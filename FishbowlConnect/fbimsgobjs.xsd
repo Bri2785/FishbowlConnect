@@ -1,0 +1,1701 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xsd:include schemaLocation="fbimsgtypes.xsd" />
+  <!-- ============================================================================= -->
+  <!--     Elements                                                                  -->
+  <!-- ============================================================================= -->
+  <xsd:element name="TagNum" type="INTTYPE" />
+  <xsd:element name="CustomerID" type="DB_ID" />  
+  <xsd:element name="Status" type="STRTYPE" />  
+  <xsd:element name="LocationID" type="DB_ID" />
+  <xsd:element name="ParentID" type="DB_ID" />  
+  <xsd:element name="Name" type="STRTYPE" />  
+  <xsd:element name="Description">
+    <xsd:simpleType>
+      <xsd:restriction base="STRTYPE">
+        <xsd:maxLength value="256" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>  
+  <xsd:element name="LocationGroupID" type="DB_ID" />  
+  <xsd:element name="PartID" type="DB_ID" />  
+  <xsd:element name="PartClassID" type="DB_ID" />  
+  <xsd:element name="TypeID" type="DB_ID" />  
+  <xsd:element name="Manufacturer">
+    <xsd:simpleType>
+      <xsd:restriction base="STRTYPE">
+        <xsd:maxLength value="30" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>   
+  <xsd:element name="ABCCode">
+    <xsd:simpleType>
+      <xsd:restriction base="STRTYPE">
+        <xsd:maxLength value="1" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+  <xsd:element name="Number" type="STRTYPE" />
+  <xsd:element name="Type" type="STRTYPE" />  
+  <xsd:element name="StatusID" type="DB_ID" />  
+  <xsd:element name="Priority" type="STRTYPE" />
+  <xsd:element name="PriorityID" type="DB_ID" />  
+  <xsd:element name="DateLastModified" type="DATETYPE" />
+  <xsd:element name="DateCompleted" type="DATETYPE" />
+  <xsd:element name="DateScheduled" type="DATETYPE" />
+  <xsd:element name="DateCreated" type="DATETYPE" />
+  <xsd:element name="DateStarted" type="DATETYPE" />
+  <xsd:element name="DateFinished" type="DATETYPE" />  
+  <xsd:element name="UserName" type="STRTYPE" />  
+  <xsd:element name="Quantity" type="QUANTYPE" />  
+  <xsd:element name="UPC">
+    <xsd:simpleType>
+      <xsd:restriction base="STRTYPE">
+        <xsd:maxLength value="15" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+  <xsd:complexType name="RemitType">
+    <xsd:sequence>
+      <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="AddressField" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="City" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Zip" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Country" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="State" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ShipType">
+    <xsd:sequence>
+      <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="AddressField" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="City" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Zip" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Country" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="State" type="STRTYPE" minOccurs="1" maxOccurs="1" />      
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BillType">
+    <xsd:sequence>
+      <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="AddressField" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="City" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Zip" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Country" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="State" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="TagID" type="DB_ID" />  
+  <xsd:element name="Num" type="xsd:integer" />
+  <xsd:element name="PartNum">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">The part number (case insensitive).</xsd:documentation>
+    </xsd:annotation>
+    <xsd:simpleType>
+      <xsd:restriction base="STRTYPE">
+        <xsd:maxLength value="70" />
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>  
+  <xsd:element name="AccountID" type="DB_ID" />
+  <xsd:element name="DateLastIssued" type="DATETYPE" /> 
+  <xsd:element name="CarrierID" type="DB_ID" />  
+  <xsd:element name="VendorID" type="DB_ID" />  
+  
+  <xsd:element name="QuantityToFulfill" type="QUANTYPE" />
+  <xsd:element name="QuantityFulfilled" type="QUANTYPE" />
+  <xsd:element name="QuantityPicked" type="QUANTYPE" />
+  <xsd:element name="Note" type="STRTYPE" />
+
+  <xsd:complexType name="TagType">
+    <xsd:sequence>
+      <xsd:element ref="Tag" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="Addresses">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Address" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <!--================================================================-->
+  <!--Account-->
+  <!--================================================================-->
+  <xsd:element name="Account">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="AccountingID" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="AccountType" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Balance" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Address-->
+  <!--================================================================-->
+  <xsd:element name="Address">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Attn" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Street" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="City" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Zip" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LocationGroupID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Default" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Residential" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="State" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Country" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="AddressInformationList" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="State">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Code" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CountryID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Country">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Code" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AddressInformationList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="AddressInformation" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AddressInformation">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Data" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Default" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Type" type="ContactType" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Carton-->
+  <!--================================================================-->
+
+  <xsd:element name="Carton">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ShipID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CartonNum" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TrackingNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="FreightWeight" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="FreightAmount" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="ShippingItems" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ShippingItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="ShippingItem" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ShippingItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ShipItemID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ProductNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ProductDescription" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyShipped" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="UOM" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Cost" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SKU" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UPC" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderItemID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderLineItem" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CartonName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CartonID" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TagNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Weight" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="WeightUOM" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DisplayWeight" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DisplayWeightUOM" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="WeightUOM">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="UOM" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="DisplayWeightUOM">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="UOM" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Carrier-->
+  <!--================================================================-->
+  <xsd:element name="Carrier">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Carrier" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!--================================================================-->
+  <!--Contacts-->
+  <!--================================================================-->
+
+  <xsd:element name="Contacts">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="ContactInformation" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ContactInformation">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ContactName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ContactID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Data" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Default" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Credit Card-->
+  <!--================================================================-->
+
+  <xsd:element name="CreditCard">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="CardNumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="CardExpMonth" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="CardExpYear" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="SecurityCode" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="NameOnCard" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CardAddress" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CardZipCode" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CardCountryCode" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Customer-->
+  <!--================================================================-->
+  
+  <xsd:element name="Customer">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="CustomerID" minOccurs="0" />
+        <xsd:element name="AccountID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Status" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefPaymentTerms" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefShipTerms" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxRate" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Number" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateCreated" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateLastModified" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LastChangedUser" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CreditLimit" type="PRICETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxExempt" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxExemptNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ActiveFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="AccountingID" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CurrencyName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CurrencyRate" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefaultSalesman" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefaultCarrier" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefaultShipService" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="JobDepth" type="xsd:integer" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ParentID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PipelineAccount" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="URL" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Addresses" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="CustomFields" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!--================================================================-->
+  <!--CUSTOM FIELDS-->
+  <!--================================================================-->
+  <xsd:element name="CustomFields">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="CustomField" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CustomField">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Type" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SortOrder" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Info" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="RequiredFlag" type="BOOLTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ActiveFlag" type="BOOLTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="CustomList" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CustomList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="CustomListItems" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CustomListItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="CustomListItem" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="CustomListItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Discount-->
+  <!--================================================================-->
+  
+  <xsd:element name="Discount">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TypeID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Description" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Percentage" type="PERCENTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Amount" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxableFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <!-- ============================================================================= -->
+  <!-- Inventory -->
+  <!-- ============================================================================= -->
+
+  <xsd:element name="InvQty">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Part" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Location" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="QtyOnHand" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyAvailable" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyCommitted" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <!-- ============================================================================= -->
+  <!-- Location -->
+  <!-- ============================================================================= -->
+  <xsd:element name="Location">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="LocationID" minOccurs="1" />
+        <xsd:element name="TypeID" type="xsd:integer" minOccurs="1" />
+        <xsd:element ref="Name" minOccurs="1" />
+        <xsd:element ref="Description" minOccurs="0" />
+        <xsd:element name="CountedAsAvailable" type="BOOLTYPE" minOccurs="0" />
+        <xsd:element name="Active" type="BOOLTYPE" minOccurs="0" />
+        <xsd:element name="Pickable" type="BOOLTYPE" minOccurs="0" />
+        <xsd:element name="Receivable" type="BOOLTYPE" minOccurs="0" />
+        <xsd:element ref="LocationGroupID" minOccurs="1" />
+        <xsd:element name="LocationGroupName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SortOrder" type="INTTYPE" minOccurs="0" />
+        <xsd:element name="TagID" type="INTTYPE" minOccurs="0" />
+        <xsd:element name="TagNumber" type="INTTYPE" minOccurs="0" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:complexType name="Location">
+    <xsd:sequence>
+      <xsd:element ref="Location" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="LocationGroup">
+    <xsd:sequence>
+      <xsd:element ref="LocationGroup" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="LocationGroup">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="LocationGroupID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="LocationGroupName" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="UsersDefaultLG"  type="BOOLTYPE" minOccurs="0"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!--================================================================-->
+  <!--MEMOS-->
+  <!--================================================================-->
+  
+  <xsd:element name="Memo">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Memo" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UserName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateCreated" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element> 
+  
+  
+  <!--================================================================-->
+  <!--ORDER HISTORY-->
+  <!--================================================================-->
+
+  <xsd:element name="OrderHistory">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="UserName" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="DateCreated" type="DATETYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Comment" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="TableID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="RecordID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Parameter-->
+  <!--================================================================-->
+
+
+  <xsd:element name="Parameter">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Value" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--================================================================-->
+  <!--Part-->
+  <!--================================================================-->
+  
+  <xsd:element name="Part">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="PartID" minOccurs="1" />
+        <xsd:element name="PartClassID" type="DB_ID" />
+        <xsd:element ref="TypeID" minOccurs="0" />
+        <xsd:element ref="UOM" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Num" type="STRTYPE" minOccurs="1" />
+        <xsd:element ref="Description" minOccurs="0" />
+        <xsd:element name="Details" type="STRTYPE" />
+        <xsd:element ref="ABCCode" minOccurs="0" />
+        <xsd:element name="StandardCost" type="STRTYPE" minOccurs="0" />
+        <xsd:element name="HasBOM" type="BOOLTYPE" default="false" minOccurs="1" />
+        <xsd:element name="Configurable" type="BOOLTYPE" default="false" minOccurs="1" />
+        <xsd:element name="PickInPartUOM" type="BOOLTYPE" default="true" minOccurs="1" />
+        <xsd:element name="ActiveFlag" type="BOOLTYPE" default="true" minOccurs="1" />
+        <xsd:element name="SerializedFlag" type="BOOLTYPE" default="false" minOccurs="1" />
+        <xsd:element name="TrackingFlag" type="BOOLTYPE" default="false" minOccurs="1" />
+        <xsd:element name="Weight" type="QUANTYPE" minOccurs="0" />
+        <xsd:element ref="WeightUOM" minOccurs="0" />
+        <xsd:element name="Width" type="QUANTYPE" minOccurs="0" />
+        <xsd:element name="Height" type="QUANTYPE" minOccurs="0" />
+        <xsd:element name="Len" type="QUANTYPE" minOccurs="0" />
+        <xsd:element ref="SizeUOM" minOccurs="0" />
+        <xsd:element ref="UPC" />
+        <!--<xsd:element ref="CustomFields" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element ref="PartTrackingList" minOccurs="0" maxOccurs="1" />
+        -->
+        <xsd:element ref="VendorPartNums" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="PartTrackingList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="PartTracking" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="SizeUOM">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="UOM" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+ 
+
+
+  
+
+  <!--================================================================-->
+  <!--PAYMENT-->
+  <!--================================================================-->
+  <xsd:element name="Payment">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Amount" type="FLOATTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="SalesOrderNumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="PaymentDate" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PaymentMethod" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Reference" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Confirmation" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ExpirationDate" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DepositAccountName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TransactionID" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="AuthorizationCode" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="MerchantAccount" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="MiscCreditCard" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="CreditCard" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!-- ============================================================================= -->
+  <!-- Pick -->
+  <!-- ============================================================================= -->
+  <xsd:element name="Pick">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="PickID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Number" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Type" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="TypeID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Status" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="StatusID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Priority" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="PriorityID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="LocationGroupID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateLastModified" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateScheduled" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateCreated" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateStarted" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateFinished" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="UserName" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="PickOrders" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="PickItems" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="PickOrders">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="PickOrder" minOccurs="1" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PickOrder">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="OrderType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderTypeID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderTo" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PickItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="PickItem" minOccurs="1" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--Used for pickQuery Return-->
+  <xsd:element name="PickSearchItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="PickID" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Number" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderTypeNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Priority" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateScheduled" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderValue" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- ============================================================================= -->
+  <!-- Pick Item -->
+  <!-- ============================================================================= -->
+  
+  <xsd:element name="PickItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="PickItemID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Status" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Part" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Tag" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Quantity" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="UOM" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DestinationTag" type="TagType" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderTypeID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="SOItemID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="POItemID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="XOItemID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="WOItemID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        
+        <xsd:element name="SlotNumber" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Location" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PickItemType" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- ============================================================================= -->
+  <!--Product-->
+  <!-- ============================================================================= -->
+  <xsd:element name="Product">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="PartID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Part" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Num" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Description" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Details" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="UPC" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SKU" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Price" type="PRICETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="UOM" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="DefaultSOItemType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="DisplayType" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="URL" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Weight" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="WeightUOMID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Width" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Height" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Len" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SizeUOMID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+
+        <xsd:element name="AccountingID" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="AccountingHash" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SellableInOtherUOMFlag" type="BOOLTYPE" default="true" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ActiveFlag" type="BOOLTYPE" default="true" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="TaxableFlag" type="BOOLTYPE" default="false" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="UsePriceFlag" type="BOOLTYPE" default="true" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="KitFlag" type="BOOLTYPE" default="false" minOccurs="1" maxOccurs="1" />
+
+        <xsd:element name="ShowSOComboFlag" type="BOOLTYPE" default="true" minOccurs="1" maxOccurs="1" />
+
+        <xsd:element name="Image" minOccurs="0" maxOccurs="1" type="STRTYPE" />
+        <xsd:element ref="CustomFields" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!--==================================================================-->
+  <!--PURCHASE ORDER-->
+  <!--==================================================================-->
+  <xsd:element name="PurchaseOrder">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CreatedDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        
+        
+        <xsd:element name="FirstShipDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="Number" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Status" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Buyer" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="RemitTo" type="RemitType" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Ship" type="ShipType" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DeliverTo" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ShippingCost" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ShippingTerms" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PaymentTerms" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="FOB" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorContact" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorSONum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QuickBooksClassName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Carrier" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CurrencyRate" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CurrencyName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CostIsHomeCurrency" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element ref="POItems" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="POItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="PurchaseOrderItem" minOccurs="1" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+
+  <xsd:element name="PurchaseOrderItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="PartNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Quantity" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QuantityFulfilled" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QuantityPicked" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UOMCode" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorPartNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ItemType" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Status" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UnitCost" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QuickBooksClassName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="RevisionLevel" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ScheduledFulfillmentDate" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!--==================================================================-->
+  <!--Receipt-->
+  <!--==================================================================-->
+
+  <xsd:element name="Receipt">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="StatusID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="TypeID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderTypeID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="SOID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="POID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="XOID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="UserID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LocationGroupID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="ReceiptItems" minOccurs="0" maxOccurs="1" />        
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <xsd:element name="ReceiptItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="ReceiveItem" minOccurs="1" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+
+  <xsd:element name="ReceiveItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ItemNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="LineNum" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ItemStatus" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ItemType" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateLastModified" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderType" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SOItemID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="POItemID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="XOItemID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderItemType" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ReceiptID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+
+        <xsd:element name="Quantity" type="QUANTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="UOMName" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="UOMID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SuggestedLocationID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="OriginalUnitCost" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="BilledUnitCost" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LandedUnitCost" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DeliverTo" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="CarrierID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PartTypeID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TrackingNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PackageCount" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateScheduled" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element ref="ReceivedReceipts" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LinkedOrders" type="STRTYPE" minOccurs="0" maxOccurs="1" />        
+        <xsd:element ref="Part" minOccurs="0" maxOccurs="1" />        
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ReceivedReceipts">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="ReceivedReceipt" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:element name="ReceivedReceipt">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ItemType" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Quantity" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Reason" type="STRTYPE" minOccurs="0" maxOccurs="1" />        
+        <xsd:element name="LocationID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!--==================================================================-->
+  <!--Report-->
+  <!--==================================================================-->
+
+
+
+  <!--==================================================================-->
+  <!--SALES ORDER-->
+  <!--==================================================================-->
+  <xsd:element name="SalesOrder">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TotalPrice" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TotalTax" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PaymentTotal" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ItemTotal" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Salesman" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Number" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Status" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Carrier" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="FirstShipDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CreatedDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="IssuedDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxRatePercentage" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxRateName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ShippingCost" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ShippingTerms" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PaymentTerms" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CustomerContact" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CustomerName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CustomerID" type="INTTYPE" minOccurs="0" maxOccurs="1" />        
+        <xsd:element name="FOB" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QuickBooksClassName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="CurrencyRate" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CurrencyName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PriceIsInHomeCurrency" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="BillTo" type="BillType" minOccurs="0" maxOccurs="1" />        
+        <xsd:element name="Ship" type="ShipType" minOccurs="0" maxOccurs="1" />  
+        <xsd:element name="IssueFlag" type="BOOLTYPE" default="false" minOccurs="1" maxOccurs="1" />        
+        <xsd:element name="VendorPO" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CustomerPO" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UPSServiceID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TotalIncludesTax" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+
+        <xsd:element name="TypeID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="URL" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Cost" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateCompleted" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateLastModified" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateRevision" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="RegisterID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ResidentialFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SalesManInitials" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PriorityID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+
+        <xsd:element ref="CustomFields" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element ref="Memos" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Items" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="Items">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="SalesOrderItem" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:element name="Memos">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Memo" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="SalesOrderItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ProductNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SOID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Taxable" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Quantity" type="STRTYPE" minOccurs="0" />
+        <xsd:element name="ProductPrice" type="STRTYPE" minOccurs="0" />
+        <xsd:element name="TotalPrice" type="STRTYPE" minOccurs="0" />
+        <xsd:element name="UOMCode" type="STRTYPE" minOccurs="0" />
+        <xsd:element name="ItemType" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Status" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QuickBooksClassName" type="STRTYPE" minOccurs="0" />        
+        <xsd:element name="NewItemFlag" type="STRTYPE" minOccurs="0" />        
+        <xsd:element name="LineNumber" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="KitItemFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+
+        <xsd:element name="AdjustmentAmount" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="AdjustPercent" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CustomerPartNum" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateLastFulfillment" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateLastModified"  minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateScheduledFulfillment" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ExchangeSOLineItem" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ItemAdjustID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyFulfilled" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyPicked" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="RevisionLevel" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TotalCost" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxableFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!--==================================================================-->
+  <!--SHIPPING-->
+  <!--==================================================================-->
+  <xsd:element name="Shipping">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderType" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CreatedDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateLastModified" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="Carrier" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Status" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="FOB" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CartonCount" type="xsd:integer" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Address" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Cartons" minOccurs="0" maxOccurs="1" />    
+        
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  
+  <xsd:element name="Cartons">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Carton" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element> 
+
+  <!-- ============================================================================= -->
+  <!-- Tag -->
+  <!-- ============================================================================= -->
+  <xsd:element name="Tag">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="TagID" type ="INTTYPE" minOccurs="0" />
+        <xsd:element name="Num" type ="INTTYPE" minOccurs="0" />
+        <xsd:element name="PartNum" type="STRTYPE" minOccurs="0" />
+        <xsd:element name="PartID" type="STRTYPE" minOccurs="0" />
+        <xsd:element ref="Location" minOccurs="0" />
+        <xsd:element name="Quantity" type="INTTYPE" minOccurs="0" />
+        <xsd:element name="QuantityCommitted" type="QUANTYPE" minOccurs="0" />
+        <xsd:element name="WONum" type="STRTYPE" minOccurs="0" />                                <!--Might Need to be WONUM-->
+        <xsd:element name="DateCreated" type="DATETIMETYPE" minOccurs="0" />
+        <xsd:element ref="Tracking" minOccurs="0" />
+        <xsd:element name="TypeID" type="INTTYPE" minOccurs="0" />
+        <xsd:element name="AccountID" type="INTTYPE" minOccurs="0" />
+        <xsd:element name="TrackingFlag" type="BOOLTYPE" minOccurs="0" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- ============================================================================= -->
+  <!-- Tax Rate -->
+  <!-- ============================================================================= -->
+
+  <xsd:element name="TaxRate">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Rate" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TypeID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefaultFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ActiveFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />        
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- ============================================================================= -->
+  <!-- Tracking -->
+  <!-- ============================================================================= -->
+
+
+  <xsd:element name="Tracking">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="TrackingItem" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="TrackingItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="PartTracking" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="TrackingValue" minOccurs="1" type="STRTYPE" />        
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PartTracking">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="PartTrackingID" type="INTTYPE" minOccurs="1" />
+        <xsd:element name="Name" minOccurs="0" type="STRTYPE" />
+        <xsd:element name="Abbr" minOccurs="0" type="STRTYPE" />
+        <xsd:element name="Description" minOccurs="0" type="STRTYPE" />
+        <xsd:element name="SortOrder" minOccurs="0" type="INTTYPE" />
+        <xsd:element name="TrackingTypeID" minOccurs="1" type="DB_ID" />
+        <xsd:element name="Active" minOccurs="0" type="BOOLTYPE" />
+        <xsd:element name="Primary" minOccurs="0" type="BOOLTYPE" />
+
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!-- ============================================================================= -->
+  <!-- Transfer Orders -->
+  <!-- ============================================================================= -->
+  <xsd:element name="TransferOrder">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="TOID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Number" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Type" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="TypeID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Status" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="StatusID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ShipFromLG" type="LocationGroup" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ShipFrom" type="Address" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ShipToLG" type="LocationGroup" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ShipTo" type="Address" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="MainLocationTag" type="TagType" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OwnerIsFrom" type="BOOLTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="UserName" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="RevisionNumber" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateScheduled" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateLastModified" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateCreated" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateLastIssued" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateFinished" minOccurs="0" maxOccurs="1" /> 
+        <xsd:element name="Carrier" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="CarrierID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Note" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="TransferOrderItems" minOccurs="1" maxOccurs="1" />
+
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:element name="TransferOrderItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="TransferOrderItem" minOccurs="1" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="TransferOrderItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="TransferOrderItemID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Type" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="TypeID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Status" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="StatusID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Part" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LineItem" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="LineNumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="LineDescription" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Note" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UnitCost" type="STRTYPE" minOccurs="0" maxOccurs="1">
+          <xsd:annotation>
+            <xsd:documentation xml:lang="en">Only used for transfer orders of type Shipping.</xsd:documentation>
+          </xsd:annotation>
+        </xsd:element>
+        <xsd:element name="RevisionNumber" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="QuantityToFulfill" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="QuantityFulfilled" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="QuantityPicked" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="DateScheduled" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  
+  
+  
+  
+  <!-- ============================================================================= -->
+  <!-- UOM -->
+  <!-- ============================================================================= -->
+  <xsd:element name="UOM">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="UOMID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Name" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Code" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Integral" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Active" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="UOMConversions" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="UOMConversions">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="UOMConversion" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="UOMConversion">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="MainUOMID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ToUOMID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ToUOMCode" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ConversionMultiply" type="FLOATTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ConversionFactor" type="FLOATTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ToUOMIsIntegral" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+
+  <!-- ============================================================================= -->
+  <!-- User -->
+  <!-- ============================================================================= -->
+  <xsd:element name="User">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UserName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="FirstName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LastName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Initials" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Active" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  
+  <!-- ============================================================================= -->
+  <!-- Vendor -->
+  <!-- ============================================================================= -->
+
+
+  <xsd:element name="Vendor">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="VendorID" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="AccountID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Status" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefPaymentTerms" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DefShipTerms" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TaxRate" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Name" minOccurs="0" maxOccurs="1" type="STRTYPE" />
+        <xsd:element name="Number" minOccurs="0" maxOccurs="1" type="STRTYPE" />
+        <xsd:element name="DateCreated" minOccurs="0" maxOccurs="1" type="DATETIMETYPE" />
+        <xsd:element name="DateModified" minOccurs="0" maxOccurs="1" type="DATETIMETYPE" />
+        <xsd:element name="LastChangedUser" minOccurs="0" maxOccurs="1" type="STRTYPE" />
+        <xsd:element name="CreditLimit" minOccurs="0" maxOccurs="1" type="PRICETYPE" />
+        <xsd:element name="Note" minOccurs="0" maxOccurs="1" type="STRTYPE" />
+        <xsd:element name="AysUserID" minOccurs="0" maxOccurs="1" type="xsd:integer" />
+        <xsd:element name="ActiveFlag" minOccurs="0" maxOccurs="1" type="BOOLTYPE" />
+        <xsd:element name="AccountingID" minOccurs="0" maxOccurs="1" type="STRTYPE" />
+        <xsd:element name="AccountingHash" minOccurs="0" maxOccurs="1" type="STRTYPE" />
+        <xsd:element name="CurrencyName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CurrencyRate" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LeadTime" minOccurs="0" maxOccurs="1" type="xsd:integer" />
+        <xsd:element ref="Addresses" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="CustomFields" minOccurs="0" maxOccurs="1"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+
+  <!-- ============================================================================= -->
+  <!-- Vendor Part Number -->
+  <!-- ============================================================================= --> 
+  
+
+  <xsd:element name="VendorPartNumber">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+  <!-- ============================================================================= -->
+  <!-- Work Order -->
+  <!-- ============================================================================= -->
+
+
+  <xsd:element name="WO">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="NUM" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TypeID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="MOItemID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="WOItems" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="Cost" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="Location" type="Location" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="LocationGroup" type="LocationGroup" minOccurs="0" maxOccurs="1" />
+        
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="StatusID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QBClass" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QBClassID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyOrdered" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyTarget" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateFinished"  minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateLastModified"  minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateScheduled"  minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateStarted"  minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="User" minOccurs="0" maxOccurs="1" />
+
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="WOItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="WOItem" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="WOItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="MOItemID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="TypeID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Part" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+
+        <xsd:element name="Cost" type="FLOATTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="DateScheduled"  minOccurs="0" maxOccurs="1" />
+        <xsd:element name="InstructionNote" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="InstructionURL" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyScrapped" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyToFulfill" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="QtyUsed" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DestLocation" type="Location" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="UOM" minOccurs="0" maxOccurs="1" />
+
+        <xsd:element name="Tracking" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SortID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+
+
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+ 
+  
+  
+  
+  
+
+  <!-- ============================================================================= -->
+  <!--      Macros                                                                   -->
+  <!-- ============================================================================= -->
+  <xsd:element name="TrackingType">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="TypeID" type="xsd:integer" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DataType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="TrackingTypeList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="TrackingType" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="SerialNum">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="SerialID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Committed" type="BOOLTYPE" default="false" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="SerialNumbers">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="SerialNum" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="KitItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Description" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="KitItemType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Product" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="TaxRate" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Discount" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ParentProductID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="QtyPriceAdjustment" type="PRICETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SortOrder" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="DefaultQty" type="QUANTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="MinQty" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="MaxQty" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="UOM" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="KitType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="SOItemType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateCreated" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateModified" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="KitOption" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="KitOption">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="KitItemID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Product" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="DefaultFlag" type="BOOLTYPE" default="false" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PriceAdjustment" type="PRICETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateCreated" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateModified" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Groups">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Group" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:complexType name="Address">
+    <xsd:sequence>
+      <xsd:element ref="Address" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="ReceiveTicket">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="OrderNumber" type="STRTYPE" minOccurs="1" />
+        <xsd:element name="OrderType" type="INTTYPE" minOccurs="1" />
+        <!--<xsd:element name="FulfillmentDate"         type="DATETYPE" minOccurs="1"/>-->
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Tracks">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="TypeID" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="VendorPartNums">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="VendorPartNumber" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+   
+  <xsd:element name="PartUOM">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="UOM" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <!-- ============================================================================= -->
+  <!-- RMA -->
+  <!-- ============================================================================= -->
+  <xsd:element name="RMA">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="RMAID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="CustomerName" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Status" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="DateCreated" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateExpires" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="RMAItems" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="CustomFields" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Memos" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="RMAItems">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="RMAItem" minOccurs="1" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="RMAItem">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="RMAItemID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="LineNum" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ProductNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ProductID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Quantity" type="QUANTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="UOM" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Issue" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="RMAType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Resolution" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ProductSubstitution" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ProductSubstitutionID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CrossShippedFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ShippedFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ReturnedFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorRMA" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateResolved" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="LinkedOrders" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="LinkedOrders">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="RMAItemLink" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="RMAItemLink">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="LinkID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Type" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="FromTable" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="FromRecord" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ToTable" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ToRecord" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderType" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderStatus" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="PartDefaultLocation">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Part" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Location" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Property">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Value" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Clients">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="IPAddress" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Exports">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ExportName" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Customers">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Vendors">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Carriers">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ShippingIDs">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ShippingID" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Parameters">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Parameter" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="OrderNums">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+
+  <!--================================================================-->
+  <!--ASSOCIATED PRODUCTS-->
+  <!--================================================================-->
+  <xsd:element name="AssociatedProduct">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Product" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="ParentProductID" type="DB_ID" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="SortOrder" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="DateCreated" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="DateModified" type="DATETIMETYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+
+
+
+  
+  
+  
+
+</xsd:schema>

@@ -1,0 +1,2114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- ============================================================================= -->
+<!--                                                                               -->
+<!-- FbiMsg.xsd                                                                    -->
+<!--                                                                               -->                      
+<!-- ============================================================================= -->
+<!-- ============================================================================= -->
+<!-- This is the main file of the schema.  It defines all of the Requests and      -->
+<!-- Responses.                                                                    -->
+<!-- ============================================================================= -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+     Fishbowl Inventory XML API schema.
+     
+    </xsd:documentation>
+  </xsd:annotation>
+  <xsd:include schemaLocation="fbimsgtypes.xsd" />
+  <xsd:include schemaLocation="fbimsgobjs.xsd" />
+  <!-- ============================================================================= -->
+  <!--      Top-level                                                                -->
+  <!-- ============================================================================= -->
+  <xsd:element name="FbiXml">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Ticket" minOccurs="1" maxOccurs="1" />
+        <xsd:choice>
+          <xsd:element ref="FbiMsgsRq" minOccurs="1" maxOccurs="1" />
+          <xsd:element ref="FbiMsgsRs" minOccurs="1" maxOccurs="1" />
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <!-- ============================================================================= -->
+  <!--      Ticket                                                                   -->
+  <!-- ============================================================================= -->
+  <xsd:element name="Ticket">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="Key" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <!-- ============================================================================= -->
+  <!--      Message Sets                                                             -->
+  <!-- ============================================================================= -->
+  <!-- Message Set Request/Response Pairs and contained requests  -->
+  <xsd:element name="FbiMsgsRq">
+    <xsd:complexType>
+      <xsd:choice minOccurs="0" maxOccurs="unbounded">
+        <xsd:element name="AddInventoryRq" type="AddInventoryRqType" />
+        <xsd:element name="AddMemoRq" type="AddMemoRqType" />
+        <xsd:element name="AddSOItemRq" type="AddSOItemRqType" />
+        <xsd:element name="AddWorkOrderItemRq" type="AddWorkOrderItemRqType" />
+        <xsd:element name="AdjustInventoryRq" type="AdjustInventoryRqType" />
+        <xsd:element name="CalculateSORq" type="CalculateSORqType"></xsd:element>
+        <xsd:element name="CarrierListRq" type="CarrierListRqType"></xsd:element>
+        <xsd:element name="CloseShortSORq" type="CloseShortSORqType" />
+        <xsd:element name="CustomerGetRq" type="CustomerGetRqType"></xsd:element>
+        <xsd:element name="CustomerListRq" type="CustomerListRqType"></xsd:element>
+        <xsd:element name="CustomerNameListRq" type="CustomerNameListRqType"></xsd:element>
+        <xsd:element name="CustomerSaveRq" type="CustomerSaveRqType" />
+        <xsd:element name="CycleCountRq" type="CycleCountRqType" />
+        <xsd:element name="DefPartLocQueryRq"   type="DefPartLocQueryRqType"/>
+        <xsd:element name="DeleteSORq" type="DeleteSORqType" />
+        <!--<xsd:element name="EmailReportListRq" type="EmailReportListRqType" />-->
+        <xsd:element name="ExecuteQueryRq" type="ExecuteQueryRqType" />
+        <xsd:element name="ExportListRq" type="ExportListRqType"></xsd:element>
+        <xsd:element name="ExportRq" type="ExportRqType"></xsd:element>
+        <xsd:element name="GetAccountBalanceRq" type="GetAccountBalanceRqType"></xsd:element>
+        <xsd:element name="GetAccountListRq" type="GetAccountListRqType"></xsd:element>
+        <xsd:element name="GetNextNumberRq" type="GetNextNumberRqType"></xsd:element>
+        <xsd:element name="GetPartListRq" type="GetPartListRqType" />
+        <xsd:element name="GetPickRq" type="GetPickRqType" />
+        <xsd:element name="GetPOListRq" type="GetPOListRqType" />
+        <xsd:element name="GetReceiptRq" type="GetReceiptRqType" />
+        <xsd:element name="GetShipListRq" type="GetShipListRqType" />
+        <xsd:element name="GetShipmentRq" type="GetShipmentRqType" />
+        <xsd:element name="GetShipNowListRq" type="GetShipNowListRqType" />
+        <xsd:element name="GetSOListRq" type="GetSOListRqType" />
+        <xsd:element name="GetSystemPropertyRq" type="GetSystemPropertyRqType"></xsd:element>
+        <xsd:element name="GetTotalInventoryRq" type="GetTotalInventoryRqType"></xsd:element>
+        <xsd:element name="GetTransferOrderListRq" type="GetTransferOrderListRqType"></xsd:element>
+        <!--<xsd:element name="GetUserPropertyRq" type="GetUserPropertyRqType" />-->
+        <xsd:element name="GetWorkOrderRq" type="GetWorkOrderRqType" />
+        <xsd:element name="ImportListRq" type="ImportListRqType"></xsd:element>
+        <xsd:element name="ImportRq" type="ImportRqType"></xsd:element>
+        <xsd:element name="InvQtyRq" type="InvQtyRqType" />
+        <xsd:element name="IssueSORq" type="IssueSORqType" />
+        <xsd:element name="LightPartListRq" type="LightPartListRqType" />
+        <xsd:element name="LoadSORq" type="LoadSORqType"></xsd:element>
+        <xsd:element name="LoadTransferOrderRq" type="LoadTransferOrderRqType"></xsd:element>
+        <xsd:element name="LocationGroupRq" type="LocationGroupRqType"></xsd:element>
+        <xsd:element name="LocationListRq" type="LocationListRqType"></xsd:element>
+        <xsd:element name="LocationQueryRq" type="LocationQueryRqType"></xsd:element>
+        <xsd:element name="LoginRq" type="LoginRqType"></xsd:element>
+        <xsd:element name="MakePaymentRq" type="MakePaymentRqType"></xsd:element>
+        <xsd:element name="MoveRq" type="MoveRqType" />
+        <xsd:element name="PartCostRq" type="PartCostRqType" />
+        <xsd:element name="PartGetRq" type="PartGetRqType" />
+        <xsd:element name="PartQueryRq" type="PartQueryRqType" />
+        <xsd:element name="PickQueryRq" type="PickQueryRqType" />
+        <xsd:element name="POSaveRq" type="SavePORqType" />
+        <!--<xsd:element name="PrintReportRq" type="PrintReportRqType" />-->
+        <xsd:element name="ProductGetRq" type="ProductGetRqType"></xsd:element>
+        <xsd:element name="ProductPriceRq" type="ProductPriceRqType" />
+        <xsd:element name="ProductQueryRq" type="ProductQueryRqType" />
+        <!--<xsd:element name="QBExportRq" type="QBExportRqType" />-->
+        <xsd:element name="QuickShipRq" type="QuickShipRqType"></xsd:element>
+        <xsd:element name="ReceivingListRq" type="ReceivingListRqType" />
+        <xsd:element name="SaveDiscountRq" type="SaveDiscountRqType"></xsd:element>
+        <xsd:element name="SaveShipmentRq" type="SaveShipmentRqType" />
+        <xsd:element name="SaveUPCRq" type="SaveUPCRqType" />
+        <xsd:element name="SavePickRq" type="SavePickRqType" />
+        <xsd:element name="SaveReceiptRq" type="SaveReceiptRqType" />
+
+        <xsd:element name="SaveImageRq" type="SaveImageRqType" />
+        <!--<xsd:element name="SaveReportRq" type="SaveReportRqType" />-->
+        <xsd:element name="SaveWorkOrderRq" type="SaveWorkOrderRqType" />
+        <xsd:element name="SetDefPartLocRq" type="SetDefPartLocRqType" />
+        <xsd:element name="SetSystemPropertyRq" type="SetSystemPropertyRqType"></xsd:element>
+        <xsd:element name="SaveTaxRateRq" type="SaveTaxRateRqType"></xsd:element>
+        <!--<xsd:element name="SetUserPropertyRq" type="SetUserPropertyRqType" />-->
+        <xsd:element name="ShipRq" type="ShipRqType" />
+        <xsd:element name="SOSaveRq" type="SaveSORqType" />
+        <xsd:element name="TransferOrderSaveRq" type="TransferOrderSaveRqType"></xsd:element>
+        <xsd:element name="UOMRq" type="UOMRqType"></xsd:element>
+        <xsd:element name="VendorGetRq" type="VendorGetRqType"></xsd:element>
+        <xsd:element name="VendorListRq" type="VendorListRqType"></xsd:element>
+        <xsd:element name="VendorNameListRq" type="VendorNameListRqType"></xsd:element>
+        <xsd:element name="VendorSaveRq" type="VendorSaveRqType"></xsd:element>
+        <xsd:element name="VoidSORq" type="VoidSORqType" />
+        <xsd:element name="WorkOrderListRq" type="WorkOrderListRqType" />
+        
+        
+        <!--___OLD___-->
+        <xsd:element name="PickRq" type="PickRqType" />
+        <!--________-->
+        <xsd:element name="TagQueryRq" type="TagQueryRqType"></xsd:element>
+        <xsd:element name="TagMoveRq" type="TagMoveRqType" />
+        <xsd:element name="PartTagQueryRq" type="PartTagQueryRqType"></xsd:element>
+        <!--<xsd:element name="CycleCountQueryRq" type="CycleCountQueryRqType" />-->
+        <xsd:element name="FinishPickRq" type="FinishPickRqType" />
+        <xsd:element name="TagInfoRq" type="TagInfoRqType" />
+        <xsd:element name="YieldRq" type="YieldRqType" />
+        <xsd:element name="ReceivingItemsRq" type="ReceivingItemsRqType" />
+        <xsd:element name="ReceiveRq" type="ReceiveRqType" />
+        <!--<xsd:element name="DefLocListRq" type="DefLocListRqType" />-->
+        <xsd:element name="OpenModuleRq" type="OpenModuleRqType"></xsd:element>
+        <xsd:element name="PartSaveRq" type="PartSaveRqType"></xsd:element>
+        <xsd:element name="ProductSaveRq" type="ProductSaveRqType"></xsd:element>
+        <xsd:element name="DiscountGetRq" type="DiscountGetRqType"></xsd:element>
+        <xsd:element name="TaxRateGetRq" type="TaxRateGetRqType"></xsd:element>
+        <xsd:element name="QBClassListGetRq" type="QBClassListGetRqType"></xsd:element>
+        <xsd:element name="HoldPickItemRq" type="HoldPickItemRqType"></xsd:element>
+      </xsd:choice>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="FbiMsgsRs">
+    <xsd:complexType>
+      <xsd:choice minOccurs="0" maxOccurs="unbounded">
+        <xsd:element name="TagQueryRs" type="TagQueryRsType" />
+        <xsd:element name="PartTagQueryRs" type="PartTagQueryRsType" />
+        <xsd:element name="LocationQueryRs" type="LocationQueryRsType" />
+        <xsd:element name="TagMoveRs" type="TagMoveRsType" />
+        <xsd:element name="CustomerListRs" type="CustomerListRsType" />
+        <xsd:element name="CustomerNameListRs" type="CustomerNameListRsType" />
+        <xsd:element name="CustomerSaveRs" type="CustomerSaveRsType" />
+        <xsd:element name="VendorListRs" type="VendorListRsType" />
+        <xsd:element name="VendorNameListRs" type="VendorNameListRsType" />
+        <xsd:element name="ImportRs" type="ImportRsType" />
+        <xsd:element name="ImportListRs" type="ImportListRsType" />
+        <xsd:element name="ExportRs" type="ExportRsType" />
+        <xsd:element name="ExportListRs" type="ExportListRsType" />
+        <xsd:element name="LoginRs" type="LoginRsType" />
+        <!--<xsd:element name="CycleCountQueryRs" type="CycleCountQueryRsType" />-->
+        <xsd:element name="CycleCountRs" type="CycleCountRsType" />
+        <xsd:element name="PickQueryRs" type="PickQueryRsType" />
+        <xsd:element name="GetPickRs" type="GetPickRsType" />
+        <xsd:element name="PickRs" type="PickRsType" />
+        <xsd:element name="FinishPickRs" type="FinishPickRsType" />
+        <xsd:element name="TagInfoRs" type="TagInfoRsType" />
+        <xsd:element name="YieldRs" type="YieldRsType" />
+        <xsd:element name="PartQueryRs" type="PartQueryRsType" />
+        <xsd:element name="PartCostRs" type="PartCostRsType" />
+        <xsd:element name="ProductQueryRs" type="ProductQueryRsType" />
+        <xsd:element name="ReceivingListRs" type="ReceivingListRsType" />
+        <xsd:element name="ReceivingItemsRs" type="ReceivingItemsRsType" />
+        <xsd:element name="ReceiveRs" type="ReceiveRsType" />
+        <xsd:element name="AddInventoryRs" type="AddInventoryRsType" />
+        <xsd:element name="AdjustInventoryRs" type="AdjustInventoryRsType" />
+        <xsd:element name="UOMRs" type="UOMRsType" />
+        <xsd:element name="LocationGroupRs" type="LocationGroupRsType" />
+        <xsd:element name="DefPartLocQueryRs" type="DefPartLocQueryRsType" />
+        <xsd:element name="SetDefPartLocRs" type="SetDefPartLocRsType" />
+        <!--<xsd:element name="DefLocListRs" type="DefLocListRsType" />-->
+        <xsd:element name="POSaveRs" type="SavePORsType" />
+        <xsd:element name="SaveSORs" type="SaveSORsType" />
+        <xsd:element name="GetPOListRs" type="GetPOListRsType" />
+        <xsd:element name="GetSOListRs" type="GetSOListRsType" />
+        <xsd:element name="GetShipListRs" type="GetShipListRsType" />
+        <xsd:element name="GetShipNowListRs" type="GetShipNowListRsType" />
+        <xsd:element name="GetShipmentRs" type="GetShipmentRsType" />
+        <xsd:element name="SaveShipmentRs" type="SaveShipmentRsType" />
+        <xsd:element name="ShipRs" type="ShipRsType" />
+        <xsd:element name="CarrierListRs" type="CarrierListRsType" />
+        <xsd:element name="MessageRs" type="MessageRsType" />
+        <xsd:element name="SetSystemPropertyRs" type="SetSystemPropertyRsType" />
+        <xsd:element name="GetSystemPropertyRs" type="GetSystemPropertyRsType" />
+        <xsd:element name="OpenModuleRs" type="OpenModuleRsType" />
+        <xsd:element name="CustomerGetRs" type="CustomerGetRsType" />
+        <xsd:element name="GetAccountBalanceRs" type="GetAccountBalanceRsType" />
+        <xsd:element name="GetNextNumberRs" type="GetNextNumberRsType" />
+        <xsd:element name="PartGetRs" type="PartGetRsType" />
+        <xsd:element name="PartSaveRs" type="PartSaveRsType" />
+        <xsd:element name="ProductSaveRs" type="ProductSaveRsType" />
+        <xsd:element name="ProductGetRs" type="ProductGetRsType" />
+        <xsd:element name="VendorSaveRs" type="VendorSaveRsType" />
+        <xsd:element name="VendorGetRs" type="VendorGetRsType" />
+        <xsd:element name="DiscountGetRs" type="DiscountGetRsType" />
+        <xsd:element name="CalculateSORs" type="CalculateSORsType" />
+        <xsd:element name="TaxRateGetRs" type="TaxRateGetRsType" />
+        <xsd:element name="QBClassListGetRs" type="QBClassListGetRsType" />
+        <xsd:element name="GetTotalInventoryRs" type="GetTotalInventoryRsType" />
+        <xsd:element name="HoldPickItemRs" type="HoldPickItemRsType" />
+        <xsd:element name="MakePaymentRs" type="MakePaymentRsType" />
+        <xsd:element name="QuickShipRs" type="QuickShipRsType" />
+        <xsd:element name="SaveDiscountRs" type="SaveDiscountRsType" />
+        <xsd:element name="SaveTaxRateRs" type="SaveTaxRateRsType" />
+        <xsd:element name="GetAccountListRs" type="GetAccountListRsType" />
+        <xsd:element name="TransferOrderSaveRs" type="TransferOrderSaveRsType" />
+        <xsd:element name="LoadTransferOrderRs" type="LoadTransferOrderRsType" />
+        <xsd:element name="GetTransferOrderListRs" type="GetTransferOrderListRsType" />
+        <xsd:element name="LoadSORs" type="LoadSORsType" />
+        <xsd:element name="AddMemoRs" type="AddMemoRsType" />
+        <xsd:element name="AddSOItemRs" type="AddSOItemRsType" />
+        <xsd:element name="AddWorkOrderItemRs" type="AddWorkOrderItemRsType" />
+        <xsd:element name="CloseShortSORs" type="CloseShortSORsType" />
+        <xsd:element name="DeleteSORs" type="DeleteSORsType" />
+        <!--<xsd:element name="EmailReportListRs" type="EmailReportListRsType" />-->
+        <xsd:element name="ExecuteQueryRs" type="ExecuteQueryRsType" />
+        <xsd:element name="GetPartListRs" type="GetPartListRsType" />
+        <xsd:element name="GetReceiptRs" type="GetReceiptRsType" />
+        <!--<xsd:element name="GetUserPropertyRs" type="GetUserPropertyRsType" />-->
+        <xsd:element name="GetWorkOrderRs" type="GetWorkOrderRsType" />
+        <xsd:element name="InvQtyRs" type="InvQtyRsType" />
+        <xsd:element name="IssueSORs" type="IssueSORsType" />
+        <xsd:element name="LightPartListRs" type="LightPartListRsType" />
+        <xsd:element name="LocationListRs" type="LocationListRsType"></xsd:element>
+        <xsd:element name="MoveRs" type="MoveRsType" />
+        <!--<xsd:element name="PrintReportRs" type="PrintReportRsType" />-->
+        <xsd:element name="ProductPriceRs" type="ProductPriceRsType" />
+        <!--<xsd:element name="QBExportRs" type="QBExportRsType" />-->
+        <xsd:element name="SaveUPCRs" type="SaveUPCRsType" />
+        <xsd:element name="SavePickRs" type="SavePickRsType" />
+        <xsd:element name="SaveReceiptRs" type="SaveReceiptRsType" />
+        <!--<xsd:element name="SaveReportRs" type="SaveReportRsType" />-->
+        <xsd:element name="SaveWorkOrderRs" type="SaveWorkOrderRsType" />
+        <!--<xsd:element name="SetUserPropertyRs" type="SetUserPropertyRsType" />-->
+        <xsd:element name="VoidSORs" type="VoidSORsType" />
+        <xsd:element name="WorkOrderListRs" type="WorkOrderListRsType" />
+
+        <xsd:element name="SaveImageRs" type="SaveImageRsType" />
+        
+        
+      </xsd:choice>
+      <xsd:attribute name="newMessageSetID" type="STRTYPE" />
+      <xsd:attribute name="statusCode" type="INTTYPE" />
+      <xsd:attribute name="statusMessage" type="STRTYPE" />
+    </xsd:complexType>
+  </xsd:element>
+  <!-- ============================================================================= -->
+  <!--      Common                                                                   -->
+  <!-- ============================================================================= -->
+  <!-- These are attributes common for all Response type objects. -->
+  <xsd:attributeGroup name="CommonRsAttrs">
+    <xsd:attribute name="requestID" type="STRTYPE" />
+    <xsd:attribute name="statusCode" type="INTTYPE" use="required" />
+    <xsd:attribute name="statusMessage" type="STRTYPE" />
+  </xsd:attributeGroup>
+  <!-- ============================================================================= -->
+  <!--      Request Detail                                                           -->
+  <!--Alphabetical order matching the FB SDK documentation-->
+  <!-- ============================================================================= -->
+  
+  
+  <!--===================-->
+  <!--A-->
+  <!--===================-->
+
+    <xsd:complexType name="AddInventoryRqType">
+      <xsd:sequence>
+        <xsd:element name="PartNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Quantity" type="QUANTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="UOMID" type="xsd:integer" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Cost" type="PRICETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Note" type="STRTYPE" minOccurs="0" />
+        <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LocationTagNum" type="INTTYPE" minOccurs="1" />
+        <!-- This MUST be the TagNum of an existing Location. -->
+        <xsd:element name="TagNum" type="INTTYPE" minOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="AddInventoryRsType">
+      <xsd:sequence>
+        <xsd:element ref="Tag" minOccurs="0" />
+      </xsd:sequence>
+      <xsd:attributeGroup ref="CommonRsAttrs" />
+    </xsd:complexType>
+
+    <!--Add Memo-->
+    <xsd:complexType name="AddMemoRqType">
+      <xsd:sequence>
+        <xsd:element name="ItemType" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="PartNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="ProductNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="CustomerNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="VendorNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="Memo" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="AddMemoRsType">
+      <xsd:sequence>
+        
+      </xsd:sequence>
+      <xsd:attributeGroup ref="CommonRsAttrs" />
+    </xsd:complexType>
+  
+  
+    <!--Add SO Item-->
+    <xsd:complexType name="AddSOItemRqType">
+      <xsd:sequence>
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="SalesOrderItem" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="AddSOItemRsType">
+      <xsd:sequence>
+        
+      </xsd:sequence>
+      <xsd:attributeGroup ref="CommonRsAttrs" />
+    </xsd:complexType>
+
+    <!--Add WO Item-->
+    <xsd:complexType name="AddWorkOrderItemRqType">
+      <xsd:sequence>
+        <xsd:element name="OrderNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="TypeID" type="DB_ID" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Description" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="PartNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Quantity" type="QUANTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="UOMCode" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="Cost" type="PRICETYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="AddWorkOrderItemRsType">
+      <xsd:sequence>
+
+      </xsd:sequence>
+      <xsd:attributeGroup ref="CommonRsAttrs" />
+    </xsd:complexType>
+  
+    <!--Adjust Inventory-->
+
+    <xsd:complexType name="AdjustInventoryRqType">
+      <xsd:sequence>
+        <xsd:element name="TagNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="Quantity" type="QUANTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="AdjustInventoryRsType">
+      <xsd:attributeGroup ref="CommonRsAttrs" />
+    </xsd:complexType>
+  
+  <!--===================-->
+  <!--C-->
+  <!--===================-->
+  
+      <!--Calculate SO-->
+      <xsd:complexType name="CalculateSORqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Calculates the totals and tax on the specified Sales Order.  This will not save the Sales Order.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element ref="SalesOrder" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The sales order to calculate.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="CalculateSORsType">
+        <xsd:sequence>
+          <xsd:element ref="SalesOrder" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Carrier List-->
+      <xsd:complexType name="CarrierListRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests a list of all active carriers.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:complexType>
+  
+      <xsd:complexType name="CarrierListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Carriers" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Close Short-->
+      <xsd:complexType name="CloseShortSORqType">
+        <xsd:sequence>
+          <xsd:element name="SONumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="CloseShortSORsType">
+        <xsd:sequence>
+
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Customer Get-->
+
+      <xsd:complexType name="CustomerGetRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests detailed information about the customer.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="Name" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The customer's name (case sensitive).</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="CustomerGetRsType">
+        <xsd:sequence>
+          <xsd:element ref="Customer" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Customer List-->
+  
+      <xsd:complexType name="CustomerListRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests a list of all customers (contains both active and inactive).</xsd:documentation>
+        </xsd:annotation>
+      </xsd:complexType>
+  
+      <xsd:complexType name="CustomerListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Customer" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Customer Name List-->
+      <xsd:complexType name="CustomerNameListRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests a list of all customer name(contains only active).</xsd:documentation>
+        </xsd:annotation>
+      </xsd:complexType>
+      <xsd:complexType name="CustomerNameListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Customers" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Customer Save-->
+      <xsd:complexType name="CustomerSaveRqType">
+        <xsd:sequence>
+          <xsd:element ref="Customer" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="CustomerSaveRsType">
+        <xsd:sequence>
+          <xsd:element ref="Customer" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      
+      <!--Cycle Count-->
+  
+      <xsd:complexType name="CycleCountRqType">
+        <xsd:sequence>
+          <xsd:element name="PartNum" type="STRTYPE" />
+          <xsd:element name="Quantity" type="INTTYPE" />
+          <xsd:element name="LocationID" type="INTTYPE" />
+          <xsd:element name="Tracking" type="STRTYPE" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="CycleCountRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+  <!--===================-->
+  <!--D-->
+  <!--===================-->
+
+      <xsd:complexType name="DefPartLocQueryRqType">
+        <xsd:sequence>
+          <xsd:element ref="PartNum" minOccurs = "0"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="DefPartLocQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="Location" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attributeGroup  ref="CommonRsAttrs"/>
+      </xsd:complexType>
+  
+  
+      <!--Delete SO-->
+      <xsd:complexType name="DeleteSORqType">
+        <xsd:sequence>
+          <xsd:element name="SONumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="DeleteSORsType">
+        <xsd:sequence>
+
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+  <!--===================-->
+  <!--E-->
+  <!--===================-->
+  
+      <!--Email Report-->
+  
+  
+  
+      <!--Export List-->
+
+      <xsd:complexType name="ExportListRqType">
+      </xsd:complexType>
+
+      <xsd:complexType name="ExportListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Exports" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Export-->
+      <xsd:complexType name="ExportRqType">
+        <xsd:sequence>
+          <xsd:element name="Type" type="STRTYPE" minOccurs="1"></xsd:element>
+        </xsd:sequence>
+
+      </xsd:complexType>
+      <xsd:complexType name="ExportRsType">
+        <xsd:sequence>
+          <xsd:element name="Type" type="STRTYPE" minOccurs="1" />
+          <xsd:group ref="Rows" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Execute Query -->
+      <xsd:complexType name="ExecuteQueryRqType">
+        <xsd:sequence>
+          <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Query" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="ExecuteQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="Rows" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+    <xsd:element name="Rows">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="Row" type="STRTYPE" minOccurs="1" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+  
+  <!--===================-->
+  <!--G-->
+  <!--===================-->
+
+      <xsd:complexType name="GetAccountBalanceRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Returns the account information for the specified account.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="Account" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetAccountBalanceRsType">
+        <xsd:sequence>
+          <xsd:element ref="Account" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <xsd:complexType name="GetAccountListRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Returns a list of all accounts.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:complexType>
+      <xsd:complexType name="GetAccountListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Account" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      
+      <!--Get Part List-->
+
+      <xsd:complexType name="GetPartListRqType">
+        <xsd:sequence>
+          <xsd:element name="PartNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="PartDesc" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="PartDetails" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="PartUPC" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="PartType" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ABCCode" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="VendorName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="VendorNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ProductNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ProductDesc" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ActiveFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ShowActive" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ShowInactive" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="HasBOM" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Configurable" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetPartListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Part" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Get Pick-->
+  
+      <xsd:complexType name="GetPickRqType">
+        <xsd:sequence>
+          <xsd:element name="PickNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="GetPickRsType">
+        <xsd:sequence>
+          <xsd:element ref="Pick" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Get PO List-->
+      <xsd:complexType name="GetPOListRqType">
+        <xsd:sequence>
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetPOListRsType">
+        <xsd:sequence>
+          <xsd:element ref="PurchaseOrder" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+      <!--Get Receipt-->
+      <xsd:complexType name="GetReceiptRqType">
+        <xsd:sequence>
+          <xsd:element name="OrderNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="OrderType" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="LocationGroup" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="GetReceiptRsType">
+        <xsd:sequence>
+          <xsd:element ref="Receipt" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+  
+      <!--Get Ship List-->
+      <xsd:complexType name="GetShipListRqType">
+        <xsd:sequence>
+          <xsd:element name="StartRecord" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="RecordCount" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="OrderNumber" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="OrderTypeID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="LocationGroup" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Carrier" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="GetShipListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Shipping" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      
+      <!--Get Shipment-->
+      <xsd:complexType name="GetShipmentRqType">
+        <xsd:sequence>
+          <xsd:element name="ShipmentID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ShipmentNUM" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="GetShipmentRsType">
+        <xsd:sequence>
+          <xsd:element ref="Shipping" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+      <!--Get Ship Now List-->
+  
+      <xsd:complexType name="GetShipNowListRqType">
+        <xsd:sequence>
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element ref="Carrier" minOccurs="1" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="GetShipNowListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Shipping" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Get SO List
+      -->
+      <xsd:complexType name="GetSOListRqType">
+        <xsd:sequence>
+          <xsd:element name="SONum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="LocationGroup" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Status" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="CustomerPO" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="CustomerName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="AccountNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="BillTo" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ShipTo" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ProductNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ProductDesc" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ProductDetails" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Salesman" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          
+          <xsd:element name="DateIssuedBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateIssuedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateCreatedBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateCreatedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateLasteModifiedBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateLasteModifiedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateScheduledBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateScheduledEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateCompletedBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateCompletedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="GetSOListRsType">
+        <xsd:sequence>
+          <xsd:element ref="SalesOrder" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+
+      <!--Get Total Inventory-->
+      <xsd:complexType name="GetTotalInventoryRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Returns the total inveontory for specified part.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="PartNumber" type="STRTYPE" minOccurs="1" maxOccurs="1">
+          </xsd:element>
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="GetTotalInventoryRsType">
+        <xsd:sequence>
+          <xsd:element name="Available" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="SerialNumbers" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Get Work Order-->
+      <xsd:complexType name="GetWorkOrderRqType">
+        <xsd:sequence>
+          <xsd:element name="WorkOrderNumber" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="GetWorkOrderRsType">
+        <xsd:sequence>
+          <xsd:element ref="WO" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      
+
+  <!--===================-->
+  <!--I-->
+  <!--===================-->
+  
+  
+      <!--NOT CHECKED 12/11/15-->
+  
+      <xsd:complexType name="ImportRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Request to run the specified import.  The data is formatted according to the import/export documentation.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="Type" type="STRTYPE" minOccurs="1"></xsd:element>
+          <xsd:group ref="Rows" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="requestID" type="STRTYPE" />
+      </xsd:complexType>
+      <xsd:complexType name="ImportListRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests a list of available imports.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:complexType>
+      <xsd:group name="Rows">
+        <xsd:sequence>
+          <xsd:element name="Row" type="STRTYPE" minOccurs="1" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The data to import/export formated according to the import/export documentation.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:group>
+  
+      <!-- Import Responses -->
+      <xsd:complexType name="ImportRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      <xsd:complexType name="ImportListRsType">
+        <xsd:sequence>
+          <xsd:group ref="ImportNames" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      <xsd:group name="ImportNames">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">List of imports</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="ImportName" type="STRTYPE" minOccurs="1" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">Import</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:group>
+  
+    <!--Inventory Quantity-->
+
+    <xsd:complexType name="InvQtyRqType">
+      <xsd:sequence>
+        <xsd:element name="PartNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        <xsd:element name="LastModifiedFrom" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="LastModifiedTo" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  
+    <xsd:complexType name="InvQtyRsType">
+      <xsd:sequence>
+        <xsd:element ref="InvQty" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+      <xsd:attributeGroup ref="CommonRsAttrs" />
+    </xsd:complexType>
+
+
+
+    <!--Issue SO-->
+    <xsd:complexType name="IssueSORqType">
+      <xsd:sequence>
+        <xsd:element name="SONumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="IssueSORsType">
+      <xsd:sequence>
+
+      </xsd:sequence>
+      <xsd:attributeGroup ref="CommonRsAttrs" />
+    </xsd:complexType>
+  
+  
+  <!--===================-->
+  <!--L-->
+  <!--===================-->
+      <!--Light Part List-->
+      <xsd:complexType name="LightPartListRqType">
+        <xsd:sequence>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="LightPartListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Part" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      
+      <!--Load SO-->
+      <xsd:complexType name="LoadSORqType">
+        <xsd:sequence>
+          <xsd:element name="Number" type="STRTYPE" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="LoadSORsType">
+        <xsd:sequence>
+          <xsd:element ref="SalesOrder" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+  
+      <!--Location List-->
+      <xsd:complexType name="LocationListRqType">
+        <xsd:sequence>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="LocationListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Location" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Location Query-->
+      <xsd:complexType name="LocationQueryRqType">
+        <xsd:sequence>
+          <xsd:element name="LocationID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="TagNum" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="LocationQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="Location" minOccurs="0" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Location Group-->
+  
+      <xsd:complexType name="LocationGroupRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests a list of location groups.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:complexType>
+  
+      <xsd:complexType name="LocationGroupRsType">
+        <xsd:sequence>
+          <xsd:group ref="LocationGroupNames" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <xsd:group name="LocationGroupNames">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Location group names.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="LocationGroupName" type="STRTYPE" minOccurs="1" maxOccurs="unbounded">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">Location group</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:group>
+  
+      <!--Login-->
+      <xsd:complexType name="LoginRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Request to log into the server.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="IAID" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The Integrated Application ID (unique for each integrated application).</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="IAName" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The name of the integrated application.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="IADescription" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">A short description of the integrated application.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="UserName" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The user logging into the server.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="UserPassword" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The user's password (encrypted).</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="LoginRsType">
+        <xsd:sequence>
+          <xsd:element name="UserFullName" type="STRTYPE" minOccurs="1" />
+          <xsd:element ref="ModuleAccess" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="ServerVersion" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <xsd:element name="ModuleAccess">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="Module" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+  
+  <!--===================-->
+  <!--M-->
+  <!--===================-->
+
+      <xsd:complexType name="MakePaymentRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Makes a payment.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element ref="Payment" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The payment information.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="ProcessPayment" type="BOOLTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="MakePaymentRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+      <!--Move Inventory-->
+      <xsd:complexType name="MoveRqType">
+        <xsd:sequence>
+          <xsd:element ref="SourceLocation" minOccurs="1" maxOccurs="1" />
+          <xsd:element ref="Part" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="Quantity" type="INTTYPE" />
+          <xsd:element ref="DestinationLocation" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="MoveRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+      <xsd:element name="SourceLocation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element ref="Location" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="DestinationLocation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element ref="Location" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+  
+  <!--===================-->
+  <!--P-->
+  <!--===================-->
+
+      <xsd:complexType name="PartCostRqType">
+        <xsd:sequence>
+            <xsd:element ref="PartNum" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="PartCostRsType">
+        <xsd:sequence>
+          <xsd:element ref="PartNum" minOccurs="1" />
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="Cost" type="PRICETYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+      <!--Part Get-->
+      <xsd:complexType name="PartGetRqType">
+        <xsd:sequence>
+          <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="1"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="PartGetRsType">
+        <xsd:sequence>
+          <xsd:element ref="Part" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+    
+      <!--Part Query-->
+      <xsd:complexType name="PartQueryRqType">
+        <xsd:sequence>
+          <xsd:element ref="PartNum"  minOccurs="1" maxOccurs="1"/>
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="PartQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="Part" minOccurs="0" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Pick Query-->
+      <xsd:complexType name="PickQueryRqType">
+        <xsd:sequence>
+          <xsd:element name="StartIndex" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="RecordCount" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="PickNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="OrderNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="PickType" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Status" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Priority" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="StartDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="EndDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Fulfillable" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="PickQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="PickSearchItem" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--<xsd:complexType name="PickOrdersType2">
+        <xsd:sequence>
+          <xsd:element ref="Tag" minOccurs="1" maxOccurs="1" />
+          <xsd:element ref="Location" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="Destination" type="DestinationType" />
+          <xsd:element name="Count" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="DestinationType">
+        <xsd:sequence>
+          <xsd:element ref="Location" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>-->
+  
+      <!--Print Report-->
+  
+      <!--Product Get-->
+
+      <xsd:complexType name="ProductGetRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests detailed information about the product.  This includes the product's underlying part, the product's base UOM and its tracking information.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The product number (case insensitive).</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="GetImage" type="BOOLTYPE" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The product number (case insensitive).</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ProductGetRsType">
+        <xsd:sequence>
+          <xsd:element ref="Product" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Product Price-->
+      <xsd:complexType name="ProductPriceRqType">
+        <xsd:sequence>
+          <xsd:element name="ProductNumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="CustomerName" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="Quantity" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="Date" type="DATETYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="ProductPriceRsType">
+        <xsd:sequence>
+            <!--TEST-->
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Product Query-->
+      <xsd:complexType name="ProductQueryRqType">
+        <xsd:sequence>
+          <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="1">
+          </xsd:element>
+          <xsd:element name="GetImage" type="BOOLTYPE" minOccurs="0" maxOccurs="1">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ProductQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="Product" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      
+  <!--===================-->
+  <!--Q-->
+  <!--===================-->
+
+      <xsd:complexType name="QuickShipRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Will do an automatic pick, pack, and ship on a Sales Order.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="SONumber" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The Sales Order.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="FulfillServiceItems" type="BOOLTYPE" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">Indicates if the service items on the SO should be fulfilled during ship.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="0" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">Location group.</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="QuickShipRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+  <!--===================-->
+  <!--R-->
+  <!--===================-->
+
+      <xsd:complexType name="ReceivingListRqType">
+        <xsd:sequence>
+          <xsd:element name="OrderNumber" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="OrderType" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="ReceiptStatus" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="StartRecord" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="RecordCount" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          
+          <xsd:element name="DateIssuedBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateIssuedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateFulfilledBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateFulfilledEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateReceivedBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateReceivedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateReconciledBegin" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="DateReconciledEnd" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+
+          <xsd:element name="PartNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="PartDesc" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="LocationGroupID" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="RMANum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="VendorName" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="ReceivingListRsType">
+        <xsd:sequence>
+          <xsd:element ref="ReceiveTicket" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+
+  <!--===================-->
+  <!--S-->
+  <!--===================-->
+
+      <xsd:complexType name="SaveDiscountRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Saves the discount.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element ref="Discount" minOccurs="1" maxOccurs="1">
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="SaveDiscountRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+
+      <xsd:complexType name="SaveImageRqType">
+        <xsd:sequence>
+          <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Number" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="Image" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="UpdateAssociations" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SaveImageRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+    
+      <!--Save Pick-->
+      <xsd:complexType name="SavePickRqType">
+        <xsd:sequence>
+          <xsd:element ref="Pick" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SavePickRsType">
+        <xsd:sequence>
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+  
+      <!--Save Receipt-->
+      <xsd:complexType name="SaveReceiptRqType">
+        <xsd:sequence>
+          <xsd:element ref="Receipt" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SaveReceiptRsType">
+        <xsd:sequence>
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Save Report-->
+      
+  
+      <!--Save Shipment-->
+      <xsd:complexType name="SaveShipmentRqType">
+        <xsd:sequence>
+          <xsd:element ref="Shipping" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+  
+      <xsd:complexType name="SaveShipmentRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Save UPC-->
+      <xsd:complexType name="SaveUPCRqType">
+        <xsd:sequence>
+          <xsd:element name="PartNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="UPC" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="UpdateProducts" type="BOOLTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SaveUPCRsType">
+        <xsd:sequence>
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+      <!--Save Work Order-->
+      <xsd:complexType name="SaveWorkOrderRqType">
+        <xsd:sequence>
+          <xsd:element ref="WO" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SaveWorkOrderRsType">
+        <xsd:sequence>
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+      <!-- Set Default Part Location -->
+      
+      <xsd:complexType name="SetDefPartLocRqType">
+        <xsd:sequence>
+          <xsd:element ref="PartNum" minOccurs="1" maxOccurs="1"/>
+          <xsd:element ref="Location" minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SetDefPartLocRsType">
+        <xsd:attributeGroup  ref="CommonRsAttrs"/>
+      </xsd:complexType>
+
+      <!--Save Tax Rate-->
+      <xsd:complexType name="SaveTaxRateRqType">
+        <xsd:sequence>
+          <xsd:element ref="TaxRate" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="SaveTaxRateRsType">
+        <xsd:sequence>
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+  
+      <!--Ship-->
+      <xsd:complexType name="ShipRqType">
+        <xsd:sequence>
+          <xsd:element name="ShipNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="ShipDate" type="DATETYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="FulfillService" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+          
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="ShipRsType">
+        <xsd:sequence>
+          <xsd:element ref="Shipping" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+  
+      <!--SO Save-->
+      <xsd:complexType name="SaveSORqType">
+        <xsd:sequence>
+          <xsd:element ref="SalesOrder" />
+          <xsd:element name="IssueFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+          <xsd:element name="IgnoreItems" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SaveSORsType">
+        <xsd:sequence>
+          <xsd:element ref="SalesOrder" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+
+
+  <!--===================-->
+  <!--U-->
+  <!--===================-->
+
+      <xsd:complexType name="UOMRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests a list of UOMs and their conversions.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:complexType>
+      <xsd:complexType name="UOMRsType">
+        <xsd:sequence>
+          <xsd:element ref="UOM" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+
+  <!--===================-->
+  <!--V-->
+  <!--===================-->
+
+      <xsd:complexType name="VendorGetRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests detailed information about the vendor.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element name="Name" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="VendorGetRsType">
+        <xsd:sequence>
+          <xsd:element ref="Vendor" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Vendor List-->
+      <xsd:complexType name="VendorListRqType">
+      </xsd:complexType>
+      <xsd:complexType name="VendorListRsType">
+        <xsd:sequence>
+          <xsd:element ref="Vendor" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+  
+      <!--Vendor Name List-->
+      <xsd:complexType name="VendorNameListRqType">
+      </xsd:complexType>
+  
+      <xsd:complexType name="VendorNameListRsType">
+        <xsd:sequence>
+          <xsd:element name="Vendor" type="STRTYPE" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Vendor Save-->
+
+      <xsd:complexType name="VendorSaveRqType">
+        <xsd:sequence>
+          <xsd:element ref="Vendor" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="VendorSaveRsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+      <!--Void SO-->
+
+      <xsd:complexType name="VoidSORqType">
+        <xsd:sequence>
+          <xsd:element name="SONumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="VoidSORsType">
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  <!--===================-->
+  <!--W-->
+  <!--===================-->
+
+  <xsd:complexType name="WorkOrderListRqType">
+  </xsd:complexType>
+
+  <xsd:complexType name="WorkOrderListRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  
+  
+  
+
+  <!--===================-->
+  <!--DISCONTINUED-->
+  <!--===================-->
+      <!-- ============================================================================= -->
+      <!-- Tag Query -->
+      <!-- ============================================================================= -->
+      <xsd:complexType name="TagQueryRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests detailed information about the tag.  This includes tracking data and information on the tag's location.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+          <xsd:element ref="TagID" />
+          <xsd:element ref="Num" />
+          <xsd:element ref="LocationID" />
+        </xsd:choice>
+        <xsd:attribute name="requestID" type="STRTYPE" />
+      </xsd:complexType>
+      <!-- Tag Responses -->
+      <xsd:complexType name="TagQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="Tag" minOccurs="0" />
+          <xsd:element ref="Location" minOccurs="0" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+  
+      <xsd:complexType name="PartTagQueryRqType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Requests the tags that contain the specified part.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+          <xsd:element ref="PartNum" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The part number (case insensitive).</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+          <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1">
+            <xsd:annotation>
+              <xsd:documentation xml:lang="en">The location group name (case sensitive).</xsd:documentation>
+            </xsd:annotation>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:complexType name="PartTagQueryRsType">
+        <xsd:sequence>
+          <xsd:element ref="Tag" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+     
+      <xsd:complexType name="TagInfoRqType">
+        <xsd:choice>
+          <xsd:element ref="TagID" />
+          <xsd:element ref="Num" />
+        </xsd:choice>
+      </xsd:complexType>
+      <xsd:complexType name="TagInfoRsType">
+        <xsd:sequence>
+          <xsd:element ref="Tag" minOccurs="0" />
+          <xsd:element ref="Location" minOccurs="0" />
+          <xsd:element name="DefaultLocation" type="DefaultLocationType" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      <xsd:complexType name="DefaultLocationType">
+        <xsd:sequence>
+          <xsd:element ref="Location" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <!-- ============================================================================= -->
+      <!-- Tag Move -->
+      <!-- ============================================================================= -->
+      <xsd:complexType name="TagMoveRqType">
+        <xsd:sequence>
+          <xsd:element name="SrcTagNum" type="INTTYPE" minOccurs="1" />
+          <xsd:element name="DstTagNum" type="INTTYPE" minOccurs="1" />
+          <!-- v4.0 will enforce that this is the TagNum of a Location.  Eventually we will be able to have hierarchical tags. -->
+          <xsd:element name="Note" type="STRTYPE" />
+        </xsd:sequence>
+        <xsd:attribute name="requestID" type="STRTYPE" />
+      </xsd:complexType>
+      <xsd:complexType name="TagMoveRsType">
+        <xsd:sequence>
+          <xsd:element ref="Tag" minOccurs="0" />
+          <xsd:element ref="Location" minOccurs="0" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+      <!-- ============================================================================= -->
+      <!-- Messages -->
+      <!-- ============================================================================= -->
+      <xsd:complexType name="MessageRsType">
+        <xsd:sequence>
+          <xsd:element name="Sender" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+          <xsd:element name="Message" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attributeGroup ref="CommonRsAttrs" />
+      </xsd:complexType>
+  
+
+  <!-- ============================================================================= -->
+  <!-- Pick                                                                          -->
+  <!-- ============================================================================= -->
+
+  
+  <xsd:complexType name="PickRqType">
+    <xsd:sequence>
+      <xsd:element name="TagNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="LocNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="Quantity" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Note" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      <xsd:element ref="Tracking" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="PickItemID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="PickRsType">
+    <xsd:sequence>
+      <xsd:element ref="Tag" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="HoldPickItemRqType">
+    <xsd:sequence>
+      <xsd:element name="PickItemID" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="HoldPickItemRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="FinishPickRqType">
+    <xsd:sequence>
+      <xsd:element ref="Pick" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Slot" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="LocNum" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FinishPickRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <!-- ============================================================================= -->
+  <!-- Pick                                                                          -->
+  <!-- ============================================================================= -->
+  <xsd:complexType name="YieldRqType">
+    <xsd:sequence>
+      <xsd:element name="TagNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="DestinationTagNum" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Location" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="Quantity" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Ref" type="STRTYPE" />
+      <xsd:element ref="SerialNumbers" minOccurs="0" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="DestinationTagType">
+    <xsd:sequence>
+      <xsd:element ref="Tag" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="YieldRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  
+  
+  
+  
+  <!-- ============================================================================= -->
+  <!-- Order Queries -->
+  <!-- ============================================================================= -->
+
+
+  
+  <xsd:complexType name="SavePORqType">
+    <xsd:sequence>
+      <xsd:element ref="PurchaseOrder" />
+      <xsd:element name="IssueFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SavePORsType">
+    <xsd:sequence>
+      <xsd:element ref="PurchaseOrder" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="LoadPORqType">
+    <xsd:sequence>
+      <xsd:element name="Number" type="STRTYPE" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="LoadPORsType">
+    <xsd:sequence>
+      <xsd:element ref="PurchaseOrder" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <!-- ============================================================================= -->
+  <!-- Part Queries -->
+  <!-- ============================================================================= -->
+  
+  <!-- ============================================================================= -->
+  <!-- Part Cost Queries -->
+  <!-- ============================================================================= -->
+  
+  <!-- ============================================================================= -->
+  <!-- Recieving Queries -->
+  <!-- ============================================================================= -->
+  
+  <xsd:complexType name="ReceivingItemsRqType">
+    <xsd:sequence>
+      <xsd:element name="OrderNumber" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="OrderType" type="INTTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="ItemStatus" type="INTTYPE" minOccurs="0" maxOccurs="1" />
+      <xsd:element name="LocationGroup" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ReceivingItemsRsType">
+    <xsd:sequence>
+      <xsd:element ref="ReceiveItem" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="ReceiveRqType">
+    <xsd:sequence>
+      <xsd:element name="LocationGroupName" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element ref="ReceiveItem" minOccurs="1" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ReceiveRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  <!-- ============================================================================= -->
+  <!-- Recieving Queries -->
+  <!-- ============================================================================= -->
+  
+  
+  
+  
+ 
+  
+  
+  
+  
+  <xsd:complexType name="SetSystemPropertyRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Used for internal testing purposes.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ref="Property" minOccurs="1" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="SetSystemPropertyRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="GetSystemPropertyRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Used for internal testing purposes.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ref="Name" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetSystemPropertyRsType">
+    <xsd:sequence>
+      <xsd:element ref="Name" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Value" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  
+  <xsd:complexType name="OpenModuleRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Not fully implemented.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Module" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element name="Action" type="STRTYPE" minOccurs="1" maxOccurs="1" />
+      <xsd:element ref="Clients" minOccurs="0" maxOccurs="1" />
+      <xsd:element ref="Parameters" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OpenModuleRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  
+  
+  <xsd:complexType name="GetNextNumberRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Requests the next order number.  This requires auto numbering module option to be turned on.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Type" type="STRTYPE" minOccurs="1" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Order Type: PO, SO, or WO</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetNextNumberRsType">
+    <xsd:sequence>
+      <xsd:element name="Number" type="STRTYPE" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  
+  <xsd:complexType name="PartSaveRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Not fully implemented.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ref="Part" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="PartSaveRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+
+  <xsd:complexType name="ProductSaveRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Not fully implemented.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ref="Product" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="ProductSaveRsType">
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  <xsd:complexType name="DiscountGetRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Returns a list of all discounts.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="DiscountGetRsType">
+    <xsd:sequence>
+      <xsd:element ref="Discount" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  
+  
+  <xsd:complexType name="TaxRateGetRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Returns a list of all tax rates.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="TaxRateGetRsType">
+    <xsd:sequence>
+      <xsd:element ref="TaxRate" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="QBClassListGetRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Returns a list of all Quickbooks Classes.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:complexType>
+  <xsd:complexType name="QBClassListGetRsType">
+    <xsd:sequence>
+      <xsd:group ref="QBClass" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:group name="QBClass">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Quickbooks class list. </xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="ClassName" type="STRTYPE" minOccurs="1" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Quickbooks class</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:group>
+  
+  
+  
+  
+  
+  
+  <xsd:complexType name="TransferOrderSaveRqType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">Saves the Transfer Order.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element ref="TransferOrder">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">The Transfer Order to save.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="IssueFlag" type="BOOLTYPE" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TransferOrderSaveRsType">
+    <xsd:sequence>
+      <xsd:element ref="TransferOrder" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="LoadTransferOrderRqType">
+    <xsd:sequence>
+      <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">The Transfer Order number.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="LoadTransferOrderRsType">
+    <xsd:sequence>
+      <xsd:element ref="TransferOrder" minOccurs="0" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:complexType name="GetTransferOrderListRqType">
+    <xsd:sequence>
+      <xsd:element name="StartIndex" type="INTTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Used to signify the begining index of the requested list.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Count" type="INTTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Amount of Transfer Orders to return.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Number" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">The Transfer Order Number. (Partial value)</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Type" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">The type of Transfer Order.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Status" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">The status of the Transfer Order.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="User" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">User who created the Transfer Order.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="FromLocationGruop" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">The Location Group it is from.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ToLocationGroup" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Location Group it is going to.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DateIssuedStart" type="DATETYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Earliest issue date to search for.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DateIssuedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Latest issue date to search for.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DateScheduledStart" type="DATETYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Latest scheduled date to search for.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DateScheduledEnd" type="DATETYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Latest scheduled date to search for.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DateReceivedStart" type="DATETYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Latest received date to search for.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="DateReceivedEnd" type="DATETYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Latest received date to search for.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ContainingPartNum" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Transfer Order contains this part number.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="ContainingPartDescription" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Transfer Order contains this part description.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element ref="CustomField" minOccurs="0" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">Custom field to search by.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SortBy" type="STRTYPE" minOccurs="0" maxOccurs="1">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">How to sort the Transfer Orders.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GetTransferOrderListRsType">
+    <xsd:sequence>
+      <xsd:group ref="OrderNumber" minOccurs="1" maxOccurs="1" />
+    </xsd:sequence>
+    <xsd:attributeGroup ref="CommonRsAttrs" />
+  </xsd:complexType>
+  <xsd:group name="OrderNumber">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">List of order numbers</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Number" type="STRTYPE" minOccurs="1" maxOccurs="unbounded">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">The order number</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:group>
+</xsd:schema>

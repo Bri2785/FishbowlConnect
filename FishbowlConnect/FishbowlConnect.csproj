@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Target Name="PushNuGetPackage" AfterTargets="GenerateNuspec" Condition="$(Configuration) == 'Release'">
+    <Message Text="Push NuGet Package to NuGet Feed" Importance="high"></Message>
+    <Exec Command="nuget.exe push -Source FishbowlConnect -ApiKey VSTS $(ProjectDir)bin\Release\FishbowlConnect.1.1.47.nupkg"></Exec>
+  </Target>
+  <PropertyGroup Label="Globals">
+    <SccProjectName>%24/FishbowlConnect/FC-Standard/FishbowlConnect</SccProjectName>
+    <SccProvider>{4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}</SccProvider>
+    <SccAuxPath>https://reelnordstrom.visualstudio.com</SccAuxPath>
+    <SccLocalPath>.</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Brian Nordstrom</Authors>
+    <Company>Unigrative</Company>
+    <Version>1.1.47</Version>
+    <Description>Library with connection and methods to consume the Fishbowl Inventory API</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Fishbowl_SessionSingleton.cs" />
+    <Compile Remove="MySQL\FBDatabase.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="7.1.1" />
+    <PackageReference Include="LibLog" Version="5.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MySqlConnector" Version="0.37.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+</Project>
