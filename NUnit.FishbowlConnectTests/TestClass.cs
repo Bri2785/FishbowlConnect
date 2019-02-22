@@ -1316,20 +1316,43 @@ namespace NUnit.FishbowlConnectTests
         [Test]
         public async Task GetPickListTest()
         {
-            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword, 15000);
 
-
-            using (FishbowlSession session = new FishbowlSession(config))
+            using (CancellationTokenSource cancellationTokenSource = new CancellationTokenSource())
             {
 
-                List<PickSimpleObject> pickSimpleObjects = await session.GetPickSimpleList(new FishbowlConnect.Json.APIObjects.PickListFilters
+                var waitAndCancelThread = Task.Run(() =>
                 {
-                    CompletelyFulfillable = false,
-                    Status = FishbowlConnect.Json.APIObjects.PickStatus.AllOpen,
-                    LocationGroupName = "Main Warehouse"
+                    Thread.Sleep(15000); //wait 15 seconds and then cancel if necessary
+
+                    cancellationTokenSource.Cancel();
                 });
 
-                Assert.IsInstanceOf<List<PickSimpleObject>>(pickSimpleObjects);
+
+                try
+                {
+                    using (FishbowlSession session = new FishbowlSession(config))
+                    {
+
+                        List<PickSimpleObject> pickSimpleObjects = await session.GetPickSimpleList(new PickListFilters
+                        {
+                            CompletelyFulfillable = true,
+                            Status = PickStatus.All,
+                            LocationGroupName = "Main Warehouse",
+                            Username="DESK3"
+                        }, "69815", cancellationTokenSource.Token);
+
+
+                        Assert.IsInstanceOf<List<PickSimpleObject>>(pickSimpleObjects);
+                    }
+                }
+                catch(TaskCanceledException e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+
+
+                await waitAndCancelThread;
             }
         }
 

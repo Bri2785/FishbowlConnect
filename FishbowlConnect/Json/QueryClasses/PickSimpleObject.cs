@@ -35,17 +35,24 @@ namespace FishbowlConnect.Json.QueryClasses
         {
             get
             {
-                if (this.ItemsNotFulfillable == this.NumberOfItems)
+                if (PickStatusID == "40")
                 {
-                    return PickFulfillStatus.None;
-                }
-                else if (this.ItemsNotFulfillable == 0)
-                {
-                    return PickFulfillStatus.Fulfillable;
+                    return PickFulfillStatus.Fulfilled;
                 }
                 else
                 {
-                    return PickFulfillStatus.Partial;
+                    if (this.ItemsNotFulfillable == this.NumberOfItems)
+                    {
+                        return PickFulfillStatus.None;
+                    }
+                    else if (this.ItemsNotFulfillable == 0)
+                    {
+                        return PickFulfillStatus.Fulfillable;
+                    }
+                    else
+                    {
+                        return PickFulfillStatus.Partial;
+                    }
                 }
             }
         }

@@ -4,13 +4,15 @@ using FishbowlConnect.Json.QueryClasses;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FishbowlConnect
 {
     public partial class FishbowlSession
     {
-        public async Task<List<ShipSimpleObject>> getShipSimpleList(ShipListFilters shipFilters = null, string searchTerm = null)
+        public async Task<List<ShipSimpleObject>> getShipSimpleList(ShipListFilters shipFilters = null, 
+            string searchTerm = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             //List<ShipSimpleObject> shipSimpleObjects = new List<ShipSimpleObject>();
 
@@ -44,7 +46,7 @@ namespace FishbowlConnect
 
             }
 
-            if (!String.IsNullOrEmpty(searchTerm))
+            if (!string.IsNullOrEmpty(searchTerm))
             {
                 WhereClause += " AND (UPPER(COALESCE(so.`billToName`, CONCAT(xoFromLG.name,' -> ', xoToLG.name), vendor.name)) LIKE " +
                     "'%" + searchTerm.ToUpper() + "%' OR UPPER(ship.num) LIKE '%" + searchTerm.ToUpper() + "%')";
@@ -74,11 +76,12 @@ namespace FishbowlConnect
                             @" ORDER BY COALESCE(so.`billToName`, CONCAT(xoFromLG.name,' -> ', xoToLG.name), vendor.name), ship.id " +
                             LimitClause;
 
-            return await ExecuteQueryAsync<ShipSimpleObject, ShipSimpleObjectClassMap>(query);
+            return await ExecuteQueryAsync<ShipSimpleObject, ShipSimpleObjectClassMap>(query, cancellationToken);
 
         }
 
-        public async Task<List<ShipmentImage>> GetShipmentImageList(int shipId)
+        public async Task<List<ShipmentImage>> GetShipmentImageList(int shipId, 
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             string query = string.Format(@"select
                                   `id`,
@@ -89,7 +92,7 @@ namespace FishbowlConnect
                                   `briteideasupdate`.`shipimages`
                                 where recordid = {0}", shipId);
 
-            return await ExecuteQueryAsync<ShipmentImage, ShipmentImageClassMap>(query);
+            return await ExecuteQueryAsync<ShipmentImage, ShipmentImageClassMap>(query, cancellationToken);
         }
 
     }

@@ -227,6 +227,7 @@ namespace FishbowlConnect.Json.APIObjects
 
     public enum PickFulfillStatus
     {
+        Fulfilled,
         Fulfillable,
         Partial,
         None

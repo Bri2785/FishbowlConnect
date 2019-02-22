@@ -1,9 +1,11 @@
 ﻿using FishbowlConnect.Json.APIObjects;
 using FishbowlConnect.Json.CsvClassMaps;
 using FishbowlConnect.Json.QueryClasses;
+using FishbowlConnect.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FishbowlConnect
@@ -16,7 +18,8 @@ namespace FishbowlConnect
         /// <param name="PickFilters"><see cref="PickListFilters"/></param>
         /// <returns>List of Simple Pick Objects</returns>
         /// <exception cref="KeyNotFoundException">Throws when no records returned</exception>
-        public async Task<List<PickSimpleObject>> GetPickSimpleList(PickListFilters PickFilters = null, string searchTerm = null)
+        public async Task<List<PickSimpleObject>> GetPickSimpleList(PickListFilters PickFilters = null, 
+            string searchTerm = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             List<PickSimpleObject> PickList = new List<PickSimpleObject>();
 
@@ -44,7 +47,7 @@ namespace FishbowlConnect
                 {
                     WhereClause += " AND Pick.StatusID in (10,20,30) ";
                 }
-                else if (PickFilters.Status == PickStatus.All   )
+                else if (PickFilters.Status == PickStatus.All)
                 {
                     WhereClause += " AND Pick.StatusID in (10,20,30,40) ";
                 }
@@ -62,42 +65,42 @@ namespace FishbowlConnect
                 //}
                 if (!string.IsNullOrEmpty(PickFilters.Username))
                 {
-                    WhereClause += " AND SysUser.UserName = '" + PickFilters.Username + "'";
+                    WhereClause += " AND UPPER(SysUser.UserName) = '" + PickFilters.Username.ToUpper() + "'";
                 }
             }
 
 
-            if (!String.IsNullOrEmpty(searchTerm))
+            if (!string.IsNullOrEmpty(searchTerm))
             {
                 WhereClause += " AND (UPPER(COALESCE(so.CUSTOMERCONTACT, CONCAT(xoFromLG.name,' -> ', xoToLG.name), vendor.name)) LIKE " +
                     "'%" + searchTerm.ToUpper() + "%' OR UPPER(pick.num) LIKE '%" + searchTerm.ToUpper() + "%')";
 
             }
 
-            string query = @"select pick.id, pick.num, pick.StatusID, pick.DateScheduled, Pick.locationgroupid, 
-                                Pick.priority, SysUser.username, 
-                                COALESCE(so.CUSTOMERCONTACT, CONCAT(xoFromLG.name,' -> ', xoToLG.name), vendor.name) AS CUSTOMERCONTACT,
-                                Locationgroup.Name as LGName, 
-                                Coalesce(ItemsNotFulfillable, 0) as ItemsNotFulfillable , ItemCount.NumberOfItems
+            string query = string.Format(@"select Pick.ID as PickID
+		            , pick.num AS PickNumber
+		            , pick.StatusID as PickStatusID
+		            , pick.DateScheduled
+		            , Pick.locationgroupid
+		            , Pick.priority
+		            , SysUser.username
+		            , COALESCE(so.CUSTOMERCONTACT, CONCAT(xoFromLG.name,' -> ', xoToLG.name), vendor.name) AS OrderInfo
+		            , Locationgroup.Name AS LGName
+		            , COALESCE(ItemsNotFulfillable, 0) AS ItemsNotFulfillable 
+		            , ItemCount.NumberOfItems
+                                
                             from pick
+                            join pickitem on pickitem.`pickId` = pick.id
+                            
                             join sysuser on pick.userID = sysuser.id
-                            LEFT JOIN so ON (
-				                CASE WHEN INSTR(Pick.num,'-') > 0 THEN
-					                SUBSTRING(pick.num FROM 1 FOR (INSTR(Pick.num,'-')-1))
-				                ELSE Pick.num 
-				                END  = CONCAT('S',SO.NUM))
-				
-			                    LEFT JOIN xo ON (
-				                CASE WHEN INSTR(Pick.num,'-') > 0 THEN
-					                SUBSTRING(pick.num FROM 1 FOR (INSTR(Pick.num,'-')-1))
-				                ELSE Pick.num 
-				                END  = CONCAT('T',xo.NUM))
-				
-			                    LEFT JOIN po ON (
-				                CASE WHEN INSTR(Pick.num,'-') > 0 THEN
-					                SUBSTRING(pick.num FROM 1 FOR (INSTR(Pick.num,'-')-1))
-				                ELSE Pick.num
-				                END  = CONCAT('P',po.NUM))	
+                            
+                            LEFT JOIN so ON (pickitem.`orderId` = so.id and pickitem.`orderTypeId` = 20)
+		
+			    LEFT JOIN xo ON (pickitem.`orderId` = xo.id and pickitem.`orderTypeId` = 40)
+		
+			    LEFT JOIN po ON (pickitem.`orderId` = po.id and pickitem.`orderTypeId` = 10)
+			    
+			    Left Join wo on (pickitem.`orderId` = wo.id and pickitem.`orderTypeId` = 30)	
 
                                 LEFT JOIN locationgroup xoToLG ON xo.`shipToLGId` = xoToLG.`id`
 			                    LEFT JOIN locationgroup xoFromLG ON xo.`fromLGId` = xoFromLG.`id`
@@ -111,12 +114,17 @@ namespace FishbowlConnect
                             Join (select PickID, Count(*) as NumberOfItems
                                     from pickitem
                                     Group By Pickitem.PickID) ItemCount on Pick.ID = ItemCount.pickid 
-                            Where " +
-                            WhereClause.Substring(4) +
-                            " Order By pick.dateCreated, pick.num" +
-                            LimitClause; //TODO: if all filters are null then remove the where from the query
+                            
+                            Where  {0} 
+                            
+                            
+                            GROUP BY 1,2,3,4,5,6,7,8,9,10,11
+                            Order By pick.dateScheduled DESC, pick.num 
+		                    {1}",
+                            WhereClause.Substring(4), LimitClause); 
 
-            return await ExecuteQueryAsync<PickSimpleObject, PickSimpleObjectClassMap>(query);
+            
+            return await ExecuteQueryAsync<PickSimpleObject, PickSimpleObjectClassMap>(query, cancellationToken);
 
 
 

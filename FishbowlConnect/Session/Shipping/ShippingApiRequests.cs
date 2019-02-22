@@ -51,7 +51,7 @@ namespace FishbowlConnect
         }
 
         /// <summary>
-        /// Ships an order in FB. Uploads the provided image as a signaute if added
+        /// Ships an order in FB. Uploads the provided image as a signature if added
         /// </summary>
         /// <param name="ShipNum">"Shipment number, must include the prefix"</param>
         /// <param name="image">"Base64 encoded image to attach to shipment. Usually used for signatures</param>

@@ -34,6 +34,7 @@ using FishbowlConnect.Json.QueryClasses;
 using FishbowlConnect.MySQL;
 using FishbowlConnect.Interfaces;
 using FishbowlConnect.Logging;
+using FishbowlConnect.Helpers;
 
 namespace FishbowlConnect
 {
@@ -414,6 +415,7 @@ namespace FishbowlConnect
 
                             }
 
+                            //receiveDoneAutoAsync.Set();
                             receiveDoneAuto.Set();
                             //receiveDone.Set();
                             state.sb = new StringBuilder();
@@ -429,6 +431,7 @@ namespace FishbowlConnect
                     else
                     {
                         Logger.Debug("Receive reset event set");
+                        //receiveDoneAutoAsync.Set();
                         receiveDoneAuto.Set();
                         //receiveDone.Set();
                     }
@@ -714,19 +717,6 @@ namespace FishbowlConnect
             }
         }
 
-        private CancellationToken cancellationToken;
-
-        public CancellationToken CancellationToken
-        {
-            get { return cancellationToken; }
-            set
-            {
-                cancellationToken = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
 
         /// <summary>
         /// Fishbowl Last XML request made in raw format 
@@ -771,11 +761,11 @@ namespace FishbowlConnect
         #endregion
 
         #region Session Constructors
-        public FishbowlSession(SessionConfig sessionConfig, CancellationToken cancellationToken = default(CancellationToken))
+        public FishbowlSession(SessionConfig sessionConfig)
             : this(sessionConfig.ServerAddress, sessionConfig.ServerPort, sessionConfig.APIUser, sessionConfig.APIPassword)
         {
             Config = sessionConfig;
-            CancellationToken = cancellationToken;
+            //CancellationToken = cancellationToken;
         }
 
 
@@ -1181,7 +1171,7 @@ namespace FishbowlConnect
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<string> IssueRequest(string request)
+        public async Task<string> IssueRequest(string request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (IsConnected != true)
             {
@@ -1203,7 +1193,7 @@ namespace FishbowlConnect
                 Send(_client, request); //send async using begin send and creates the response 
                 sendDoneAuto.WaitOne();
 
-                if (receiveDoneAuto.WaitOne(Config.RequestTimeout))//set timeout
+                if (await receiveDoneAuto.WaitOneAsync(Config.RequestTimeout, cancellationToken))//set timeout
                 {
                     //if true then its good, if false then it timed out
                     Logger.Debug("Issue Request Done");
@@ -1220,7 +1210,6 @@ namespace FishbowlConnect
             }
             catch (Exception ex)
             {
-                //App.reelLogger.Error(ex, "Issue request error");
                 Debug.WriteLine(ex.Message);
 
                 throw;
@@ -1239,7 +1228,8 @@ namespace FishbowlConnect
         /// <exception cref="FishbowlConnectionException"></exception>
         /// <exception cref="FishbowlRequestException"></exception>
         /// <exception cref="FishbowlException"></exception>
-        public async Task<T> IssueXMLRequestAsync<T>(object requestObject)
+        public async Task<T> IssueXMLRequestAsync<T>(object requestObject,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             //check if disposed before sending to see if we need to reset
             //property to auto reset and re-login?
@@ -1301,7 +1291,7 @@ namespace FishbowlConnect
                     //message sent , response is coming in the receive callback since the server is already listening when we started it
 
                     //Begin receive started in class construction, reset is done in the callback
-                    if (receiveDoneAuto.WaitOne(Config.RequestTimeout))//set timeout
+                    if (await receiveDoneAuto.WaitOneAsync(Config.RequestTimeout, cancellationToken))//set timeout
                     {
                         //if true then its good, if false then it timed out
 
@@ -1464,7 +1454,9 @@ namespace FishbowlConnect
                     //message sent , response is coming in the receive callback since the server is already listening when we started it
 
                     //Begin receive started in class construction, reset is done in the callback
-                    if (receiveDoneAuto.WaitOne(Config.RequestTimeout))//set timeout
+
+                    if (await receiveDoneAuto.WaitOneAsync(Config.RequestTimeout, cancellationToken))//set timeout
+                    
                     {
                         //if true then its good, if false then it timed out
 
@@ -3155,6 +3147,8 @@ namespace FishbowlConnect
             {
                 throw new ArgumentException("Query cannot be missing");
             }
+
+            Logger.Trace(query);
 
             ExecuteQueryRq executeQueryRq = new ExecuteQueryRq()
             {
