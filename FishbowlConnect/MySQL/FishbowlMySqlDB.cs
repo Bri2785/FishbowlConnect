@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using FishbowlConnect.Helpers;
 using FishbowlConnect.Interfaces;
 using FishbowlConnect.Json.APIObjects;
 using FishbowlConnect.Json.QueryClasses;
@@ -341,6 +342,7 @@ namespace FishbowlConnect.MySQL
         /// </summary>
         /// <param name="searchTerm">SearchTerm must contain the special characters for locaiotn and tracking lookup</param>
         /// <returns></returns>
+        [Obsolete]
         public async Task<List<InvQtyWithTracking>> GetPartTagAndTracking(string searchTerm)
         {
             if (String.IsNullOrEmpty(searchTerm))
@@ -529,7 +531,7 @@ namespace FishbowlConnect.MySQL
             }
             else
             {
-                query = String.Format(
+                query = string.Format(
                     @"SELECT part.num, sum(tag.`qty`) as qty, tag.id AS tagid, tag.`num` AS tagNum, tag.`locationId`, location.`name` as LocationName, locationgroup.name as LocationGroupName,
                     location.`pickable` AS locationPickable,                    
                     COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`) AS primaryInfo,
@@ -563,7 +565,7 @@ namespace FishbowlConnect.MySQL
 
                     /* LOOKUP BY PARTNUM, LOCATIONID, PRIMARYTRACKING */
                     WHERE
-                    (UPPER(product.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' OR
+                    (UPPER(part.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' OR
                     UPPER(CONCAT('$T$', COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`))) LIKE '{0}' OR
                     CONCAT('$L$', location.name) LIKE '{0}'  )
                     AND location.`typeId` NOT IN (20,60,80)
@@ -627,7 +629,8 @@ namespace FishbowlConnect.MySQL
         /// <returns></returns>
         /// <exception cref="ArgumentException">Thrown when part not found</exception>
         /// <exception cref="KeyNotFoundException">Thrown when no records returned</exception>
-        public async Task<List<InvQtyWithAllTracking>> GetPartTagAndAllTrackingWithDefaultLocation(string SearchTerm, string LocationGroupName)
+        public async Task<List<InvQtyWithAllTracking>> GetPartTagAndAllTrackingWithDefaultLocation(string SearchTerm
+            , string LocationGroupName, InventorySearchTermType searchTermType)
         {
             if (String.IsNullOrEmpty(SearchTerm))
             {
@@ -641,7 +644,7 @@ namespace FishbowlConnect.MySQL
 
             if (SearchTerm.Contains("$L$"))
             {
-                query = String.Format(@"SELECT part.num AS PartNumber
+                query = string.Format(@"SELECT part.num AS PartNumber
 	                        , SUM(tag.`qty`) AS Qty
 	                        , tag.id AS TagID
 	                        , tag.`num` AS tagNum
@@ -692,7 +695,7 @@ namespace FishbowlConnect.MySQL
 		                        JOIN locationgroup dflGroup ON (dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
 		                        ) dfl ON part.`id` = dfl.`partId` 
 		
-                        /* LOOKUP BY PRODUCTNUM OR UPC */
+                        /* LOOKUP BY LOCATION */
                         WHERE
                         CONCAT('$L$', location.name) LIKE '{0}'
                         AND location.`typeId` NOT IN (20,60,80)
@@ -703,7 +706,7 @@ namespace FishbowlConnect.MySQL
             else if(SearchTerm.Contains("$T$"))
             {
                 //change to part only query
-                query = String.Format(@"SELECT part.num AS PartNumber
+                query = string.Format(@"SELECT part.num AS PartNumber
 	                                , SUM(tag.`qty`) AS Qty
 	                                , tag.id AS TagID
 	                                , tag.`num` AS tagNum
@@ -770,7 +773,7 @@ namespace FishbowlConnect.MySQL
 		                                JOIN locationgroup dflGroup ON (dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
 		                                ) dfl ON part.`id` = dfl.`partId` 
 		
-                                /* LOOKUP BY PRODUCTNUM OR UPC */
+                                /* LOOKUP BY TRACKING */
                                 WHERE
                                 location.`typeId` NOT IN (20,60,80)
 
@@ -779,7 +782,82 @@ namespace FishbowlConnect.MySQL
             }
             else
             {
-                query = String.Format(@"SELECT part.num AS PartNumber
+                switch (searchTermType)
+                {
+                    case InventorySearchTermType.Part:
+                        query = string.Format(@"SELECT part.num AS PartNumber
+                                , tag.`qty` AS Qty
+                                , tag.id AS TagID
+                                , tag.`num` AS tagNum
+                                , tag.`locationId`
+	                            , location.`name` AS LocationName
+                                , location.`pickable` AS LocationPickable
+                                , COALESCE(DATE_FORMAT(trackingdate.`info`, '%m/%d/%Y'), trackingdecimal.`info`,
+                                                        CASE WHEN parttracking.`typeId` = 80 THEN
+
+                                                            CASE WHEN trackinginteger.`info` = 0 THEN 'false'
+                                                                ELSE 'true'
+                                                                END
+
+                                            ELSE trackinginteger.`info`
+                                            END,
+
+                                                        trackingtext.`info`) AS TrackingInfo
+
+                                , parttracking.name AS TrackingLabel
+                                , parttracking.`abbr` AS TrackingAbbr
+                                , COALESCE(parttracking.`typeId`, 0) AS TrackingTypeID
+                                , COALESCE(parttracking.`id`, 0) AS TrackingID
+                                , COALESCE(parttracking.sortorder, 0) AS TrackingSortOrder
+                                , COALESCE(parttotracking.`primaryFlag`, 0) AS IsPrimaryTracking
+
+                                , locationgroup.name AS LocationGroupName
+                                , 0 AS UPCCaseQty
+                                , dfl.DefaultLocationName
+
+                            FROM part
+                            #JOIN product ON product.`partId` = part.id
+                            #LEFT JOIN uomconversion ON (product.`uomId` = uomconversion.`fromUomId` AND uomconversion.`toUomId` = part.`uomId`)
+                            LEFT JOIN tag ON tag.`partId` = part.id
+                            LEFT JOIN location ON tag.`locationId` = location.`id`
+                            LEFT JOIN locationgroup ON location.`locationGroupId` = locationgroup.`id`
+
+                            LEFT JOIN parttotracking ON(parttotracking.`partId` = part.id)# AND parttotracking.`primaryFlag` = 1)
+                                LEFT JOIN parttracking ON parttotracking.`partTrackingId` = parttracking.`id`
+
+                            LEFT JOIN trackingtext ON trackingtext.`partTrackingId` = parttotracking.`partTrackingId` AND trackingtext.`tagId` = tag.`id`
+
+
+                            LEFT JOIN trackingdecimal ON trackingdecimal.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdecimal.`tagId` = tag.`id`
+
+
+                            LEFT JOIN trackinginteger ON trackinginteger.`partTrackingId` = parttotracking.`partTrackingId` AND trackinginteger.`tagId` = tag.`id`
+
+
+                            LEFT JOIN trackingdate ON trackingdate.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdate.`tagId` = tag.`id`
+
+                            LEFT JOIN(SELECT defaultlocation.`partId`, dflLocation.`name` AS DefaultLocationName
+
+                                    FROM defaultlocation
+
+                                    JOIN location dflLocation ON dflLocation.`id` = defaultlocation.`locationId`
+
+                                    JOIN locationgroup dflGroup ON(dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
+                                    ) dfl ON part.`id` = dfl.`partId` 
+
+                            /* LOOKUP BY PART NUM OR PART UPC */
+                            WHERE
+                            (UPPER(part.`num`) LIKE '{0}' OR part.`upc` LIKE '{0}' )
+                            AND(location.`typeId` NOT IN(20, 60, 80) OR location.`typeId` IS NULL)
+
+                            GROUP BY part.num, locationId, trackinginfo, trackinglabel, upccaseqty
+                            ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
+
+
+                        break;
+
+                    case InventorySearchTermType.Product:
+                        query = string.Format(@"SELECT part.num AS PartNumber
 	                                    , SUM(tag.`qty`) AS Qty
 	                                    , tag.id AS TagID
 	                                    , tag.`num` AS tagNum
@@ -832,13 +910,19 @@ namespace FishbowlConnect.MySQL
 		                                    JOIN locationgroup dflGroup ON (dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
 		                                    ) dfl ON part.`id` = dfl.`partId` 
 		
-                                    /* LOOKUP BY PRODUCTNUM OR UPC */
+                                    /* LOOKUP BY PRODUCT NUM OR UPC */
                                     WHERE
                                     (UPPER(product.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' )
                                     AND (location.`typeId` NOT IN (20,60,80) OR location.`typeId` IS NULL)
 
                                     GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
                                     ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
+
+
+                        break;
+                    
+                }
+                
 
             }
 
@@ -912,7 +996,7 @@ namespace FishbowlConnect.MySQL
                     FROM part
                     JOIN product ON part.id = product.`partId`
                         WHERE
-                        (UPPER(product.`num`) = '{0}' OR product.`upc` = '{0}')
+                        (UPPER(part.`num`) = '{0}' OR product.`upc` = '{0}')
     
                 UNION
 
@@ -952,11 +1036,11 @@ namespace FishbowlConnect.MySQL
 
         public async Task<string> GetPartNumberFromProductOrUPC(string searchTerm)
         {
-            if (String.IsNullOrEmpty(searchTerm))
+            if (string.IsNullOrEmpty(searchTerm))
             {
                 throw new ArgumentNullException("Search term required");
             }
-            string query = String.Format(@"Select Part.num as PartNumber 
+            string query = string.Format(@"Select Part.num as PartNumber 
                                 from part
                                 join product on part.id = product.partid
                                 where product.num like '{0}' OR product.upc like '{0}'",searchTerm);
@@ -1098,7 +1182,8 @@ namespace FishbowlConnect.MySQL
         //         }
         //     }
 
-        #region Products
+        #region Products And Parts
+
         public async Task<List<ProductSpec>> getProductSpecs(string ProductNumber)
         {
             if (String.IsNullOrEmpty(ProductNumber))
@@ -1347,6 +1432,51 @@ namespace FishbowlConnect.MySQL
 
         }
 
+
+        /// <summary>
+        /// Get a list of active part from the fishbowl database. Only returns inventoried and non-inventoried part types
+        /// </summary>
+        /// <returns>List of PartSimple Objects</returns>
+        /// <exception cref="KeyNotFoundException">Thrown when no records are found</exception>
+        public async Task<List<PartSimpleObject>> GetFBParts()
+        {
+            //await Load();
+
+            List<PartSimpleObject> partSimples = new List<PartSimpleObject>();
+
+            string query = @"SELECT part.num AS PartNumber, part.description AS PartDescription
+	                            FROM part
+	                            WHERE part.`activeFlag` = 1
+	                            AND part.`typeId` IN(10, 30)
+	                            ORDER BY part.num";
+
+            using (var result = new MySqlCommand(query, Connection))
+            {
+                using (var reader = await result.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        partSimples.Add(new PartSimpleObject
+                        {
+                            PartNumber = (string)reader["PartNumber"],
+                            PartDescription = (string)reader["PartDescription"]
+                        });
+                    }
+                }
+            }
+
+            if (partSimples?.Count == 0)
+            {
+                throw new KeyNotFoundException("No parts found");
+            }
+            return partSimples;
+
+
+        }
+
+
+
+
         //     public static bool FBProductIsKit(string ProductNum)
         //     {
         //         using (MySqlConnection connFB = FishBowlConnection())
@@ -1490,7 +1620,7 @@ namespace FishbowlConnect.MySQL
         //}
         #endregion
 
-             #region Shipping
+        #region Shipping
 
         [Obsolete("Use the FB session call instead of direct to DB")]
         public async Task<List<ShipSimpleObject>> getShipSimpleList(ShipListFilters shipFilters = null, string searchTerm = null)

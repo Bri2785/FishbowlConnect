@@ -37,6 +37,9 @@ namespace FishbowlConnect
         /// </summary>
         /// <param name="PickToSave"></param>
         /// <returns></returns>
+        /// <exception cref="FishbowlRequestException">Request Error</exception>
+        /// <exception cref="FishbowlAuthException">Thrown on bad login info</exception>
+        /// <exception cref="FishbowlConnectionException">Thrown when can't connect to server</exception>
         public async Task<Pick> SavePick(Pick PickToSave)
         {
             SavePickRq SavePickRq = new SavePickRq();

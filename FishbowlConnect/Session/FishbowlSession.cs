@@ -373,7 +373,7 @@ namespace FishbowlConnect
 
                             //deseralize the response and respond appropriately
 
-                            Logger.Trace("Response received : " + serverResponse);
+                            Logger.Trace("Response received : {0}", serverResponse);
 
                             // Write the response to the console.  
                             Debug.WriteLine("Response received : {0}", serverResponse);

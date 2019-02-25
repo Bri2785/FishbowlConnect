@@ -531,6 +531,40 @@ namespace NUnit.FishbowlConnectTests
 
 
         }
+
+        [Test]
+        public async Task FBDBgetPartsTest()
+        {
+            MySqlConfig config = new MySqlConfig("192.168.150.2", "3301", "gone", "fishing", "BRITEIDEASUPDATE");
+
+            using (var db = await FishbowlMySqlDB.CreateAsync(config))
+            {
+                List<PartSimpleObject> temp = await db.GetFBParts();
+                Assert.IsInstanceOf(typeof(List<PartSimpleObject>), temp);
+                Assert.True(temp.Count > 1);
+
+            }
+
+
+        }
+
+
+
+
+        [TestCase("100GGR")]
+        [TestCase("dfdsf")]
+        public async Task FBDBGetPartNumberFromProductOrUPCTest(string numberOrUPC)
+        {
+            MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(), DatabaseUser, DatabasePassword, DatabaseName);
+
+            using (var db = await FishbowlMySqlDB.CreateAsync(config))
+            {
+                string productNum = await db.GetPartNumberFromProductOrUPC(numberOrUPC);
+                Assert.True(!string.IsNullOrEmpty(productNum));
+            }
+
+
+        }
         [Test]
         public async Task FBDBgetProductListTest()
         {
@@ -566,7 +600,7 @@ namespace NUnit.FishbowlConnectTests
             {
                 try
                 {
-                    List<InvQtyWithAllTracking> temp = await db.GetPartTagAndAllTrackingWithDefaultLocation(searchTerm, "Main Warehouse");
+                    List<InvQtyWithAllTracking> temp = await db.GetPartTagAndAllTrackingWithDefaultLocation(searchTerm, "Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Product);
                     Assert.IsInstanceOf(typeof(List<InvQtyWithAllTracking>), temp);
                     foreach (InvQtyWithAllTracking item in temp)
                     {
@@ -612,7 +646,8 @@ namespace NUnit.FishbowlConnectTests
             {
                 try
                 {
-                    List<InvQtyWithAllTracking> temp = await db.GetPartTagAndAllTrackingWithDefaultLocation(searchTerm, "Main Warehouse");
+                    List<InvQtyWithAllTracking> temp = await db.GetPartTagAndAllTrackingWithDefaultLocation(searchTerm
+                        , "Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Product);
                     Assert.IsInstanceOf(typeof(List<InvQtyWithAllTracking>), temp);
 
                     List<InvQtyWithAllTracking> primaryList = temp
