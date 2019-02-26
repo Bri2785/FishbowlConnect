@@ -524,8 +524,8 @@ namespace NUnit.FishbowlConnectTests
 
             using (var db = await FishbowlMySqlDB.CreateAsync(config))
             {
-                ProductSimple temp = await db.getProduct("LED-SBA24BL");
-                Assert.IsInstanceOf(typeof(ProductSimple), temp);
+                ProductSimpleObject temp = await db.getProduct("LED-SBA24BL");
+                Assert.IsInstanceOf(typeof(ProductSimpleObject), temp);
 
             }
 
@@ -571,8 +571,8 @@ namespace NUnit.FishbowlConnectTests
             using (FishbowlMySqlDB db = await FishbowlMySqlDB.CreateAsync(new MySqlConfig(DatabaseAddress,
                         DatabasePort.ToString(), DatabaseUser, DatabasePassword, DatabaseName)))
             {
-                List<ProductSimple> productSimples = await db.getFBProducts();
-                Assert.IsInstanceOf(typeof(List<ProductSimple>), productSimples);
+                List<ProductSimpleObject> productSimples = await db.getFBProducts();
+                Assert.IsInstanceOf(typeof(List<ProductSimpleObject>), productSimples);
 
             }
 

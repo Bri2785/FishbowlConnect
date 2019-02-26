@@ -1337,13 +1337,11 @@ namespace FishbowlConnect.MySQL
         /// <summary>
         /// Get a list of active products from the fishbowl database. Only returns inventoried and non-inventoried part types
         /// </summary>
-        /// <returns>List of ProductSimple Objects</returns>
+        /// <returns>List of ProductSimpleObject Objects</returns>
         /// <exception cref="KeyNotFoundException">Thrown when no records are found</exception>
-        public async Task<List<ProductSimple>> getFBProducts()
+        public async Task<List<ProductSimpleObject>> getFBProducts()
         {
-            //await Load();
-
-            List<ProductSimple> productSimples = new List<ProductSimple>();
+            List<ProductSimpleObject> ProductSimpleObjects = new List<ProductSimpleObject>();
 
             string query = @"SELECT product.num AS ProductNumber, product.description AS ProductDescription #, producttree.`name` AS ProductTree
                                 FROM product
@@ -1359,21 +1357,20 @@ namespace FishbowlConnect.MySQL
                 {
                     while (await reader.ReadAsync())
                     {
-                        productSimples.Add(new ProductSimple
+                        ProductSimpleObjects.Add(new ProductSimpleObject
                         {
-                            ProductNumber = (string)reader["ProductNumber"],
-                            ProductDescription = (string)reader["ProductDescription"]//,
-                            //ProductTree = reader["ProductTree"] == DBNull.Value ? null : (string)reader["ProductTree"]
+                            Number = (string)reader["ProductNumber"],
+                            Description = (string)reader["ProductDescription"]
                         });
                     }
                 }
             }
 
-            if (productSimples?.Count == 0)
+            if (ProductSimpleObjects?.Count == 0)
             {
                 throw new KeyNotFoundException("No products found");
             }
-            return productSimples;
+            return ProductSimpleObjects;
 
 
         }
@@ -1385,11 +1382,11 @@ namespace FishbowlConnect.MySQL
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException">Thrown when no records found</exception>
         /// <exception cref="ArgumentException">Thrown when more than one product returned</exception>
-        public async Task<ProductSimple> getProduct(string productNumOrUPC)
+        public async Task<ProductSimpleObject> getProduct(string productNumOrUPC)
         {
             //await Load();
 
-            ProductSimple productSimple = null;// = new ProductSimple();
+            ProductSimpleObject ProductSimpleObject = null;// = new ProductSimpleObject();
 
             string query = String.Format(@"SELECT product.id, product.num, product.description, product.`upc`, product.price
                                 FROM product
@@ -1405,9 +1402,9 @@ namespace FishbowlConnect.MySQL
                     {
                         rowCount++;
 
-                        productSimple = new ProductSimple { 
-                            ProductNumber = (string)reader["num"],
-                            ProductDescription = (string)reader["description"],
+                        ProductSimpleObject = new ProductSimpleObject { 
+                            Number = (string)reader["num"],
+                            Description = (string)reader["description"],
                             UPC = (string)reader["upc"],
                             Price = (decimal)reader["price"],
                             Id = (int)reader["id"]
@@ -1417,7 +1414,7 @@ namespace FishbowlConnect.MySQL
                 }
             }
 
-            if (productSimple == null)
+            if (ProductSimpleObject == null)
             {
                 throw new KeyNotFoundException(String.Format("{0} not found", productNumOrUPC));
             }
@@ -1427,7 +1424,7 @@ namespace FishbowlConnect.MySQL
             }
 
 
-            return productSimple;
+            return ProductSimpleObject;
 
 
         }
@@ -1458,8 +1455,8 @@ namespace FishbowlConnect.MySQL
                     {
                         partSimples.Add(new PartSimpleObject
                         {
-                            PartNumber = (string)reader["PartNumber"],
-                            PartDescription = (string)reader["PartDescription"]
+                            Number = (string)reader["PartNumber"],
+                            Description = (string)reader["PartDescription"]
                         });
                     }
                 }
