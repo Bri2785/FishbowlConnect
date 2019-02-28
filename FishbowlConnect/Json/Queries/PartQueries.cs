@@ -52,6 +52,22 @@ namespace FishbowlConnect
             return await ExecuteQueryAsync<PartNumAndTracks, PartNumAndTracksClassMap>(query);
         }
 
+        /// <summary>
+        /// Gets the part number and description a part with the provided product number. Does not do wild card searched, product number must match
+        /// </summary>
+        /// <param name="ProductNumber"></param>
+        /// <returns>PartSimpleObject</returns>
+        /// <exception cref="KeyNotFoundException">Thrown when no record matches</exception>
+        public async Task<PartSimpleObject> GetSimplePart(string ProductNumber)
+        {
+            string query = string.Format(@"SELECT part.num AS Number, part.description AS Description
+	                            FROM part
+                                JOIN product on product.partid = part.id
+	                            WHERE part.`activeFlag` = 1
+	                            AND UPPER(product.num) like '{0}'", ProductNumber);
+
+            return (await ExecuteQueryAsync<PartSimpleObject, PartSimpleObjectClassMap>(query))[0];
+        }
 
     }
 }

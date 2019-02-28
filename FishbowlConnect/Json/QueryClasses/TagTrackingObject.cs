@@ -9,6 +9,6 @@ namespace FishbowlConnect.QueryClasses
         public int TagID { get; set; }
         public string Info { get; set; }
         public string TrackingLabel { get; set; }
-        public int TrackingTypeID { get; set; }
+        public int? TrackingTypeID { get; set; }
     }
 }

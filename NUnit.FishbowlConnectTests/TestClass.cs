@@ -39,7 +39,7 @@ namespace NUnit.FishbowlConnectTests
         const string DatabaseName = "BRITEIDEASUPDATE";
         const string BadDatabaseName = "fndfnd";
 
-        const string ValidPartNumberWithInventory = "LED-SB24W";
+        const string ValidPartNumberWithInventory = "ECL-SC";
 
         [Test]
         public void SessionTest()
@@ -257,7 +257,7 @@ namespace NUnit.FishbowlConnectTests
 
         #region Inventory
 
-        [TestCase("TestProduct")]
+        [TestCase("ECL-SC")]
         public async Task MoveInventoryImportTest(string partNumber)
         {
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
@@ -333,7 +333,8 @@ namespace NUnit.FishbowlConnectTests
                     DatabaseAddress, DatabasePort.ToString(), DatabaseUser, DatabasePassword,
                     DatabaseName)))
                 {
-                    InvQtyWithTracking invQty = (await db.GetPartTagAndTracking(partNumber)).First(m => m.Qty > 1);
+                    InvQtyWithAllTracking invQty = (await db.GetPartTagAndAllTrackingWithDefaultLocation(
+                        partNumber,"Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Part)).First(m => m.Qty > 1);
                     if (invQty != null)
                     {
 
@@ -341,7 +342,8 @@ namespace NUnit.FishbowlConnectTests
                         await session.CycleInventoryImportAsync(invQty.PartNumber, invQty.LocationFullName, (int)invQty.Qty - 1,
                             "Test Cycle Count", null, invQty.TagID);
 
-                        InvQtyWithTracking newInvQty = (await db.GetPartTagAndTracking(partNumber)).Find(m => m.TagID == invQty.TagID);
+                        InvQtyWithAllTracking newInvQty = (await db.GetPartTagAndAllTrackingWithDefaultLocation(
+                        partNumber, "Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Part)).Find(m => m.TagID == invQty.TagID);
 
                         Assert.IsTrue(newInvQty.Qty == invQty.Qty - 1);
                     }
@@ -1814,6 +1816,29 @@ namespace NUnit.FishbowlConnectTests
                     Product temp = session.GetProduct("100GCL").Result;
 
                     Assert.IsInstanceOf(typeof(Product), temp);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOf(typeof(FishbowlException), ex);
+                //throw;
+            }
+        }
+
+        [TestCase("00875-SC")]
+        public async Task GetPart(string productnumber )
+        {
+            try
+            {
+                SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+                using (FishbowlSession session = new FishbowlSession(config))
+                {
+
+                    PartSimpleObject part = await session.GetSimplePart(productnumber);
+
+                    Assert.IsInstanceOf(typeof(PartSimpleObject), part);
 
                 }
             }

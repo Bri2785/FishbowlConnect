@@ -216,15 +216,14 @@ namespace FishbowlConnect
                     // Complete the connection.  
                     client.EndConnect(ar);
 
-                    Logger.Debug(String.Format("Socket connected to {0}",
-                        client.RemoteEndPoint.ToString()));
+                    IsConnected = true;
 
-                    connectDoneAuto.Set();
+                    
 
                     Logger.Debug(string.Format("Socket connected to {0}",
                         client.RemoteEndPoint.ToString()));
 
-                    IsConnected = true;
+
 
                     //Debug.WriteLine("Disposed Status: " + _disposed.ToString());
                     // Create the state object.  
@@ -240,7 +239,7 @@ namespace FishbowlConnect
                     new AsyncCallback(ReceiveCallback), state);
                     Logger.Debug("Begin Receive - Listening for incoming info");
 
-
+                    connectDoneAuto.Set(); //done connecting
 
                 }
 
@@ -2946,7 +2945,7 @@ namespace FishbowlConnect
 
                 foreach (TagTrackingObject item in tagTrackingItems)
                 {
-                    if (!String.IsNullOrEmpty(item.TrackingLabel))
+                    if (!string.IsNullOrEmpty(item.TrackingLabel))
                     {
                         //get field index for each returned item and add to dictionary
                         try

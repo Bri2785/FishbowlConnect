@@ -786,7 +786,7 @@ namespace FishbowlConnect.MySQL
                 {
                     case InventorySearchTermType.Part:
                         query = string.Format(@"SELECT part.num AS PartNumber
-                                , tag.`qty` AS Qty
+                                , SUM(tag.`qty`) AS Qty
                                 , tag.id AS TagID
                                 , tag.`num` AS tagNum
                                 , tag.`locationId`
