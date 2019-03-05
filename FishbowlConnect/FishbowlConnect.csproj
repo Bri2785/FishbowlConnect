@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Target Name="PushNuGetPackage" AfterTargets="GenerateNuspec" Condition="$(Configuration) == 'Release'">
     <Message Text="Push NuGet Package to NuGet Feed" Importance="high"></Message>
-    <Exec Command="nuget.exe push -Source FishbowlConnect -ApiKey VSTS $(ProjectDir)bin\Release\FishbowlConnect.1.1.59.nupkg"></Exec>
+    <Exec Command="nuget.exe push -Source FishbowlConnect -ApiKey VSTS $(ProjectDir)bin\Release\FishbowlConnect.1.1.62.nupkg"></Exec>
   </Target>
   <PropertyGroup Label="Globals">
     <SccProjectName>%24/FishbowlConnect/FC-Standard/FishbowlConnect</SccProjectName>
@@ -15,7 +15,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Brian Nordstrom</Authors>
     <Company>Unigrative</Company>
-    <Version>1.1.59</Version>
+    <Version>1.1.62</Version>
     <Description>Library with connection and methods to consume the Fishbowl Inventory API</Description>
   </PropertyGroup>
   <ItemGroup>

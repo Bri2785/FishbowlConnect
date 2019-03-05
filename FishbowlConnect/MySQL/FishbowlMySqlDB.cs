@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using FishbowlConnect.Helpers;
 using FishbowlConnect.Interfaces;
@@ -975,6 +976,397 @@ namespace FishbowlConnect.MySQL
             return invQtywithAllTrackings;
 
         }
+
+
+
+
+        /// <summary>
+        /// Returns classes of part/tag that are grouped and have list of all tracking. for a location, product, or tracking and also includes the default location for the part
+        /// </summary>
+        /// <param name="SearchTerm">SearchTerm must contain the special characters for location and tracking lookup</param>
+        /// <param name="LocationGroupName">Pass in LG name to get the default location with the record</param>
+        /// <param name="searchTermType">Search for Part or Product when searchTerm doesnt have a prefix</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">Thrown when part not found</exception>
+        /// <exception cref="KeyNotFoundException">Thrown when no records returned</exception>
+        public async Task<List<InvQtyGroupedByTagWithTracking>> GetPartTagGroupedWithAllTrackingWithDefaultLocation(string SearchTerm
+            , string LocationGroupName, InventorySearchTermType searchTermType)
+        {
+            if (String.IsNullOrEmpty(SearchTerm))
+            {
+                throw new ArgumentNullException("Search Term is required");
+            }
+
+            List<InvQtyGroupedByTagWithTracking> invQtyGrouped = new List<InvQtyGroupedByTagWithTracking>();
+
+            string query = null;
+
+            if (SearchTerm.Contains("$L$"))
+            {
+                query = string.Format(@"SELECT part.num AS PartNumber
+	                        , SUM(tag.`qty`) AS Qty
+	                        , tag.id AS TagID
+	                        , tag.`num` AS tagNum
+	                        , tag.`locationId`
+	                        , location.`name` AS LocationName
+	                        , location.`pickable` AS LocationPickable
+	                        #, COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`) AS TrackingInfo
+	                        , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
+                                                    CASE WHEN parttracking.`typeId` = 80 THEN 
+	                                                    CASE WHEN trackinginteger.`info` = 0 THEN 'false'
+		                                                    ELSE 'true'
+		                                                    END
+			                            ELSE trackinginteger.`info`
+			                            END, 
+
+                                                    trackingtext.`info`) AS TrackingInfo
+	
+	                        , parttracking.name AS TrackingLabel
+	                        , parttracking.`abbr` AS TrackingAbbr
+	                        , COALESCE(parttracking.`typeId`,0) AS TrackingTypeID
+	                        , COALESCE(parttracking.`id`,0) AS TrackingID
+                            , COALESCE(parttracking.sortorder,0) AS TrackingSortOrder
+	                        , COALESCE(parttotracking.`primaryFlag`,0) AS IsPrimaryTracking
+	
+	                        , locationgroup.name AS LocationGroupName
+	                        , 1 AS UPCCaseQty
+	                        , dfl.DefaultLocationName
+
+                        FROM part 
+                        LEFT JOIN tag ON tag.`partId` = part.id
+                        JOIN location ON tag.`locationId` = location.`id`
+                        JOIN locationgroup ON location.`locationGroupId` = locationgroup.`id`
+
+                        LEFT JOIN parttotracking ON (parttotracking.`partId` = part.id)# AND parttotracking.`primaryFlag` = 1)
+                         LEFT JOIN parttracking ON parttotracking.`partTrackingId` = parttracking.`id`
+
+                        LEFT JOIN trackingtext ON trackingtext.`partTrackingId` = parttotracking.`partTrackingId` AND trackingtext.`tagId` = tag.`id`
+	
+                        LEFT JOIN trackingdecimal ON trackingdecimal.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdecimal.`tagId` = tag.`id`
+	
+                        LEFT JOIN trackinginteger ON trackinginteger.`partTrackingId` = parttotracking.`partTrackingId` AND trackinginteger.`tagId` = tag.`id`
+	
+                        LEFT JOIN trackingdate ON trackingdate.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdate.`tagId` = tag.`id`
+
+                        LEFT JOIN (SELECT defaultlocation.`partId`, dflLocation.`name` AS DefaultLocationName
+		                        FROM defaultlocation
+		                        JOIN location dflLocation ON dflLocation.`id` = defaultlocation.`locationId`
+		                        JOIN locationgroup dflGroup ON (dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
+		                        ) dfl ON part.`id` = dfl.`partId` 
+		
+                        /* LOOKUP BY LOCATION */
+                        WHERE
+                        CONCAT('$L$', location.name) LIKE '{0}'
+                        AND location.`typeId` NOT IN (20,60,80)
+
+                        GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
+                        ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
+            }
+            else if (SearchTerm.Contains("$T$"))
+            {
+                //change to part only query
+                query = string.Format(@"SELECT part.num AS PartNumber
+	                                , SUM(tag.`qty`) AS Qty
+	                                , tag.id AS TagID
+	                                , tag.`num` AS tagNum
+	                                , tag.`locationId`
+	                                , location.`name` AS LocationName
+	                                , location.`pickable` AS LocationPickable
+	                                #, COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`) AS TrackingInfo
+	                                , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
+                                                            CASE WHEN parttracking.`typeId` = 80 THEN 
+	                                                            CASE WHEN trackinginteger.`info` = 0 THEN 'false'
+		                                                            ELSE 'true'
+		                                                            END
+			                                    ELSE trackinginteger.`info`
+			                                    END, 
+
+                                                            trackingtext.`info`) AS TrackingInfo
+	
+	                                , parttracking.name AS TrackingLabel
+	                                , parttracking.`abbr` AS TrackingAbbr
+	                                , COALESCE(parttracking.`typeId`,0) AS TrackingTypeID
+	                                , COALESCE(parttracking.`id`,0) AS TrackingID
+                                    , COALESCE(parttracking.sortorder,0) AS TrackingSortOrder
+	                                , COALESCE(parttotracking.`primaryFlag`,0) AS IsPrimaryTracking
+	
+	                                , locationgroup.name AS LocationGroupName
+	                                , 1 AS UPCCaseQty
+	                                , dfl.DefaultLocationName
+
+                                FROM part 
+                                LEFT JOIN tag ON tag.`partId` = part.id
+
+                                join (select tag.id as TagID
+	                                from part
+	                                left JOIN tag ON tag.`partId` = part.id
+	                                LEFT JOIN parttotracking ON (parttotracking.`partId` = part.id)
+	                                #LEFT JOIN parttracking ON parttotracking.`partTrackingId` = parttracking.`id`
+	                                LEFT JOIN trackingtext ON trackingtext.`partTrackingId` = parttotracking.`partTrackingId` AND trackingtext.`tagId` = tag.`id`
+	                                LEFT JOIN trackingdecimal ON trackingdecimal.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdecimal.`tagId` = tag.`id`	
+	                                LEFT JOIN trackinginteger ON trackinginteger.`partTrackingId` = parttotracking.`partTrackingId` AND trackinginteger.`tagId` = tag.`id`
+	                                LEFT JOIN trackingdate ON trackingdate.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdate.`tagId` = tag.`id`
+	                                WHERE
+                                        (UPPER(CONCAT('$T$', COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`))) LIKE '{0}')) 
+		                                trackingInfoTag on trackingInfoTag.TagID = tag.id
+
+
+
+                                JOIN location ON tag.`locationId` = location.`id`
+                                JOIN locationgroup ON location.`locationGroupId` = locationgroup.`id`
+
+                                LEFT JOIN parttotracking ON (parttotracking.`partId` = part.id)# AND parttotracking.`primaryFlag` = 1)
+                                 LEFT JOIN parttracking ON parttotracking.`partTrackingId` = parttracking.`id`
+
+                                LEFT JOIN trackingtext ON trackingtext.`partTrackingId` = parttotracking.`partTrackingId` AND trackingtext.`tagId` = tag.`id`
+	
+                                LEFT JOIN trackingdecimal ON trackingdecimal.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdecimal.`tagId` = tag.`id`
+	
+                                LEFT JOIN trackinginteger ON trackinginteger.`partTrackingId` = parttotracking.`partTrackingId` AND trackinginteger.`tagId` = tag.`id`
+	
+                                LEFT JOIN trackingdate ON trackingdate.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdate.`tagId` = tag.`id`
+
+                                LEFT JOIN (SELECT defaultlocation.`partId`, dflLocation.`name` AS DefaultLocationName
+		                                FROM defaultlocation
+		                                JOIN location dflLocation ON dflLocation.`id` = defaultlocation.`locationId`
+		                                JOIN locationgroup dflGroup ON (dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
+		                                ) dfl ON part.`id` = dfl.`partId` 
+		
+                                /* LOOKUP BY TRACKING */
+                                WHERE
+                                location.`typeId` NOT IN (20,60,80)
+
+                                GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
+                                ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
+            }
+            else
+            {
+                switch (searchTermType)
+                {
+                    case InventorySearchTermType.Part:
+                        query = string.Format(@"SELECT part.num AS PartNumber
+                                , SUM(tag.`qty`) AS Qty
+                                , tag.id AS TagID
+                                , tag.`num` AS tagNum
+                                , tag.`locationId`
+	                            , location.`name` AS LocationName
+                                , location.`pickable` AS LocationPickable
+                                , COALESCE(DATE_FORMAT(trackingdate.`info`, '%m/%d/%Y'), trackingdecimal.`info`,
+                                                        CASE WHEN parttracking.`typeId` = 80 THEN
+
+                                                            CASE WHEN trackinginteger.`info` = 0 THEN 'false'
+                                                                ELSE 'true'
+                                                                END
+
+                                            ELSE trackinginteger.`info`
+                                            END,
+
+                                                        trackingtext.`info`) AS TrackingInfo
+
+                                , parttracking.name AS TrackingLabel
+                                , parttracking.`abbr` AS TrackingAbbr
+                                , COALESCE(parttracking.`typeId`, 0) AS TrackingTypeID
+                                , COALESCE(parttracking.`id`, 0) AS TrackingID
+                                , COALESCE(parttracking.sortorder, 0) AS TrackingSortOrder
+                                , COALESCE(parttotracking.`primaryFlag`, 0) AS IsPrimaryTracking
+
+                                , locationgroup.name AS LocationGroupName
+                                , 0 AS UPCCaseQty
+                                , dfl.DefaultLocationName
+
+                            FROM part
+                            #JOIN product ON product.`partId` = part.id
+                            #LEFT JOIN uomconversion ON (product.`uomId` = uomconversion.`fromUomId` AND uomconversion.`toUomId` = part.`uomId`)
+                            LEFT JOIN tag ON tag.`partId` = part.id
+                            LEFT JOIN location ON tag.`locationId` = location.`id`
+                            LEFT JOIN locationgroup ON location.`locationGroupId` = locationgroup.`id`
+
+                            LEFT JOIN parttotracking ON(parttotracking.`partId` = part.id)# AND parttotracking.`primaryFlag` = 1)
+                                LEFT JOIN parttracking ON parttotracking.`partTrackingId` = parttracking.`id`
+
+                            LEFT JOIN trackingtext ON trackingtext.`partTrackingId` = parttotracking.`partTrackingId` AND trackingtext.`tagId` = tag.`id`
+
+
+                            LEFT JOIN trackingdecimal ON trackingdecimal.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdecimal.`tagId` = tag.`id`
+
+
+                            LEFT JOIN trackinginteger ON trackinginteger.`partTrackingId` = parttotracking.`partTrackingId` AND trackinginteger.`tagId` = tag.`id`
+
+
+                            LEFT JOIN trackingdate ON trackingdate.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdate.`tagId` = tag.`id`
+
+                            LEFT JOIN(SELECT defaultlocation.`partId`, dflLocation.`name` AS DefaultLocationName
+
+                                    FROM defaultlocation
+
+                                    JOIN location dflLocation ON dflLocation.`id` = defaultlocation.`locationId`
+
+                                    JOIN locationgroup dflGroup ON(dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
+                                    ) dfl ON part.`id` = dfl.`partId` 
+
+                            /* LOOKUP BY PART NUM OR PART UPC */
+                            WHERE
+                            (UPPER(part.`num`) LIKE '{0}' OR part.`upc` LIKE '{0}' )
+                            AND(location.`typeId` NOT IN(20, 60, 80) OR location.`typeId` IS NULL)
+
+                            GROUP BY part.num, locationId, trackinginfo, trackinglabel, upccaseqty
+                            ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
+
+
+                        break;
+
+                    case InventorySearchTermType.Product:
+                        query = string.Format(@"SELECT part.num AS PartNumber
+	                                    , SUM(tag.`qty`) AS Qty
+	                                    , tag.id AS TagID
+	                                    , tag.`num` AS tagNum
+	                                    , tag.`locationId`
+	                                    , location.`name` AS LocationName
+	                                    , location.`pickable` AS LocationPickable
+	                                    #, COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`) AS TrackingInfo
+	                                    , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
+                                                                CASE WHEN parttracking.`typeId` = 80 THEN 
+	                                                                CASE WHEN trackinginteger.`info` = 0 THEN 'false'
+		                                                                ELSE 'true'
+		                                                                END
+			                                        ELSE trackinginteger.`info`
+			                                        END, 
+
+                                                                trackingtext.`info`) AS TrackingInfo
+	
+	                                    , parttracking.name AS TrackingLabel
+	                                    , parttracking.`abbr` AS TrackingAbbr
+	                                    , COALESCE(parttracking.`typeId`,0) AS TrackingTypeID
+	                                    , COALESCE(parttracking.`id`,0) AS TrackingID
+                                        , COALESCE(parttracking.sortorder,0) AS TrackingSortOrder
+	                                    , COALESCE(parttotracking.`primaryFlag`,0) AS IsPrimaryTracking
+	
+	                                    , locationgroup.name AS LocationGroupName
+	                                    , CAST((COALESCE(uomconversion.multiply,1) / COALESCE(uomconversion.factor,1)) AS SIGNED) AS UPCCaseQty
+	                                    , dfl.DefaultLocationName
+
+                                    FROM product
+                                    JOIN part ON product.`partId` = part.id
+                                    LEFT JOIN uomconversion ON (product.`uomId` = uomconversion.`fromUomId` AND uomconversion.`toUomId` = part.`uomId`)
+                                    LEFT JOIN tag ON tag.`partId` = part.id
+                                    LEFT JOIN location ON tag.`locationId` = location.`id`
+                                    LEFT JOIN locationgroup ON location.`locationGroupId` = locationgroup.`id`
+
+                                    LEFT JOIN parttotracking ON (parttotracking.`partId` = part.id)# AND parttotracking.`primaryFlag` = 1)
+                                     LEFT JOIN parttracking ON parttotracking.`partTrackingId` = parttracking.`id`
+
+                                    LEFT JOIN trackingtext ON trackingtext.`partTrackingId` = parttotracking.`partTrackingId` AND trackingtext.`tagId` = tag.`id`
+	
+                                    LEFT JOIN trackingdecimal ON trackingdecimal.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdecimal.`tagId` = tag.`id`
+	
+                                    LEFT JOIN trackinginteger ON trackinginteger.`partTrackingId` = parttotracking.`partTrackingId` AND trackinginteger.`tagId` = tag.`id`
+	
+                                    LEFT JOIN trackingdate ON trackingdate.`partTrackingId` = parttotracking.`partTrackingId` AND trackingdate.`tagId` = tag.`id`
+
+                                    LEFT JOIN (SELECT defaultlocation.`partId`, dflLocation.`name` AS DefaultLocationName
+		                                    FROM defaultlocation
+		                                    JOIN location dflLocation ON dflLocation.`id` = defaultlocation.`locationId`
+		                                    JOIN locationgroup dflGroup ON (dflGroup.`id` = defaultlocation.`locationGroupId` AND dflGroup.`name` = '{1}')
+		                                    ) dfl ON part.`id` = dfl.`partId` 
+		
+                                    /* LOOKUP BY PRODUCT NUM OR UPC */
+                                    WHERE
+                                    (UPPER(product.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' )
+                                    AND (location.`typeId` NOT IN (20,60,80) OR location.`typeId` IS NULL)
+
+                                    GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
+                                    ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
+
+
+                        break;
+
+                }
+
+
+            }
+
+
+        
+            List<InvQtyWithAllTracking> invQtyWithAllTrackings = new List<InvQtyWithAllTracking>();
+
+            using (var result = new MySqlCommand(query, Connection))
+            {
+                using (var reader = await result.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        invQtyWithAllTrackings.Add(new InvQtyWithAllTracking
+                        {
+                            PartNumber = (string)reader["PartNumber"],
+                            Qty = reader["qty"] == DBNull.Value ? 0 : (decimal)reader["qty"],
+                            TagID = reader["tagid"] == DBNull.Value ? 0 : (int)(Int64)reader["tagid"],
+                            LocationId = reader["locationId"] == DBNull.Value ? 0 : (int)reader["locationId"],
+                            LocationName = reader["LocationName"] == DBNull.Value ? null : reader["LocationName"].ToString(),
+                            LocationPickable = reader["locationPickable"] == DBNull.Value ? false : Convert.ToBoolean((UInt64)reader["locationPickable"]),
+                            TrackingInfo = reader["TrackingInfo"] == DBNull.Value ? null : reader["TrackingInfo"].ToString(),
+                            TrackingLabel = reader["TrackingLabel"] == DBNull.Value ? null : reader["TrackingLabel"].ToString(),
+                            TrackingAbbr = reader["TrackingAbbr"] == DBNull.Value ? null : reader["TrackingAbbr"].ToString(),
+
+                            TrackingTypeID = (int)(long)reader["TrackingTypeID"],
+                            TrackingID = (int)(long)reader["TrackingID"],
+                            TrackingSortOrder = (int)(long)reader["TrackingSortOrder"],
+                            IsPrimaryTracking = Convert.ToBoolean((decimal)reader["IsPrimaryTracking"]),
+
+                            LocationGroupName = reader["LocationGroupName"] == DBNull.Value ? null : reader["LocationGroupName"].ToString(),
+                            UPCCaseQty = (int)(Int64)reader["UPCCaseQty"],
+                            DefaultLocationName = reader["DefaultLocationName"] == DBNull.Value ? null : reader["DefaultLocationName"].ToString(),
+
+                        });
+                    }
+                }
+            }
+
+            if (invQtyWithAllTrackings.Count == 0)
+            {
+                //check to make sure the part is valid
+                if (!(await CheckPartLocationTrackingIsValid(SearchTerm)))
+                {
+                    throw new ArgumentException("Search Term is not found. Please check.");
+                }
+                else
+                {
+                    throw new KeyNotFoundException("No records returned");
+                }
+            }
+
+            //group returned list
+            var grouped = invQtyWithAllTrackings.GroupBy(i => new
+            {
+                i.PartNumber,
+                i.Qty,
+                i.TagID,
+                i.LocationId,
+                i.LocationName,
+                i.LocationPickable,
+                i.LocationGroupName,
+                i.UPCCaseQty,
+                i.DefaultLocationName
+            })
+            .Select(grp => new InvQtyGroupedByTagWithTracking(grp.Key.PartNumber, grp.Key.Qty, grp.Key.TagID, grp.Key.LocationId,
+                                                               grp.Key.LocationName, grp.Key.LocationPickable, grp.Key.LocationGroupName,
+                                                               grp.Key.UPCCaseQty, grp.Key.DefaultLocationName,
+                                                               grp.ToList().Where(t => t.TrackingInfo != null).Select(track => 
+                                                                    new TrackingSimple(track.TrackingInfo, track.TrackingLabel,
+                                                                                        track.TrackingAbbr, track.TrackingTypeID,
+                                                                                        track.TrackingID, track.TrackingSortOrder,
+                                                                                        track.IsPrimaryTracking)).ToList())).ToList();
+
+
+            //.Select(grp => new { Tag = grp.Key, Tracking = grp.ToList() }).ToList();
+
+            return grouped;
+
+        }
+
+
+
+
+
 
 
         /// <summary>
