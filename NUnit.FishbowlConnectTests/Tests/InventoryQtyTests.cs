@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NUnit.FishbowlConnectTests
+namespace NUnit.FishbowlConnectTests.Tests
 {
     [TestFixture]
     public class InventoryQtyTests

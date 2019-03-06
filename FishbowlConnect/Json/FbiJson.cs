@@ -53,6 +53,7 @@ namespace FishbowlConnect.Json
         public SaveShipmentRs SaveShipmentRs { set { Rs = value; } }
         public ShipRs ShipRs { set { Rs = value; } }
         public InvQtyRs InvQtyRs { set { Rs = value; } }
+        public ProductGetRs ProductGetRs { set { Rs = value; } }
 
         public string StatusCode { get; set; }
         public string StatusMessage { get; set; }

@@ -1476,27 +1476,27 @@ namespace NUnit.FishbowlConnectTests
             Debug.WriteLine("Property Changed " + e.PropertyName);
         }
 
-        [Test]
-        public async Task GetProductListTest()
-        {
-            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
-            List<ProductListInfo> tempList;
+        //[Test]
+        //public async Task GetProductListTest()
+        //{
+        //    SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+        //    List<ProductListInfo> tempList;
 
-            for (int i = 0; i < 10; i++)
-            {
-                Debug.WriteLine(i);
+        //    for (int i = 0; i < 10; i++)
+        //    {
+        //        Debug.WriteLine(i);
 
-                using (FishbowlSession session = new FishbowlSession(config))
-                {
+        //        using (FishbowlSession session = new FishbowlSession(config))
+        //        {
 
-                    tempList = await session.GetProductList("GCL");
-                    Assert.IsInstanceOf<List<ProductListInfo>>(tempList);
-                }
-                //Thread.Sleep(500);
-            }
+        //            tempList = await session.GetProductList("GCL");
+        //            Assert.IsInstanceOf<List<ProductListInfo>>(tempList);
+        //        }
+        //        //Thread.Sleep(500);
+        //    }
 
 
-        }
+        //}
 
 
         //SHIPPING

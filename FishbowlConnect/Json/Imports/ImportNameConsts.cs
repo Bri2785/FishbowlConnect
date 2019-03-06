@@ -11,5 +11,6 @@ namespace FishbowlConnect.Json.Imports
         public static string INVENTORY_MOVE = "ImportInventoryMove";
         public static string INVENTORY_ADD = "ImportAddInventory";
         public static string SET_PART_DEFAULT_LOCATION = "ImportDefaultLocations";
+        public static string PRODUCT_SAVE_PRICE_AND_UPC = "ImportProduct";
     }
 }

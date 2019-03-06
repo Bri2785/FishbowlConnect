@@ -26,6 +26,7 @@ namespace FishbowlConnect.Json.APIObjects
         public string TypeID { get; set; }
 
         public UOM UOM { get; set; }
+
         public string Num { get; set; }
 
         public string Description { get; set; }
