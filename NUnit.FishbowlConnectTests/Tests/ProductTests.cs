@@ -1,5 +1,6 @@
 ﻿using FishbowlConnect;
 using FishbowlConnect.Json.APIObjects;
+using FishbowlConnect.Json.QueryClasses;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace NUnit.FishbowlConnectTests.Tests
         }
 
         [TestCase(ValidProductNumber)]
-        public async Task ImportProductPriceAndUpcChangesSave(string productNumber)
+        public async Task WhenImportingProductPriceAndUpcChangesSave(string productNumber)
         {
 
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
@@ -89,6 +90,25 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
+        [TestCase("TestProduct")]
+        public async Task RequestProductUomConversionsReturnsList(string PartNumber)
+        {
+
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                List<PartToProductUomConversion> conversions = await session.GetProductUomConverisons(PartNumber);
+
+                Assert.NotNull(conversions);
+                Assert.True(conversions.Count == 3);
+
+            }
+
+
+        }
 
     }
 }

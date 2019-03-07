@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FishbowlConnect.Json.QueryClasses
 {
+    /// <summary>
+    /// Product Simple Object hold a few of the available fields for a product
+    /// </summary>
     public class ProductSimpleObject : NotifyOnChange, IPPSimple
     {
         private string number;
