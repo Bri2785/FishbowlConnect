@@ -16,12 +16,13 @@ namespace FishbowlConnect
 	                                    , product.`upc`
 	                                    , Coalesce(uomconversion.`factor`,1) as factor
 	                                    , Coalesce(uomconversion.`multiply`,1) as multiply
-	                                    , uom.`code` as ProductUomCode
+	                                    , COALESCE(uom.`code`, partUom.`code`) AS ProductUomCode
 	
                                     from part
                                     join product on product.partid = part.`id`
                                     left join uomconversion on uomconversion.`fromUomId` = part.`uomId` and uomconversion.`toUomId` = product.`uomId`
                                     left join uom on uomconversion.`toUomId` = uom.`id`
+                                    left join uom partUom on part.`uomId` = partUom.`id`
 
                                     where part.num = '{0}'", PartNumber.Replace("'","''")); //escape quotes
 
