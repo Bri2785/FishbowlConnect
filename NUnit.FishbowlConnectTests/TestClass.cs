@@ -1377,7 +1377,7 @@ namespace NUnit.FishbowlConnectTests
                             Status = PickStatus.All,
                             LocationGroupName = "Main Warehouse",
                             Username="DESK3"
-                        }, "69815", cancellationTokenSource.Token);
+                        }, "69815", null, cancellationTokenSource.Token);
 
 
                         Assert.IsInstanceOf<List<PickSimpleObject>>(pickSimpleObjects);

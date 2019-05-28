@@ -1,5 +1,6 @@
 ﻿using FishbowlConnect;
 using FishbowlConnect.Json.APIObjects;
+using FishbowlConnect.Json.QueryClasses;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -32,11 +33,34 @@ namespace NUnit.FishbowlConnectTests.Tests
                 Assert.NotNull(pick);
                 Assert.True(pick.PickItems.PickItem.Count == 1);
 
-                
+
             }
 
         }
-        
+
         //no void pick to return FB back to the original state
+
+        [Test]
+        public async Task LoadPickListWithFilters( )
+        {
+
+            PickListFilters pickListFilters = new PickListFilters { Status = PickStatus.AllOpen };
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                List < PickSimpleObject > pickSimpleObjects = await session.GetPickSimpleList(pickListFilters,null,
+                     "pick.datescheduled");
+
+
+                Assert.NotNull(pickSimpleObjects);
+                Assert.True(pickSimpleObjects.Count > 0);
+
+
+            }
+        }
+
     }
 }

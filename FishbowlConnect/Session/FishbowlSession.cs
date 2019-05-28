@@ -2113,13 +2113,21 @@ namespace FishbowlConnect
             //importRows.Add(new Row { RowField = sb.ToString() });
             //sb.Clear();
 
-
+            string cost = null;
+            try
+            {
+                cost = await GetPartLastCost(PartNumber);
+            }
+            catch (Exception)
+            {
+                cost = "0.00";
+            }
 
             ImportAddInventory importAddInventory = new ImportAddInventory
             {
                 PartNumber = PartNumber,
                 Qty = Qty,
-                Cost = await GetPartLastCost(PartNumber),
+                Cost = cost,
                 Date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
                 Location = LocationGroup + "-" + LocationName,
                 Note = Note

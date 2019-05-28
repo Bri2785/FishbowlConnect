@@ -18,8 +18,11 @@ namespace FishbowlConnect
         /// <param name="PickFilters"><see cref="PickListFilters"/></param>
         /// <returns>List of Simple Pick Objects</returns>
         /// <exception cref="KeyNotFoundException">Throws when no records returned</exception>
+        /// <param name="orderByClause">Can be pick.StatusID, pick.DateScheduled, Pick.locationgroupid, Pick.priority, SysUser.username</param>
         public async Task<List<PickSimpleObject>> GetPickSimpleList(PickListFilters PickFilters = null, 
-            string searchTerm = null, CancellationToken cancellationToken = default(CancellationToken))
+            string searchTerm = null, string orderByClause = null,
+            CancellationToken cancellationToken = default(CancellationToken)
+            )
         {
             List<PickSimpleObject> PickList = new List<PickSimpleObject>();
 
@@ -30,6 +33,7 @@ namespace FishbowlConnect
 
             string WhereClause = "";
             string LimitClause = "";
+            string OrderByClause = "";
 
             if (PickFilters != null)
             {
@@ -77,6 +81,15 @@ namespace FishbowlConnect
 
             }
 
+            if (!string.IsNullOrEmpty(orderByClause))
+            {
+                OrderByClause = " Order By " + orderByClause + " , pick.num";
+            }
+            else
+            {
+                OrderByClause = " Order by pick.num";
+            }
+
             string query = string.Format(@"select Pick.ID as PickID
 		            , pick.num AS PickNumber
 		            , pick.StatusID as PickStatusID
@@ -119,9 +132,9 @@ namespace FishbowlConnect
                             
                             
                             GROUP BY 1,2,3,4,5,6,7,8,9,10,11
-                            Order By pick.dateScheduled DESC, pick.num 
-		                    {1}",
-                            WhereClause.Substring(4), LimitClause); 
+                            {1}
+   		                    {2}",
+                             WhereClause.Substring(4), OrderByClause, LimitClause); 
 
             
             return await ExecuteQueryAsync<PickSimpleObject, PickSimpleObjectClassMap>(query, cancellationToken);
