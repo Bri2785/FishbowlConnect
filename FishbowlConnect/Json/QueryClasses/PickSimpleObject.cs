@@ -27,6 +27,7 @@ namespace FishbowlConnect.Json.QueryClasses
         public string Priority { get; set; }
         public string Username { get; set; }
         public string OrderInfo { get; set; }
+        public string Carrier { get; set; }
         public string LGName { get; set; }
         public int ItemsNotFulfillable { get; set; }
         public int NumberOfItems { get; set; }

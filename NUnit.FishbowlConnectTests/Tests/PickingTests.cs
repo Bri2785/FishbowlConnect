@@ -44,7 +44,7 @@ namespace NUnit.FishbowlConnectTests.Tests
         public async Task LoadPickListWithFilters( )
         {
 
-            PickListFilters pickListFilters = new PickListFilters { Status = PickStatus.AllOpen };
+            PickListFilters pickListFilters = new PickListFilters { Status = PickStatus.AllOpen, Carrier = "Fedex-Parcel-Ground" };
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
 
 

@@ -252,6 +252,7 @@ namespace FishbowlConnect.Json.APIObjects
         public string Username { get; set; }
         public PickStatus Status { get; set; }
         public bool CompletelyFulfillable { get; set; }
+        public string Carrier { get; set; }
     }
 
     

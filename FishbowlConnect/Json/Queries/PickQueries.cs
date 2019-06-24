@@ -16,9 +16,11 @@ namespace FishbowlConnect
         /// Gets a list of the picks from FB that match the specified filters
         /// </summary>
         /// <param name="PickFilters"><see cref="PickListFilters"/></param>
+        /// <param name="searchTerm"></param>
         /// <returns>List of Simple Pick Objects</returns>
         /// <exception cref="KeyNotFoundException">Throws when no records returned</exception>
         /// <param name="orderByClause">Can be pick.StatusID, pick.DateScheduled, Pick.locationgroupid, Pick.priority, SysUser.username</param>
+        /// <param name="cancellationToken"></param>
         public async Task<List<PickSimpleObject>> GetPickSimpleList(PickListFilters PickFilters = null, 
             string searchTerm = null, string orderByClause = null,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -71,6 +73,10 @@ namespace FishbowlConnect
                 {
                     WhereClause += " AND UPPER(SysUser.UserName) = '" + PickFilters.Username.ToUpper() + "'";
                 }
+                if (!string.IsNullOrEmpty(PickFilters.Carrier))
+                {
+                    WhereClause += " AND UPPER(carrier.name) = '" + PickFilters.Carrier.ToUpper() + "'";
+                }
             }
 
 
@@ -98,6 +104,7 @@ namespace FishbowlConnect
 		            , Pick.priority
 		            , SysUser.username
 		            , COALESCE(so.CUSTOMERCONTACT, CONCAT(xoFromLG.name,' -> ', xoToLG.name), vendor.name) AS OrderInfo
+                    , carrier.name as Carrier
 		            , Locationgroup.Name AS LGName
 		            , COALESCE(ItemsNotFulfillable, 0) AS ItemsNotFulfillable 
 		            , ItemCount.NumberOfItems
@@ -114,6 +121,8 @@ namespace FishbowlConnect
 			    LEFT JOIN po ON (pickitem.`orderId` = po.id and pickitem.`orderTypeId` = 10)
 			    
 			    Left Join wo on (pickitem.`orderId` = wo.id and pickitem.`orderTypeId` = 30)	
+
+                LEFT JOIN carrier ON carrier.id = COALESCE(so.`carrierId`, xo.`carrierId`, po.`carrierId`)
 
                                 LEFT JOIN locationgroup xoToLG ON xo.`shipToLGId` = xoToLG.`id`
 			                    LEFT JOIN locationgroup xoFromLG ON xo.`fromLGId` = xoFromLG.`id`
