@@ -64,6 +64,8 @@ namespace NUnit.FishbowlConnectTests.Tests
                 };
                 so.CustomField.Add(customField);
 
+                so.CarrierName = "Fedex";
+                so.CarrierService = "2 Day";
                 await session.ImportSalesOrderAsync(so);
 
                 //check the so import response to see if it returns the new number -> it does not, will need different method

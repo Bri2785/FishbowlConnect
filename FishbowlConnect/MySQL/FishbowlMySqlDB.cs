@@ -343,7 +343,7 @@ namespace FishbowlConnect.MySQL
         /// </summary>
         /// <param name="searchTerm">SearchTerm must contain the special characters for locaiotn and tracking lookup</param>
         /// <returns></returns>
-        [Obsolete]
+        [Obsolete ("Use GetPartTagAndTrackingWithDefaultLocation")]
         public async Task<List<InvQtyWithTracking>> GetPartTagAndTracking(string searchTerm)
         {
             if (String.IsNullOrEmpty(searchTerm))
