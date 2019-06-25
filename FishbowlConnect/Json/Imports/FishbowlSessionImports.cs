@@ -209,8 +209,8 @@ namespace FishbowlConnect
         /// Adds in missing API fields like phone, email, carrier name, and carrier service
         /// </summary>
         /// <param name="salesOrder">Sales Order Object</param>
-        /// <returns></returns>
-        public async Task ImportSalesOrderAsync(SalesOrder salesOrder)
+        /// <returns>The new sales order number created</returns>
+        public async Task<string> ImportSalesOrderAsync(SalesOrder salesOrder)
         {
             if (salesOrder == null)
             {
@@ -329,13 +329,13 @@ namespace FishbowlConnect
                     PaymentTerms = salesOrder.PaymentTerms,
                     Phone = salesOrder.Phone,
                     PONum = salesOrder.CustomerPO,
-                    PriorityId = int.Parse(salesOrder.PriorityID),
+                    PriorityId = salesOrder.PriorityID,
                     QuickbooksClassName = salesOrder.QuickBooksClassName,
                     Salesman = salesOrder.Salesman,
                     ShippingTerms = salesOrder.ShippingTerms,
                     ShipToResidential = salesOrder.ResidentialFlag,
                     SONum = salesOrder.Number,
-                    Status = int.Parse(salesOrder.Status),
+                    Status = salesOrder.Status,
                     TaxRateName = salesOrder.TaxRateName,
                     URL = salesOrder.URL,
                     VendorPONum = salesOrder.VendorPO
@@ -405,7 +405,7 @@ namespace FishbowlConnect
                             {
                                 salesOrderItemCustomFieldIndexes.Add(csvHeader.GetFieldIndex("CFI-" + customField.Name), customField.Info);
                             }
-                            catch (CsvHelper.MissingFieldException ex)
+                            catch (CsvHelper.MissingFieldException)
                             {
                                 //throw new ArgumentException("Custom Field not found.", ex);
                             }
@@ -489,8 +489,9 @@ namespace FishbowlConnect
             await IssueJsonRequestAsync<ImportRs>(importRq);
 
 
+            string query = @"Select num from SO order by id desc limit 1";
 
-
+            return await ExecuteQueryAsync(query);
 
 
 

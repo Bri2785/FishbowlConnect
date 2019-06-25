@@ -10,7 +10,7 @@ namespace FishbowlConnect.Json.Imports
         //fields for the Sales order to be imported
         public string Flag { get; set; }
         public string SONum { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public string CustomerName { get; set; }
         public string CustomerContact { get; set; }
         public string BillToName { get; set; }
@@ -28,7 +28,7 @@ namespace FishbowlConnect.Json.Imports
         public string ShipToResidential { get; set; }
         public string CarrierName { get; set; }
         public string TaxRateName { get; set; }
-        public int PriorityId { get; set; }
+        public string PriorityId { get; set; }
         public string PONum { get; set; }
         public string VendorPONum { get; set; }
         /// <summary>
