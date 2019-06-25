@@ -1,7 +1,12 @@
-﻿namespace FishbowlConnect.Json
+﻿using FishbowlConnect.Json.Converters;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+
+namespace FishbowlConnect.Json
 {
     public class Header
     {
-        public string Row { get; set; }
+        [JsonConverter(typeof(ListOrSingleValueConverter<string>))]
+        public List<string> Row { get; set; }
     }
 }

@@ -139,7 +139,7 @@ namespace FishbowlConnect
 
             if (product.CustomFields.CustomField.Where(cf => cf.RequiredFlag == "True").ToList().Count > 0)
             {
-                string header = await getImportHeaderRowAsync(ImportNameConsts.PRODUCT_SAVE_PRICE_AND_UPC);
+                string header = (await getImportHeaderRowAsync(ImportNameConsts.PRODUCT_SAVE_PRICE_AND_UPC)).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(header))
                 {
@@ -216,7 +216,7 @@ namespace FishbowlConnect
 
 
             csvWriter.Flush();
-            importRows.Add(new Row { RowField = sb.ToString() });
+            importRows.Add(new Row { RowField = new List<string> { sb.ToString() } });
 
 
             ImportRq importRq = new ImportRq();

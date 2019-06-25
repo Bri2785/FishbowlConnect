@@ -38,81 +38,10 @@ namespace FishbowlConnect
     //    }
 
     //}
-    public partial class SalesOrder
-    {
-        private int EDITxnIDField;
+    //public partial class SalesOrder
+    //{
 
-        private string MagIncrementIDField;
-
-        private uint MagEntityIDField;
-
-        private string email;
-
-        private string phone;
-
-        [XmlIgnore]
-        public string Email
-        {
-            get
-            {
-                return this.email;
-            }
-            set
-            {
-                this.email = value;
-            }
-        }
-
-        [XmlIgnore]
-        public string Phone
-        {
-            get
-            {
-                return this.phone;
-            }
-            set
-            {
-                this.phone = value;
-            }
-        }
-
-        [XmlIgnore]
-        public int EDITxnID
-        {
-            get
-            {
-                return this.EDITxnIDField;
-            }
-            set
-            {
-                this.EDITxnIDField = value;
-            }
-        }
-        [XmlIgnore]
-        public string MagIncrementID
-        {
-            get
-            {
-                return this.MagIncrementIDField;
-            }
-            set
-            {
-                this.MagIncrementIDField = value;
-            }
-        }
-        [XmlIgnore]
-        public uint MagEntityID
-        {
-            get
-            {
-                return this.MagEntityIDField;
-            }
-            set
-            {
-                this.MagEntityIDField = value;
-            }
-        }
-    }
+    //}
 
     public partial class Customer : NotifyOnChange
     {
