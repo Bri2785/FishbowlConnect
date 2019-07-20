@@ -12,7 +12,7 @@ namespace NUnit.FishbowlConnectTests.Tests
     [TestFixture]
     public class ProductTests
     {
-        const string GoodServerAddress = "192.168.150.4";
+        const string GoodServerAddress = "192.168.150.2";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
         const string BadServerAddress = "127.5.4.3";
@@ -22,13 +22,13 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string NoPassword = null;
 
         const string DatabaseAddress = "192.168.150.2";
-        const int DatabasePort = 2361;
+        const int DatabasePort = 3301;
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
         const string DatabaseName = "BRITEIDEASUPDATE";
         const string BadDatabaseName = "fndfnd";
 
-        const string ValidProductNumber = "LED-C70WW";
+        const string ValidProductNumber = "3802299LG-RZ";
 
         //all run against briteideasUpdate DB Date 3-5-19, C:\Program Files\Fishbowl\data\backups
 
@@ -63,16 +63,16 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 Product product = await session.GetProduct(productNumber);
 
-                product.Price = "30";
-                product.UPC = "042000123456";
+                product.Price = "19.99";
+                product.UPC = "";
 
                 //save product back to FB
                 await session.SaveProductPriceAndUpc(product);
 
                 Product newProduct = await session.GetProduct(productNumber);
 
-                Assert.True(newProduct.Price == "30");
-                Assert.True(newProduct.UPC == "042000123456");
+                Assert.True(newProduct.Price == "19.99");
+                Assert.True(newProduct.UPC == "");
 
                 product.Price = "23";
                 product.UPC = "042002420554";

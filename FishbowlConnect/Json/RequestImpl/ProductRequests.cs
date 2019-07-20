@@ -137,38 +137,38 @@ namespace FishbowlConnect
             int headerFieldCount = 0;
             Dictionary<int, string> cFieldIndexes = null;
 
+            cFieldIndexes = new Dictionary<int, string>();
+            string header = (await getImportHeaderRowAsync(ImportNameConsts.PRODUCT_SAVE_PRICE_AND_UPC)).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(header))
+            {
+                throw new Exception("Header row is not available");
+            }
+
+            //we need to deserialize the header row to find out which index column our required custom fields are in
+
+            TextReader textReader = new StringReader(header);
+            var csvHeader = new CsvReader(textReader);
+            csvHeader.Read();
+            csvHeader.ReadHeader();
+
+            headerFieldCount = csvHeader.Context.HeaderRecord.Length;
+
+            foreach (var property in import.GetType().GetProperties())
+            {
+                //get field index for each returned item and add to dictionary
+                try
+                {
+                    cFieldIndexes.Add(csvHeader.GetFieldIndex(property.Name), property.GetValue(import).ToString());
+                }
+                catch (CsvHelper.MissingFieldException ex)
+                {
+                    throw new ArgumentException("Class Property Name not found.", ex);
+                }
+            }
+
             if (product.CustomFields.CustomField.Where(cf => cf.RequiredFlag == "True").ToList().Count > 0)
             {
-                string header = (await getImportHeaderRowAsync(ImportNameConsts.PRODUCT_SAVE_PRICE_AND_UPC)).FirstOrDefault();
-
-                if (string.IsNullOrEmpty(header))
-                {
-                    throw new Exception("Header row is not available");
-                }
-
-                //we need to deserialize the header row to find out which index column our required custom fields are in
-
-                TextReader textReader = new StringReader(header);
-                var csvHeader = new CsvReader(textReader);
-                csvHeader.Read();
-                csvHeader.ReadHeader();
-
-                headerFieldCount = csvHeader.Context.HeaderRecord.Length;
-                cFieldIndexes = new Dictionary<int, string>();
-
-
-                foreach (var property in import.GetType().GetProperties())
-                {
-                    //get field index for each returned item and add to dictionary
-                    try
-                    {
-                        cFieldIndexes.Add(csvHeader.GetFieldIndex(property.Name), property.GetValue(import).ToString());
-                    }
-                    catch (CsvHelper.MissingFieldException ex)
-                    {
-                        throw new ArgumentException("Class Property Name not found.", ex);
-                    }
-                }
 
                 foreach (var item in product.CustomFields.CustomField.Where(cf => cf.RequiredFlag == "True"))
                 {
@@ -341,6 +341,6 @@ namespace FishbowlConnect
         //                ");
         //    return UOMRs;
         //}
-        
+
     }
 }
