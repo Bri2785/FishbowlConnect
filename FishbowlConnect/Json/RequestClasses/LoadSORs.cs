@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FishbowlConnect.Json.Requests
+namespace FishbowlConnect.Json
 {
     public class LoadSORs :IRs
     {
