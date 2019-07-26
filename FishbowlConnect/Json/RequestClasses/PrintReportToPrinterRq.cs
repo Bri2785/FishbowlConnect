@@ -1,0 +1,23 @@
+﻿using FishbowlConnect.Json.APIObjects;
+using FishbowlConnect.Json.Converters;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace FishbowlConnect.Json
+{
+    public class PrintReportToPrinterRq
+    {
+        public int NumberOfCopies { get; set; }
+        public string PrinterName { get; set; }
+        public string ReportName { get; set; }
+        public ParameterList ParameterList { get; set; }
+    }
+
+    public class ParameterList
+    {
+        [JsonConverter(typeof(ListOrSingleValueConverter<ReportParam>))]
+        public List<ReportParam> ReportParam { get; set; }
+    }
+}
