@@ -46,5 +46,18 @@ namespace FishbowlConnect
 
 
         }
+
+        /// <summary>
+        /// Returns a list pf installed printer names from the Fishbowl server to be used in report printing
+        /// </summary>
+        /// <returns>List of string of printer names</returns>
+        public async Task<List<string>> GetServerPrinterList()
+        {
+            GetServerPrinterListRq printerListRq = new GetServerPrinterListRq();
+
+            GetServerPrinterListRs printerListRs = await IssueJsonRequestAsync<GetServerPrinterListRs>(printerListRq);
+
+            return printerListRs.Printers.Printer;
+        }
     }
 }

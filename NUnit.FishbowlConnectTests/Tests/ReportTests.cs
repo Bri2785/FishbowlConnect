@@ -33,9 +33,41 @@ namespace NUnit.FishbowlConnectTests.Tests
             {
                 List<ReportParam> reportParams = new List<ReportParam>();
 
-                reportParams.Add(new ReportParam { Name = "SONumber", Value = "71230" });
+                reportParams.Add(new ReportParam { Name = "soNum", Value = "71229" });
 
                 await session.PrintReportToPrinter(ReportName, PrinterName, reportParams);
+
+            }
+        }
+        [TestCase("Product Label Zebra 1.25 x 2.25", "CutePDF Writer", 1)]
+        public async Task PrintLabelReportToPrinterTest(string ReportName, string PrinterName, int NumberOfCopies)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+                List<ReportParam> reportParams = new List<ReportParam>();
+
+                reportParams.Add(new ReportParam { Name = "productNum", Value = "100GCL" });
+
+                await session.PrintReportToPrinter(ReportName, PrinterName, reportParams);
+
+            }
+        }
+
+        [Test]
+        public async Task GetListOfServerPrinters()
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                List<string> printers = await session.GetServerPrinterList();
+
+                Assert.NotNull(printers);
 
             }
         }

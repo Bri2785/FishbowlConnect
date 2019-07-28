@@ -55,6 +55,7 @@ namespace FishbowlConnect.Json
         public InvQtyRs InvQtyRs { set { Rs = value; } }
         public ProductGetRs ProductGetRs { set { Rs = value; } }
         public PrintReportToPrinterRs PrintReportToPrinterRs { set { Rs = value; } }
+        public GetServerPrinterListRs GetServerPrinterListRs { set { Rs = value; } }
 
         public string StatusCode { get; set; }
         public string StatusMessage { get; set; }
