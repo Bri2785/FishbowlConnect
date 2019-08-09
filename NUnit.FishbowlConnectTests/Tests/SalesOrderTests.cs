@@ -41,7 +41,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
-        [TestCase("71224")]
+        [TestCase("71223")]
         public async Task GetSalesOrderAndSaveItBackUsingImport(string salesOrderNumber)
         {
 
@@ -66,6 +66,14 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 so.CarrierName = "Fedex";
                 so.CarrierService = "2 Day";
+
+                if (so.Items.SalesOrderItem[0].CustomField == null)
+                {
+                    so.Items.SalesOrderItem[0].CustomField = new List<CustomField>();
+                }
+
+                so.Items.SalesOrderItem[0].CustomField.Add(new CustomField { Name = "itemTest", Info = "test string" });
+
                 await session.ImportSalesOrderAsync(so);
 
                 //check the so import response to see if it returns the new number -> it does not, will need different method

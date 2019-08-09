@@ -362,6 +362,7 @@ namespace FishbowlConnect
             }
             //move to end
             //importRows.Add(new Row { RowField = sb.ToString() });
+
             rowField.Add(sb.ToString());
 
 
@@ -436,8 +437,8 @@ namespace FishbowlConnect
 
                 foreach (SalesOrderItem item in salesOrder.Items.SalesOrderItem)
                 {
-                    sb.Append(",");
-                    sb.AppendLine();//Append("/r");
+                    //sbItem.Append(",");
+                    //sbItem.AppendLine();
 
                     //translate from SalesOrderItem to ImportSalesOrderItem
                     ImportSalesOrderItem importSalesOrderItem = new ImportSalesOrderItem
@@ -465,7 +466,7 @@ namespace FishbowlConnect
                     //starts at the end of the regular import property fields and if the index matches then it writes the value
                     for (int i = writeableFieldCount; i < headerFieldCount; i++)
                     {
-                        if (salesOrderCustomFieldIndexes.TryGetValue(i, out string value))
+                        if (salesOrderItemCustomFieldIndexes.TryGetValue(i, out string value))
                         {
                             csvWriterItems.WriteField(value);
                         }
@@ -476,10 +477,15 @@ namespace FishbowlConnect
                     }
 
                     csvWriterItems.Flush();
+                    rowField.Add(sbItem.ToString());
+                    sbItem.Clear();
+
                 }
-                rowField.Add(sbItem.ToString());
+                //sb.Append(sbItem.ToString());
+                
             }
 
+            //rowField.Add(sb.ToString());
             importRows.Add(new Row { RowField = rowField });
 
             ImportRq importRq = new ImportRq();
