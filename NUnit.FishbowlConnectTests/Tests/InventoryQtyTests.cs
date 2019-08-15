@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,6 +107,36 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
+        [TestCase("100GGR")]
+        public async Task InvQtySearchedByPartOrProductShouldHaveDefaultLocationCorrect(string searchTerm)
+        {
+            MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),
+                DatabaseUser, DatabasePassword, DatabaseName);
+
+            using (FishbowlMySqlDB db = await FishbowlMySqlDB.CreateAsync(config))
+            {
+                List<InvQtyWithAllTracking> list;
+
+                    list = await db.GetPartTagAndAllTrackingWithDefaultLocation(searchTerm, "Main Warehouse"
+                        , FishbowlConnect.Helpers.InventorySearchTermType.Part);
+
+
+                foreach (var item in list)
+                {
+                    Debug.WriteLine(item.LocationName + " - " + item.DefaultLocationMatchStatus.ToString());
+                }
+
+                list = await db.GetPartTagAndAllTrackingWithDefaultLocation(searchTerm, "Main Warehouse"
+                        , FishbowlConnect.Helpers.InventorySearchTermType.Product);
+
+
+                foreach (var item in list)
+                {
+                    Debug.WriteLine(item.LocationName + " - " + item.DefaultLocationMatchStatus.ToString());
+                }
+
+            }
+        }
 
     }
 }

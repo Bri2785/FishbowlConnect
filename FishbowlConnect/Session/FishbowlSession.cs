@@ -1188,7 +1188,7 @@ namespace FishbowlConnect
                 Debug.WriteLine("Writing to stream...");
 
                 RequestingRaw = true;
-
+                Logger.Trace(request);
                 Send(_client, request); //send async using begin send and creates the response 
                 sendDoneAuto.WaitOne();
 
@@ -1281,6 +1281,7 @@ namespace FishbowlConnect
                     xmlRequest = await Task.Run(() => SerializeToXMLString(request));
                     //Debug.WriteLine(xmlRequest);
                     LastRequestXML = xmlRequest;
+                    Logger.Trace(xmlRequest);
 
                     Send(_client, xmlRequest); //send async using begin send and creates the response 
                     sendDoneAuto.WaitOne();
@@ -1442,7 +1443,7 @@ namespace FishbowlConnect
                     //Debug.WriteLine(jsonRequest);
                     LastRequestJson = jsonRequest;
 
-
+                    Logger.Trace(jsonRequest);
                     Send(_client, jsonRequest); //send async using begin send  
                     sendDoneAuto.WaitOne(); //wait for sending confirmation in callback, block thread
 
