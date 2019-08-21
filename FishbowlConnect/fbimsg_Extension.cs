@@ -171,31 +171,7 @@ namespace FishbowlConnect
         }
     }
 
-    public partial class TrackingItem
-    {
 
-        /// <remarks/>
-        [XmlIgnore]
-        public string TrackingSummary
-        {
-            get
-            {
-                if (PartTracking.TrackingTypeID == "20" || PartTracking.TrackingTypeID == "30")
-                {
-                    if (TrackingValue != null)
-                    {
-                        return PartTracking.Abbr + " - " + Convert.ToDateTime(TrackingValue).ToString("d");
-                    }
-
-                }
-
-                return PartTracking.Abbr + " - " + TrackingValue;
-
-
-            }
-
-        }
-    }
 
     public class PartDefaultLocationSimple : INotifyPropertyChanged
     {

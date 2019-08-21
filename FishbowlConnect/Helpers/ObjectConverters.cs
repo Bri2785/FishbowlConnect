@@ -1,4 +1,5 @@
-﻿using FishbowlConnect.Json.QueryClasses;
+﻿using FishbowlConnect.Json.APIObjects;
+using FishbowlConnect.Json.QueryClasses;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 
 namespace NUnit.FishbowlConnectTests.Tests
 {
@@ -14,9 +15,9 @@ namespace NUnit.FishbowlConnectTests.Tests
     {
         const string GoodServerAddress = "192.168.150.4";
         const string GoodUserName = "admin";
-        const string GoodPassword = "does1tall";
+        const string GoodPassword = "holl30";
 
-        const string ValidPickNumber = "S71222";
+        const string ValidPickNumber = "S19-7478";
 
         [TestCase(ValidPickNumber)]
         public async Task LoadPickByNumberReturnsPickObject(string PickNum)
@@ -31,7 +32,7 @@ namespace NUnit.FishbowlConnectTests.Tests
                 Pick pick = await session.GetPick(PickNum);
 
                 Assert.NotNull(pick);
-                Assert.True(pick.PickItems.PickItem.Count == 1);
+                Assert.True(pick.PickItems.PickItem.Count >= 1);
 
 
             }
@@ -60,6 +61,32 @@ namespace NUnit.FishbowlConnectTests.Tests
 
 
             }
+        }
+
+        [TestCase(ValidPickNumber)]
+        public async Task LoadPickByNumberAndSaveBackLeavesPickUnchanged(string PickNum)
+        {
+
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                Pick pick = await session.GetPick(PickNum);
+
+                Assert.NotNull(pick);
+
+                await session.SavePick(pick);
+
+                Pick newPick = await session.GetPick(PickNum);
+
+                pick.Should().BeEquivalentTo(newPick);
+                
+                
+
+            }
+
         }
 
     }

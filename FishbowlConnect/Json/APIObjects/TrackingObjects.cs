@@ -21,6 +21,52 @@ namespace FishbowlConnect.Json.APIObjects
         }
     }
 
+
+    public class TrackingItem : NotifyOnChange
+    {
+        private string trackingValueField;
+
+        /// <remarks/>
+        public PartTracking PartTracking { get; set; }
+
+        [JsonConverter(typeof(MySQLCompatibleDateFormat))]
+        public string TrackingValue
+        {
+            get
+            {
+                return this.trackingValueField;
+            }
+            set
+            {
+                this.trackingValueField = value;
+                RaisePropertyChanged(nameof(TrackingSummary));
+            }
+        }
+
+        [JsonIgnore]
+            public string TrackingSummary
+            {
+                get
+                {
+                    if (PartTracking.TrackingTypeID == "20" || PartTracking.TrackingTypeID == "30")
+                    {
+                        if (!string.IsNullOrEmpty(TrackingValue))
+                        {
+                            return PartTracking.Abbr + " - " + Convert.ToDateTime(TrackingValue).ToString("d");
+                        }
+
+                    }
+
+                    return PartTracking.Abbr + " - " + TrackingValue;
+
+
+                }
+
+            }
+        
+
+    }
+
     public class TrackingSimple : NotifyOnChange
     {
         private string trackingInfo;

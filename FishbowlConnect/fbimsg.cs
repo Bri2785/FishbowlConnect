@@ -4280,52 +4280,7 @@ namespace FishbowlConnect
         }
     }
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public partial class TrackingItem : NotifyOnChange
-    {
 
-        
-
-        private PartTracking partTrackingField;
-
-        private string trackingValueField;
-
-        /// <remarks/>
-        public PartTracking PartTracking
-        {
-            get
-            {
-                return this.partTrackingField;
-            }
-            set
-            {
-                this.partTrackingField = value;
-            }
-        }
-
-        /// <remarks/>
-        //[System.Xml.Serialization.XmlElementAttribute(DataType="integer")]
-        public string TrackingValue
-        {
-            get
-            {
-                return this.trackingValueField;
-            }
-            set
-            {
-                this.trackingValueField = value;
-                RaisePropertyChanged(nameof(TrackingSummary));
-            }
-        }
-
-
-    }
 
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
