@@ -25,18 +25,18 @@ namespace NUnit.FishbowlConnectTests.Tests
         const int DatabasePort = 2361;
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
-        const string DatabaseName = "BRITEIDEASUPDATE";
+        const string DatabaseName = "gcs_copy";
         const string BadDatabaseName = "fndfnd";
 
         const string ValidPartNumberWithInventory = "ECL-SC";
-        const string ValidDefaultLocationGroup = "MainWarehouse";
+        const string ValidDefaultLocationGroup = "Main";
 
 
 
         //all run against briteideasUpdate DB Date 3-5-19, C:\Program Files\Fishbowl\data\backups
 
 
-        [TestCase("TestProduct")]
+        [TestCase("WSGR051")]
         public async Task InvQtyGroupedWithTrackingShouldReturnNestedLists(string partNumber)
         {
             MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),

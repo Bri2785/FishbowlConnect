@@ -454,7 +454,7 @@ namespace FishbowlConnect
                     {
                         //socket disposed exception
                         Debug.WriteLine("Socket disposed");
-                        Logger.Debug(ex, "Socket Disposed, triggered in receive callback after socket disposed in disposing method");
+                        Logger.Debug("Socket Disposed, triggered in receive callback after socket disposed in disposing method");
                         //LastFBException = new FishbowlException("Socket Disposed, triggered in receive callback after socket disposed in disposing method", ex);
                         ((StateObject)ar.AsyncState).workSocket.Close(); //close the old socket
 

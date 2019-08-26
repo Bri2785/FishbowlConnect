@@ -8,6 +8,7 @@ using FishbowlConnect.Helpers;
 using FishbowlConnect.Interfaces;
 using FishbowlConnect.Json.APIObjects;
 using FishbowlConnect.Json.QueryClasses;
+using FishbowlConnect.Logging;
 using MySql.Data.MySqlClient;
 using MySqlConnector;
 
@@ -18,6 +19,9 @@ namespace FishbowlConnect.MySQL
 {
     public class FishbowlMySqlDB : IDisposable
     {
+        private static readonly ILog Logger = LogProvider.For<FishbowlMySqlDB>();
+
+
         public MySqlConnection Connection { get; private set; }
 
         public MySqlConfig Config { get; set; }
@@ -122,7 +126,7 @@ namespace FishbowlConnect.MySQL
 
         public async Task<ProductAvailableInventory> getProductAFS(string ProductNumber)
         {
-            if (String.IsNullOrEmpty(ProductNumber))
+            if (string.IsNullOrEmpty(ProductNumber))
             {
                 throw new ArgumentNullException("Product Number is required");
             }
@@ -130,7 +134,7 @@ namespace FishbowlConnect.MySQL
             //await Load();
             ProductAvailableInventory productAvailableInventory = null;// = new ProductAvailableInventory();
 
-            string query = String.Format(
+            string query = string.Format(
                         @"SELECT PRODUCT.ID AS PRODUCTID, PRODUCT.NUM AS PRODUCTNUM, PRODUCT.PARTID, 
                         (COALESCE(SUM((QTYONHAND-QTYALLOCATED-QTYNOTAVAILABLE)/COALESCE(FACTOR,1)),0) + COALESCE(qryInventoryOnTransfers.SumofQty,0)) AS InStockAvailable,
                         COALESCE(BOMInventory.MaxBuildInv,0) AS BuildInventory, 
@@ -992,7 +996,7 @@ namespace FishbowlConnect.MySQL
         public async Task<List<InvQtyGroupedByTagWithTracking>> GetPartTagGroupedWithAllTrackingWithDefaultLocation(string SearchTerm
             , string LocationGroupName, InventorySearchTermType searchTermType)
         {
-            if (String.IsNullOrEmpty(SearchTerm))
+            if (string.IsNullOrEmpty(SearchTerm))
             {
                 throw new ArgumentNullException("Search Term is required");
             }
@@ -1209,7 +1213,7 @@ namespace FishbowlConnect.MySQL
                             (UPPER(part.`num`) LIKE '{0}' OR part.`upc` LIKE '{0}' )
                             AND(location.`typeId` NOT IN(20, 60, 80) OR location.`typeId` IS NULL)
 
-                            GROUP BY part.num, locationId, trackinginfo, trackinglabel, upccaseqty
+                            GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
                             ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
 
 
@@ -1285,7 +1289,7 @@ namespace FishbowlConnect.MySQL
 
             }
 
-
+            Logger.Trace("Pick Inventory Query : {0}", query);
         
             List<InvQtyWithAllTracking> invQtyWithAllTrackings = new List<InvQtyWithAllTracking>();
 
