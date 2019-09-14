@@ -9,7 +9,11 @@ namespace FishbowlConnect
 {
     public partial class FishbowlSession
     {
-
+        /// <summary>
+        /// Return a shipping object containing the requested shipment
+        /// </summary>
+        /// <param name="shipmentID">Ship ID</param>
+        /// <returns></returns>
         public async Task<Shipping> getShipment(int shipmentID)
         {
             GetShipmentRq getShipmentRq = new GetShipmentRq();
@@ -26,6 +30,11 @@ namespace FishbowlConnect
             return getShipmentRs?.Shipping;
         }
 
+        /// <summary>
+        /// Return a shipping object containing the requested shipment
+        /// </summary>
+        /// <param name="shipmentNum">The shipment number</param>
+        /// <returns></returns>
         public async Task<Shipping> getShipment(string shipmentNum)
         {
             GetShipmentRq getShipmentRq = new GetShipmentRq();
@@ -38,7 +47,11 @@ namespace FishbowlConnect
 
         }
 
-
+        /// <summary>
+        /// Saves shipment changes to FB
+        /// </summary>
+        /// <param name="shipment">Populated shipping object</param>
+        /// <returns></returns>
         public async Task SaveShipment(Shipping shipment)
         {
             SaveShipmentRq saveShipmentRq = new SaveShipmentRq();
@@ -51,7 +64,7 @@ namespace FishbowlConnect
         }
 
         /// <summary>
-        /// Ships an order in FB. Uploads the provided image as a signature if added
+        /// Ships an order in FB. Uploads the provided image as a signature if added. Auto fulfills any service items also
         /// </summary>
         /// <param name="ShipNum">"Shipment number, must include the prefix"</param>
         /// <param name="image">"Base64 encoded image to attach to shipment. Usually used for signatures</param>
@@ -64,7 +77,7 @@ namespace FishbowlConnect
             shipRq.ShipDate = DateTime.Now;
             shipRq.FulfillService = true;
 
-            if (!String.IsNullOrEmpty(image))
+            if (!string.IsNullOrEmpty(image))
             {
                 shipRq.Image = image;
             }

@@ -14,10 +14,10 @@ namespace NUnit.FishbowlConnectTests.Tests
     public class PickingTests
     {
         const string GoodServerAddress = "192.168.150.4";
-        const string GoodUserName = "admin";
+        const string GoodUserName = "jon";
         const string GoodPassword = "holl30";
 
-        const string ValidPickNumber = "S19-7478";
+        const string ValidPickNumber = "S19-6384";
 
         [TestCase(ValidPickNumber)]
         public async Task LoadPickByNumberReturnsPickObject(string PickNum)
@@ -69,6 +69,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
 
+            config.RequestTimeout = 30000;
 
             using (FishbowlSession session = new FishbowlSession(config))
             {

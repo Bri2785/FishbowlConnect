@@ -11,6 +11,13 @@ namespace FishbowlConnect
 {
     public partial class FishbowlSession
     {
+        /// <summary>
+        /// Returns a simple list of shipments matching provided filters
+        /// </summary>
+        /// <param name="shipFilters"></param>
+        /// <param name="searchTerm"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<List<ShipSimpleObject>> getShipSimpleList(ShipListFilters shipFilters = null, 
             string searchTerm = null, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -59,7 +66,8 @@ namespace FishbowlConnect
 	                            carrier.`name` AS Carrier, 
 	                            ship.`statusId` AS ShipStatusID,
 	                            ship.`dateShipped` AS DateShipped,
-	                            ship.`cartonCount` AS CartonCount
+	                            ship.`cartonCount` AS CartonCount,
+                                ship.shipToId AS CustomerId
 	
                             FROM ship
                             JOIN carrier ON ship.`carrierId` = carrier.id
@@ -80,6 +88,13 @@ namespace FishbowlConnect
 
         }
 
+        /// <summary>
+        /// Returns list of shipment images from the database with the file path. Does not return base64 image
+        /// Will throw error if table doesn't exist
+        /// </summary>
+        /// <param name="shipId">shipment id number</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<List<ShipmentImage>> GetShipmentImageList(int shipId, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
