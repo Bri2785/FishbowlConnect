@@ -3,6 +3,7 @@ using FishbowlConnect.Json.Converters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FishbowlConnect.Json.APIObjects
@@ -24,8 +25,6 @@ namespace FishbowlConnect.Json.APIObjects
 
         public Address Address { get; set; }
 
-
-
         private Cartons cartons;
 
         public Cartons Cartons
@@ -38,6 +37,8 @@ namespace FishbowlConnect.Json.APIObjects
             }
         }
 
+        public FullyObservableCollection<ShippingItem> ItemsFlattened => 
+            new FullyObservableCollection<ShippingItem>( Cartons?.Carton?.SelectMany(x => x.ShippingItems?.ShippingItem) );
     }
 
     public partial class Cartons
