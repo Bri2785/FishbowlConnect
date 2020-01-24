@@ -920,7 +920,7 @@ namespace FishbowlConnect.MySQL
                                     (UPPER(product.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' )
                                     AND (location.`typeId` NOT IN (20,60,80) OR location.`typeId` IS NULL)
 
-                                    GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
+                                    GROUP BY part.num, locationId, trackinginfo, trackinglabel, upccaseqty
                                     ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
 
 

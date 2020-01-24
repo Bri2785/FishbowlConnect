@@ -62,6 +62,22 @@ namespace FishbowlConnect.Json.QueryClasses
         [JsonIgnore]
         public string NumberAndNameAndPO { get { return ShipNum + " - " + OrderInfo + PONumber ?? " - " + PONumber; } }
 
+        [JsonIgnore]
+        public string OrderInfoInitial
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(OrderInfo) || OrderInfo.Length == 0)
+                {
+                    return "?";
+                }
+                else
+                {
+                    return OrderInfo[0].ToString().ToUpper();
+                }
+            }
+        }
+
     }
 
     //public class ShipSimpleObjectGroupedList : ObservableCollection<ShipSimpleObject>

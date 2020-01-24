@@ -38,7 +38,9 @@ namespace FishbowlConnect.Json.APIObjects
         }
 
         public FullyObservableCollection<ShippingItem> ItemsFlattened => 
-            new FullyObservableCollection<ShippingItem>( Cartons?.Carton?.SelectMany(x => x.ShippingItems?.ShippingItem) );
+            new FullyObservableCollection<ShippingItem>( Cartons?.Carton?
+                                                        .Where(c=>c.ShippingItems != null)
+                                                        .SelectMany(x => x.ShippingItems?.ShippingItem) );
     }
 
     public partial class Cartons
