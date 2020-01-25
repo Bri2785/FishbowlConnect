@@ -22,5 +22,7 @@ namespace FishbowlConnect.Json.QueryClasses
         public bool TrackingPrimaryFlag { get; set; }
 
         public string TrackingInfo { get; set; } //used on import, not used on export query
+        [Ignore]
+        public bool IsPrimaryTracking { get; set ; }
     }
 }
