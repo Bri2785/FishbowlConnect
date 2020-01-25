@@ -993,7 +993,7 @@ namespace FishbowlConnect.MySQL
         /// <returns></returns>
         /// <exception cref="ArgumentException">Thrown when part not found</exception>
         /// <exception cref="KeyNotFoundException">Thrown when no records returned</exception>
-        public async Task<List<InvQtyGroupedByTagWithTracking>> GetPartTagGroupedWithAllTrackingWithDefaultLocation(string SearchTerm
+        public async Task<List<InvQtyGroupedByUniqueTagInfoWithTracking>> GetPartInvGroupedWithAllTrackingWithDefaultLocation(string SearchTerm
             , string LocationGroupName, InventorySearchTermType searchTermType)
         {
             if (string.IsNullOrEmpty(SearchTerm))
@@ -1001,10 +1001,11 @@ namespace FishbowlConnect.MySQL
                 throw new ArgumentNullException("Search Term is required");
             }
 
-            List<InvQtyGroupedByTagWithTracking> invQtyGrouped = new List<InvQtyGroupedByTagWithTracking>();
+            List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtyGrouped = new List<InvQtyGroupedByUniqueTagInfoWithTracking>();
 
             string query = null;
 
+            //TODO: locaion and tracking lookups
             if (SearchTerm.Contains("$L$"))
             {
                 query = string.Format(@"SELECT part.num AS PartNumber
@@ -1149,12 +1150,16 @@ namespace FishbowlConnect.MySQL
                 {
                     case InventorySearchTermType.Part:
                         query = string.Format(@"SELECT part.num AS PartNumber
-                                , SUM(tag.`qty`) AS Qty
+                                #, SUM(tag.`qty`) AS Qty
+                                , tag.qty
+                                , tag.`qtyCommitted`
                                 , tag.id AS TagID
                                 , tag.`num` AS tagNum
+                                , tag.`dateCreated`
                                 , tag.`locationId`
 	                            , location.`name` AS LocationName
                                 , location.`pickable` AS LocationPickable
+                                , tag.`trackingEncoding`
                                 , COALESCE(DATE_FORMAT(trackingdate.`info`, '%m/%d/%Y'), trackingdecimal.`info`,
                                                         CASE WHEN parttracking.`typeId` = 80 THEN
 
@@ -1179,8 +1184,6 @@ namespace FishbowlConnect.MySQL
                                 , dfl.DefaultLocationName
 
                             FROM part
-                            #JOIN product ON product.`partId` = part.id
-                            #LEFT JOIN uomconversion ON (product.`uomId` = uomconversion.`fromUomId` AND uomconversion.`toUomId` = part.`uomId`)
                             LEFT JOIN tag ON tag.`partId` = part.id
                             LEFT JOIN location ON tag.`locationId` = location.`id`
                             LEFT JOIN locationgroup ON location.`locationGroupId` = locationgroup.`id`
@@ -1213,7 +1216,7 @@ namespace FishbowlConnect.MySQL
                             (UPPER(part.`num`) LIKE '{0}' OR part.`upc` LIKE '{0}' )
                             AND(location.`typeId` NOT IN(20, 60, 80) OR location.`typeId` IS NULL)
 
-                            GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
+                            
                             ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
 
 
@@ -1221,13 +1224,16 @@ namespace FishbowlConnect.MySQL
 
                     case InventorySearchTermType.Product:
                         query = string.Format(@"SELECT part.num AS PartNumber
-	                                    , SUM(tag.`qty`) AS Qty
-	                                    , tag.id AS TagID
-	                                    , tag.`num` AS tagNum
-	                                    , tag.`locationId`
-	                                    , location.`name` AS LocationName
-	                                    , location.`pickable` AS LocationPickable
-	                                    #, COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`) AS TrackingInfo
+                                #, SUM(tag.`qty`) AS Qty
+                                , tag.qty
+                                , tag.`qtyCommitted`
+                                , tag.id AS TagID
+                                , tag.`num` AS tagNum
+                                , tag.`dateCreated`
+                                , tag.`locationId`
+	                            , location.`name` AS LocationName
+                                , location.`pickable` AS LocationPickable
+                                , tag.`trackingEncoding`
 	                                    , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
                                                                 CASE WHEN parttracking.`typeId` = 80 THEN 
 	                                                                CASE WHEN trackinginteger.`info` = 0 THEN 'false'
@@ -1278,7 +1284,7 @@ namespace FishbowlConnect.MySQL
                                     (UPPER(product.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' )
                                     AND (location.`typeId` NOT IN (20,60,80) OR location.`typeId` IS NULL)
 
-                                    GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
+                                    #GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
                                     ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
 
 
@@ -1303,10 +1309,13 @@ namespace FishbowlConnect.MySQL
                         {
                             PartNumber = (string)reader["PartNumber"],
                             Qty = reader["qty"] == DBNull.Value ? 0 : (decimal)reader["qty"],
+                            QtyCommitted = reader["qtyCommitted"] == DBNull.Value ? 0 : (decimal)reader["qtyCommitted"],
                             TagID = reader["tagid"] == DBNull.Value ? 0 : (int)(Int64)reader["tagid"],
+                            DateCreated = reader["dateCreated"] == DBNull.Value ? DateTime.MinValue : (DateTime)reader["dateCreated"],
                             LocationId = reader["locationId"] == DBNull.Value ? 0 : (int)reader["locationId"],
                             LocationName = reader["LocationName"] == DBNull.Value ? null : reader["LocationName"].ToString(),
                             LocationPickable = reader["locationPickable"] == DBNull.Value ? false : Convert.ToBoolean((UInt64)reader["locationPickable"]),
+                            TrackingEncoding = reader["trackingEncoding"] == DBNull.Value ? null : reader["trackingEncoding"].ToString(),
                             TrackingInfo = reader["TrackingInfo"] == DBNull.Value ? null : reader["TrackingInfo"].ToString(),
                             TrackingLabel = reader["TrackingLabel"] == DBNull.Value ? null : reader["TrackingLabel"].ToString(),
                             TrackingAbbr = reader["TrackingAbbr"] == DBNull.Value ? null : reader["TrackingAbbr"].ToString(),
@@ -1342,8 +1351,7 @@ namespace FishbowlConnect.MySQL
             var grouped = invQtyWithAllTrackings.GroupBy(i => new
             {
                 i.PartNumber,
-                i.Qty,
-                i.TagID,
+                i.TrackingEncoding,
                 i.LocationId,
                 i.LocationName,
                 i.LocationPickable,
@@ -1351,14 +1359,34 @@ namespace FishbowlConnect.MySQL
                 i.UPCCaseQty,
                 i.DefaultLocationName
             })
-            .Select(grp => new InvQtyGroupedByTagWithTracking(grp.Key.PartNumber, grp.Key.Qty, grp.Key.TagID, grp.Key.LocationId,
-                                                               grp.Key.LocationName, grp.Key.LocationPickable, grp.Key.LocationGroupName,
-                                                               grp.Key.UPCCaseQty, grp.Key.DefaultLocationName,
-                                                               grp.ToList().Where(t => t.TrackingInfo != null).Select(track => 
-                                                                    new TrackingSimple(track.TrackingInfo, track.TrackingLabel,
-                                                                                        track.TrackingAbbr, track.TrackingTypeID,
-                                                                                        track.TrackingID, track.TrackingSortOrder,
-                                                                                        track.IsPrimaryTracking)).ToList())).ToList();
+            .Select(grp => new InvQtyGroupedByUniqueTagInfoWithTracking(
+                grp.Key.PartNumber
+                , grp.GroupBy(g => new { g.TagID, g.Qty } )
+                                    .Sum(tagGrp => tagGrp.Key.Qty)
+                , grp.GroupBy(g => new { g.TagID, g.QtyCommitted })
+                                    .Sum(tagGrp => tagGrp.Key.QtyCommitted)
+                , grp.Key.TrackingEncoding
+                , grp.Key.LocationId
+                , grp.Key.LocationName
+                , grp.Key.LocationPickable
+                , grp.Key.LocationGroupName
+                , grp.Key.UPCCaseQty
+                , grp.Key.DefaultLocationName,
+
+                grp.ToList().Select(
+                    tag => new SimpleTag(tag.TagID, tag.Qty, tag.QtyCommitted, tag.DateCreated, tag.LocationId))
+                    .Distinct(new SimpleTagComparer())
+                    .ToList(),
+
+                grp.ToList().Where(t => t.TrackingInfo != null).Select(track => 
+                    new TrackingSimple(track.TrackingInfo, track.TrackingLabel,
+                                        track.TrackingAbbr, track.TrackingTypeID,
+                                        track.TrackingID, track.TrackingSortOrder,
+                                        track.IsPrimaryTracking))
+                                        .Distinct(new SimpleTrackingComparer())
+                                        .ToList()))
+                                        
+                                        .ToList();
 
 
             //.Select(grp => new { Tag = grp.Key, Tracking = grp.ToList() }).ToList();

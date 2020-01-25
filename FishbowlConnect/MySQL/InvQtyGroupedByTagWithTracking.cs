@@ -7,19 +7,27 @@ using System.Text;
 
 namespace FishbowlConnect.MySQL
 {
-    public class InvQtyGroupedByTagWithTracking : NotifyOnChange
+    /// <summary>
+    /// Contains inventory quantities that are summed and grouped by all matching information. 
+    /// Same Location, and all tracking info (encoding) will be summed together. 
+    /// List of summed tagIds will be found in the simpleTags property
+    /// </summary>
+    public class InvQtyGroupedByUniqueTagInfoWithTracking : NotifyOnChange
     {
-        public InvQtyGroupedByTagWithTracking(string partNumber, decimal qty, int tagID, int locationId, string locationName, bool locationPickable, string locationGroupName, int upcCaseQty, string defaultLocationName, List<TrackingSimple> simpleTracking)
+        public InvQtyGroupedByUniqueTagInfoWithTracking(string partNumber, decimal qty, decimal qtyCommitted, string trackingEncoding, int locationId, string locationName, bool locationPickable, string locationGroupName, int upcCaseQty, string defaultLocationName, List<SimpleTag> simpleTags, List<TrackingSimple> simpleTracking)
         {
             PartNumber = partNumber;
             Qty = qty;
-            TagID = tagID;
+            QtyCommitted = qtyCommitted;
+            //TagID = tagID;
+            TrackingEncoding = trackingEncoding;
             LocationId = locationId;
             LocationName = locationName;
             LocationPickable = locationPickable;
             LocationGroupName = locationGroupName;
             UPCCaseQty = upcCaseQty;
             DefaultLocationName = defaultLocationName;
+            SimpleTags = simpleTags;
             SimpleTracking = simpleTracking;
         }
 
@@ -46,6 +54,32 @@ namespace FishbowlConnect.MySQL
             }
         }
 
+        private decimal qtyCommitted;
+
+        public decimal QtyCommitted
+        {
+            get { return qtyCommitted; }
+            set
+            {
+                qtyCommitted = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string trackingEncoding;
+
+        public string TrackingEncoding
+        {
+            get { return trackingEncoding; }
+            set
+            {
+                trackingEncoding = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        [Obsolete("Look in the List<SimpleTags> for tag info")]
         private int tagID;
         public int TagID
         {
@@ -125,6 +159,20 @@ namespace FishbowlConnect.MySQL
                 RaisePropertyChanged(nameof(DefaultLocationMatchStatus));
             }
         }
+
+        private List<SimpleTag> simpleTags;
+
+        public List<SimpleTag> SimpleTags
+        {
+            get { return simpleTags; }
+            set
+            {
+                simpleTags = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         private List<TrackingSimple> simpleTracking;
 

@@ -171,5 +171,30 @@ namespace FishbowlConnect.Json.APIObjects
 
     }
 
+    class SimpleTrackingComparer : IEqualityComparer<TrackingSimple>
+    {
+        public bool Equals(TrackingSimple x, TrackingSimple y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                return false;
+
+            return
+                x.TrackingID == y.TrackingID &&
+                x.TrackingInfo == y.TrackingInfo;
+        }
+
+        public int GetHashCode(TrackingSimple obj)
+        {
+            //null check then creates hash from partnumber, tracking encoding, tag id
+
+            if (ReferenceEquals(obj, null)) return 0;
+            int hashSimpleTrackingID = obj.TrackingID == 0 ? 0 : obj.TrackingID.GetHashCode();
+            int hashSimpleTrackingInfo = obj.TrackingInfo == null ? 0 : obj.TrackingInfo.GetHashCode();
+            return hashSimpleTrackingID ^ hashSimpleTrackingInfo;
+        }
+    }
+
 
 }

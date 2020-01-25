@@ -30,6 +30,19 @@ namespace FishbowlConnect.MySQL
             }
         }
 
+        private decimal qtyCommitted;
+
+        public decimal QtyCommitted
+        {
+            get { return qtyCommitted; }
+            set
+            {
+                qtyCommitted = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private int tagID;
         public int TagID
         {
@@ -40,6 +53,19 @@ namespace FishbowlConnect.MySQL
                 RaisePropertyChanged();
             }
         }
+
+        private DateTime dateCreated;
+
+        public DateTime DateCreated
+        {
+            get { return dateCreated; }
+            set
+            {
+                dateCreated = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private int locationId;
         public int LocationId
@@ -75,6 +101,19 @@ namespace FishbowlConnect.MySQL
                 RaisePropertyChanged();
             }
         }
+
+        private string trackingEncoding;
+
+        public string TrackingEncoding
+        {
+            get { return trackingEncoding; }
+            set
+            {
+                trackingEncoding = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private string trackingInfo;
         public string TrackingInfo
@@ -220,5 +259,32 @@ namespace FishbowlConnect.MySQL
             }
         }
 
+    }
+
+    class InvQtyComparer : IEqualityComparer<InvQtyWithAllTracking>
+    {
+        public bool Equals(InvQtyWithAllTracking x, InvQtyWithAllTracking y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                return false;
+
+            return
+                x.PartNumber == y.PartNumber &&
+                x.TagID == y.TagID &&
+                x.TrackingEncoding == y.TrackingEncoding;
+        }
+
+        public int GetHashCode(InvQtyWithAllTracking obj)
+        {
+            //null check then creates hash from partnumber, tracking encoding, tag id
+
+            if (ReferenceEquals(obj, null)) return 0;
+            int hashInvQtyPart = obj.PartNumber == null ? 0 : obj.PartNumber.GetHashCode();
+            int hashInvQtyTracking = obj.TrackingEncoding == null ? 0 : obj.TrackingEncoding.GetHashCode();
+            int hashTagId = obj.TagID == 0 ? 0 : obj.TagID.GetHashCode();
+            return hashInvQtyPart ^ hashInvQtyTracking ^ hashTagId;
+        }
     }
 }
