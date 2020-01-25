@@ -79,17 +79,17 @@ namespace FishbowlConnect.MySQL
         }
 
 
-        [Obsolete("Look in the List<SimpleTags> for tag info")]
-        private int tagID;
-        public int TagID
-        {
-            get { return tagID; }
-            set
-            {
-                tagID = value;
-                RaisePropertyChanged();
-            }
-        }
+        //[Obsolete("Look in the List<SimpleTags> for tag info")]
+        //private int tagID;
+        //public int TagID
+        //{
+        //    get { return tagID; }
+        //    set
+        //    {
+        //        tagID = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
         private int locationId;
         public int LocationId

@@ -24,24 +24,25 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string BadDatabaseName = "fndfnd";
 
 
-        const string GoodServerAddress = "192.168.150.2";
-        const string GoodUserName = "admin";
-        const string GoodPassword = "does1tall";
-        const string DatabaseAddress = "192.168.150.2";
-        const int DatabasePort = 3301;
-        const string DatabaseName = "briteideasupdate";
-        const string ValidPartNumberWithInventory = "ECL-SC";
-        const string ValidDefaultLocationGroup = "Main Warehouse";
-        const string ValidProductNumberWithInventory = "ML60BLcs6";
-
-        //const string GoodServerAddress = "192.168.150.4";
+        //const string GoodServerAddress = "192.168.150.2";
         //const string GoodUserName = "admin";
         //const string GoodPassword = "does1tall";
         //const string DatabaseAddress = "192.168.150.2";
-        //const int DatabasePort = 2361;
-        //const string DatabaseName = "gcs_copy_1_23_20";
-        //const string ValidPartNumberWithInventory = "CSBL030";
-        //const string ValidDefaultLocationGroup = "Main";
+        //const int DatabasePort = 3301;
+        //const string DatabaseName = "briteideasupdate";
+        //const string ValidPartNumberWithInventory = "ECL-SC";
+        //const string ValidDefaultLocationGroup = "Main Warehouse";
+
+        const string ValidProductNumberWithInventory = "ML60BLcs6";
+
+        const string GoodServerAddress = "192.168.150.4";
+        const string GoodUserName = "admin";
+        const string GoodPassword = "does1tall";
+        const string DatabaseAddress = "192.168.150.2";
+        const int DatabasePort = 2361;
+        const string DatabaseName = "gcs_copy_1_23_20";
+        const string ValidPartNumberWithInventory = "CSBL030";
+        const string ValidDefaultLocationGroup = "Main";
 
 
 

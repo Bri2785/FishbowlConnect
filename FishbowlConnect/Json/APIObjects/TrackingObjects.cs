@@ -1,4 +1,5 @@
-﻿using FishbowlConnect.Json.Converters;
+﻿using FishbowlConnect.Interfaces;
+using FishbowlConnect.Json.Converters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -67,7 +68,7 @@ namespace FishbowlConnect.Json.APIObjects
 
     }
 
-    public class TrackingSimple : NotifyOnChange
+    public class TrackingSimple : NotifyOnChange, IPartTrackingFields
     {
         private string trackingInfo;
         public string TrackingInfo

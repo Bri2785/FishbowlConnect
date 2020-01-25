@@ -220,8 +220,21 @@ namespace FishbowlConnect.Json.APIObjects
 
     public partial class PickItems: NotifyOnChange
     {
+        private FullyObservableCollection<PickItem> pickItems;
+
         [JsonConverter(typeof(FullyObservableCollectionOrSingleValueConverter<PickItem>))]
-        public FullyObservableCollection<PickItem> PickItem { get; set; }
+        public FullyObservableCollection<PickItem> PickItem
+        {
+            get
+            {
+                return this.pickItems;
+            }
+            set
+            {
+                this.pickItems = value;
+                RaisePropertyChanged();
+            }
+        }
 
     }
 
