@@ -1009,14 +1009,17 @@ namespace FishbowlConnect.MySQL
             if (SearchTerm.Contains("$L$"))
             {
                 query = string.Format(@"SELECT part.num AS PartNumber
-	                        , SUM(tag.`qty`) AS Qty
-	                        , tag.id AS TagID
-	                        , tag.`num` AS tagNum
-	                        , tag.`locationId`
+	                        #, SUM(tag.`qty`) AS Qty
+                            , tag.qty
+                            , tag.`qtyCommitted`
+                            , tag.id AS TagID
+                            , tag.`num` AS tagNum
+                            , tag.`dateCreated`
+                            , tag.`locationId`
 	                        , location.`name` AS LocationName
-	                        , location.`pickable` AS LocationPickable
-	                        #, COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`) AS TrackingInfo
-	                        , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
+                            , location.`pickable` AS LocationPickable
+                            , tag.`trackingEncoding`
+                            , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
                                                     CASE WHEN parttracking.`typeId` = 80 THEN 
 	                                                    CASE WHEN trackinginteger.`info` = 0 THEN 'false'
 		                                                    ELSE 'true'
@@ -1064,21 +1067,22 @@ namespace FishbowlConnect.MySQL
                         CONCAT('$L$', location.name) LIKE '{0}'
                         AND location.`typeId` NOT IN (20,60,80)
 
-                        GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
                         ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
             }
             else if (SearchTerm.Contains("$T$"))
             {
                 //change to part only query
                 query = string.Format(@"SELECT part.num AS PartNumber
-	                                , SUM(tag.`qty`) AS Qty
-	                                , tag.id AS TagID
-	                                , tag.`num` AS tagNum
-	                                , tag.`locationId`
-	                                , location.`name` AS LocationName
-	                                , location.`pickable` AS LocationPickable
-	                                #, COALESCE (trackingdate.`info`, trackingdecimal.`info`, trackinginteger.`info`, trackingtext.`info`) AS TrackingInfo
-	                                , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
+	                            , tag.qty
+                                , tag.`qtyCommitted`
+                                , tag.id AS TagID
+                                , tag.`num` AS tagNum
+                                , tag.`dateCreated`
+                                , tag.`locationId`
+	                            , location.`name` AS LocationName
+                                , location.`pickable` AS LocationPickable
+                                , tag.`trackingEncoding`
+                                , COALESCE (DATE_FORMAT(trackingdate.`info`,'%m/%d/%Y'), trackingdecimal.`info`, 
                                                             CASE WHEN parttracking.`typeId` = 80 THEN 
 	                                                            CASE WHEN trackinginteger.`info` = 0 THEN 'false'
 		                                                            ELSE 'true'
@@ -1141,7 +1145,6 @@ namespace FishbowlConnect.MySQL
                                 WHERE
                                 location.`typeId` NOT IN (20,60,80)
 
-                                GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
                                 ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
             }
             else
@@ -1284,7 +1287,6 @@ namespace FishbowlConnect.MySQL
                                     (UPPER(product.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' )
                                     AND (location.`typeId` NOT IN (20,60,80) OR location.`typeId` IS NULL)
 
-                                    #GROUP BY part.num, locationId, tagid, trackinginfo, trackinglabel, upccaseqty
                                     ORDER BY location.`name`, tagid, parttracking.sortorder", SearchTerm.ToUpper(), LocationGroupName);
 
 
@@ -1378,7 +1380,7 @@ namespace FishbowlConnect.MySQL
                     .Distinct(new SimpleTagComparer())
                     .ToList(),
 
-                grp.ToList().Where(t => t.TrackingInfo != null).Select(track => 
+                grp.ToList().Select(track => 
                     new TrackingSimple(track.TrackingInfo, track.TrackingLabel,
                                         track.TrackingAbbr, track.TrackingTypeID,
                                         track.TrackingID, track.TrackingSortOrder,

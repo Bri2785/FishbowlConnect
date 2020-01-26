@@ -138,7 +138,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
 
                         await session.CycleInventoryImportAsync(invQty.PartNumber, invQty.LocationFullName, (int)invQty.Qty - 1,
-                            "Test Cycle Count", null, invQty.TagID);
+                            "Test Cycle Count", null, null); //TODO: add tracking values
 
                         InvQtyWithAllTracking newInvQty = (await db.GetPartTagAndAllTrackingWithDefaultLocation(
                         partNumber, "Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Part)).Find(m => m.TagID == invQty.TagID);
@@ -204,7 +204,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
 
                     await session.MoveInventoryImportAsync(partNumber, fromLocation, moveQty,
-                        toLocation, "Test Move", invQty.TagID);
+                        toLocation, "Test Move", null);  //TODO: add tracking values
 
                     //now check the to location qty
 
@@ -231,7 +231,7 @@ namespace NUnit.FishbowlConnectTests.Tests
             {
 
                 await session.CycleInventoryImportAsync(partNumber, "A1", 10,
-                    "Test Cycle Count", null, 67397);
+                    "Test Cycle Count", null, null);  //TODO: add tracking values
 
 
             }

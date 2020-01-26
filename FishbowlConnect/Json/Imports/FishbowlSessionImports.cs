@@ -508,18 +508,17 @@ namespace FishbowlConnect
 
 
         /// <summary>
-        /// Moves inventory. The provided TagId is used to get all of the active and used tracking fields
-        /// for this tag. These are then used in the MoveRq to make sure the tag is moved correctly.
+        /// Moves inventory. 
         /// </summary>
         /// <param name="PartNumber"></param>
         /// <param name="BeginLocationWithLG"></param>
         /// <param name="Qty"></param>
         /// <param name="EndLocationWithLG"></param>
         /// <param name="Note"></param>
-        /// <param name="TagID">TagID NOT TagNum. Set to 0 if PartTracking is not used</param>
+        /// <param name="trackingFieldsAndValues">List of simple tracking fields and values/param>
         /// <returns></returns>
         public async Task MoveInventoryImportAsync(string PartNumber, string BeginLocationWithLG, int Qty, string EndLocationWithLG,
-                string Note, int TagID)
+                string Note, List<TrackingSimple> trackingFieldsAndValues)
         {
             //validate
             if (String.IsNullOrEmpty(PartNumber))
@@ -559,17 +558,17 @@ namespace FishbowlConnect
             Dictionary<int, string> trackingIndexes = null;
 
 
-            List<TagTrackingObject> tagTrackingItems = null;
-            try
-            {
-                tagTrackingItems = await GetTrackingByTag(TagID); //throws keynotfound no results error if 0 rows
-            }
-            catch (KeyNotFoundException)
-            {
+            //List<TagTrackingObject> tagTrackingItems = null;
+            //try
+            //{
+            //    tagTrackingItems = await GetTrackingByTag(TagID); //throws keynotfound no results error if 0 rows
+            //}
+            //catch (KeyNotFoundException)
+            //{
 
-            }
+            //}
 
-            if (tagTrackingItems?.Count > 0)
+            if (trackingFieldsAndValues?.Count > 0)
             {
                 //We need to get all of the tracking from the DB
 
@@ -588,7 +587,7 @@ namespace FishbowlConnect
                     trackingIndexes = new Dictionary<int, string>();
 
 
-                    foreach (TagTrackingObject item in tagTrackingItems)
+                    foreach (TrackingSimple item in trackingFieldsAndValues)
                     {
                         if (!String.IsNullOrEmpty(item.TrackingLabel))
                         {
@@ -596,7 +595,7 @@ namespace FishbowlConnect
                             //get field index for each returned item and add to dictionary
                             try
                             {
-                                trackingIndexes.Add(csvHeader.GetFieldIndex("Tracking-" + item.TrackingLabel), item.Info);
+                                trackingIndexes.Add(csvHeader.GetFieldIndex("Tracking-" + item.TrackingLabel), item.TrackingInfo);
                             }
                             catch (CsvHelper.MissingFieldException ex)
                             {
@@ -686,15 +685,16 @@ namespace FishbowlConnect
         /// <param name="NewQty"></param>
         /// <param name="Note">Optional</param>
         /// <param name="Customer">Optional. Pass in null if not needed</param>
-        /// <param name="TagID">TagId to load tracking information. 0 if tracking is not used</param>
+        /// <param name="trackingFieldsAndValues">List of part tracking fields and their values</param>
         /// <returns></returns>
-        public async Task CycleInventoryImportAsync(string PartNumber, string Location, int NewQty, string Note, string Customer, int TagID)
+        public async Task CycleInventoryImportAsync(string PartNumber, string Location, int NewQty,
+            string Note, string Customer, List<TrackingSimple> trackingFieldsAndValues)
         {
-            if (String.IsNullOrEmpty(PartNumber))
+            if (string.IsNullOrEmpty(PartNumber))
             {
                 throw new ArgumentNullException("Part Number required");
             }
-            if (String.IsNullOrEmpty(Location))
+            if (string.IsNullOrEmpty(Location))
             {
                 throw new ArgumentNullException("Location required");
             }
@@ -712,23 +712,23 @@ namespace FishbowlConnect
 
             Dictionary<int, string> trackingIndexes = null;
 
-            List<TagTrackingObject> tagTrackingItems = null;
-            try
-            {
-                tagTrackingItems = await GetTrackingByTag(TagID); //throws keynotfound no results error if 0 rows
-            }
-            catch (KeyNotFoundException)
-            {
+            //List<TagTrackingObject> tagTrackingItems = null;
+            //try
+            //{
+            //    tagTrackingItems = await GetTrackingByTag(TagID); //throws keynotfound no results error if 0 rows
+            //}
+            //catch (KeyNotFoundException)
+            //{
 
-            }
+            //}
 
-            if (tagTrackingItems?.Count > 0)
+            if (trackingFieldsAndValues?.Count > 0)
             {
                 //load tracking info
                 ////get headers
                 string header = (await getImportHeaderRowAsync(ImportNameConsts.INVENTORY_CYCLE_COUNT)).FirstOrDefault();
 
-                if (String.IsNullOrEmpty(header))
+                if (string.IsNullOrEmpty(header))
                 {
                     throw new Exception("Header row is not available");
                 }
@@ -744,14 +744,14 @@ namespace FishbowlConnect
                     headerFieldCount = csvHeader.Context.HeaderRecord.Length;
                     trackingIndexes = new Dictionary<int, string>();
 
-                    foreach (TagTrackingObject item in tagTrackingItems)
+                    foreach (TrackingSimple item in trackingFieldsAndValues)
                     {
                         if (!string.IsNullOrEmpty(item.TrackingLabel))
                         {
                             //get field index for each returned item and add to dictionary
                             try
                             {
-                                trackingIndexes.Add(csvHeader.GetFieldIndex("Tracking-" + item.TrackingLabel), item.Info);
+                                trackingIndexes.Add(csvHeader.GetFieldIndex("Tracking-" + item.TrackingLabel), item.TrackingInfo);
                             }
                             catch (CsvHelper.MissingFieldException ex)
                             {

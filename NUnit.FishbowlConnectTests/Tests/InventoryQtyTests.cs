@@ -31,6 +31,7 @@ namespace NUnit.FishbowlConnectTests.Tests
         //const int DatabasePort = 3301;
         //const string DatabaseName = "briteideasupdate";
         //const string ValidPartNumberWithInventory = "ECL-SC";
+        //const string ValidPartNumberWithNoInventory = "LED-C70W2";
         //const string ValidDefaultLocationGroup = "Main Warehouse";
 
         const string ValidProductNumberWithInventory = "ML60BLcs6";
@@ -43,7 +44,9 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string DatabaseName = "gcs_copy_1_23_20";
         const string ValidPartNumberWithInventory = "CSBL030";
         const string ValidDefaultLocationGroup = "Main";
-
+        const string ValidPartNumberWithNoInventory = "";
+        const string ValidTrackingWithInventory = "$T$L18-19-8013";
+        const string ValidLocationWithInventory = "$L$WS5C";
 
 
         //all run against briteideasUpdate DB Date 3-5-19, C:\Program Files\Fishbowl\data\backups
@@ -84,6 +87,86 @@ namespace NUnit.FishbowlConnectTests.Tests
 
 
 
+
+        }
+
+        [TestCase(ValidPartNumberWithNoInventory)]
+        public async Task InvQtyGroupedWithTrackingNoInventoryShouldReturnNestedLists(string partNumber)
+        {
+            MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),
+                DatabaseUser, DatabasePassword, DatabaseName);
+
+            using (var db = await FishbowlMySqlDB.CreateAsync(config))
+            {
+
+                List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtyGroupedByTags
+                    = await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(partNumber,
+                                                ValidDefaultLocationGroup, FishbowlConnect.Helpers.InventorySearchTermType.Part);
+
+
+                Assert.IsInstanceOf(typeof(List<InvQtyGroupedByUniqueTagInfoWithTracking>), invQtyGroupedByTags);
+
+                //should be 3 tags, each with 2 tracking items
+                Assert.True(invQtyGroupedByTags.Count == 1);
+
+                InvQtyGroupedByUniqueTagInfoWithTracking first = invQtyGroupedByTags.FirstOrDefault();
+
+                Assert.True(first.SimpleTracking.Count == 2);
+
+                Assert.NotNull(first.SimpleTracking[0].TrackingAbbr); //will hold the lot number
+
+                
+
+            }
+
+
+
+
+        }
+
+        [TestCase(ValidLocationWithInventory)]
+        public async Task InvQtyGroupedForLocationShouldReturnResults(string locationName)
+        {
+            MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),
+                DatabaseUser, DatabasePassword, DatabaseName);
+
+            using (var db = await FishbowlMySqlDB.CreateAsync(config))
+            {
+
+                List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtyGroupedByTags
+                    = await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(locationName,
+                                                ValidDefaultLocationGroup, FishbowlConnect.Helpers.InventorySearchTermType.Product);
+
+
+                Assert.IsInstanceOf(typeof(List<InvQtyGroupedByUniqueTagInfoWithTracking>), invQtyGroupedByTags);
+
+                Assert.True(invQtyGroupedByTags.Count > 0 );
+
+
+            }
+
+        }
+
+        [TestCase(ValidTrackingWithInventory)]
+        public async Task InvQtyGroupedForTrackingShouldReturnResults(string trackingValue)
+        {
+            MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),
+                DatabaseUser, DatabasePassword, DatabaseName);
+
+            using (var db = await FishbowlMySqlDB.CreateAsync(config))
+            {
+
+                List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtyGroupedByTags
+                    = await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(trackingValue,
+                                                ValidDefaultLocationGroup, FishbowlConnect.Helpers.InventorySearchTermType.Product);
+
+
+                Assert.IsInstanceOf(typeof(List<InvQtyGroupedByUniqueTagInfoWithTracking>), invQtyGroupedByTags);
+
+                Assert.True(invQtyGroupedByTags.Count > 0);
+
+
+            }
 
         }
 
