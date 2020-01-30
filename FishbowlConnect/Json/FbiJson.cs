@@ -1,4 +1,5 @@
-﻿using FishbowlConnect.Json.Requests;
+﻿using FishbowlConnect.Json.RequestClasses;
+using FishbowlConnect.Json.Requests;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,7 @@ namespace FishbowlConnect.Json
         public ProductGetRs ProductGetRs { set { Rs = value; } }
         public PrintReportToPrinterRs PrintReportToPrinterRs { set { Rs = value; } }
         public GetServerPrinterListRs GetServerPrinterListRs { set { Rs = value; } }
+        public SetSystemPropertyRs SetSystemPropertyRs { set { Rs = value; } }
 
         public string StatusCode { get; set; }
         public string StatusMessage { get; set; }

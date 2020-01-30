@@ -1391,7 +1391,7 @@ namespace FishbowlConnect
         /// If it is not connected the the server, it will login using the user and password supplied in the configuration class
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">T is the response type</typeparam>
         /// <param name="requestObject"></param>
         /// <returns>Returns response object of type T</returns>
         /// <exception cref="FishbowlAuthException"></exception>
@@ -1440,7 +1440,7 @@ namespace FishbowlConnect
                     request.FbiMsgsRq = fbiMsgsRq;
 
                     jsonRequest = await Task.Run(() => SerializeToJsonString(request));
-                    //Debug.WriteLine(jsonRequest);
+                    Debug.WriteLine(jsonRequest);
                     LastRequestJson = jsonRequest;
 
                     Logger.Trace(jsonRequest);

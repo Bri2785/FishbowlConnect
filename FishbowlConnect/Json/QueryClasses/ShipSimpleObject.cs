@@ -60,7 +60,7 @@ namespace FishbowlConnect.Json.QueryClasses
         [JsonIgnore]
         public string NameAndPO { get { return OrderInfo + PONumber ?? " - " + PONumber; } }
         [JsonIgnore]
-        public string NumberAndNameAndPO { get { return ShipNum + " - " + OrderInfo + PONumber ?? " - " + PONumber; } }
+        public string NumberAndNameAndPO { get { return ShipNum + " - " + OrderInfo + (PONumber != null ?  " - " + PONumber : ""); } }
 
         [JsonIgnore]
         public string OrderInfoInitial
