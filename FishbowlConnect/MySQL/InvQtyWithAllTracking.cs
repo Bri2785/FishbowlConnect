@@ -19,6 +19,19 @@ namespace FishbowlConnect.MySQL
             }
         }
 
+        private string partDescription;
+
+        public string PartDescription
+        {
+            get { return partDescription; }
+            set
+            {
+                partDescription = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private decimal qty;
         public decimal Qty
         {

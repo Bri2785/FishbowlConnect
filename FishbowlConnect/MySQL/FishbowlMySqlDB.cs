@@ -1009,7 +1009,7 @@ namespace FishbowlConnect.MySQL
             if (SearchTerm.Contains("$L$"))
             {
                 query = string.Format(@"SELECT part.num AS PartNumber
-	                        #, SUM(tag.`qty`) AS Qty
+	                        , part.description
                             , tag.qty
                             , tag.`qtyCommitted`
                             , tag.id AS TagID
@@ -1073,6 +1073,7 @@ namespace FishbowlConnect.MySQL
             {
                 //change to part only query
                 query = string.Format(@"SELECT part.num AS PartNumber
+                                , part.description
 	                            , tag.qty
                                 , tag.`qtyCommitted`
                                 , tag.id AS TagID
@@ -1153,7 +1154,7 @@ namespace FishbowlConnect.MySQL
                 {
                     case InventorySearchTermType.Part:
                         query = string.Format(@"SELECT part.num AS PartNumber
-                                #, SUM(tag.`qty`) AS Qty
+                                , part.description
                                 , tag.qty
                                 , tag.`qtyCommitted`
                                 , tag.id AS TagID
@@ -1227,7 +1228,7 @@ namespace FishbowlConnect.MySQL
 
                     case InventorySearchTermType.Product:
                         query = string.Format(@"SELECT part.num AS PartNumber
-                                #, SUM(tag.`qty`) AS Qty
+                                , part.description
                                 , tag.qty
                                 , tag.`qtyCommitted`
                                 , tag.id AS TagID
@@ -1310,6 +1311,7 @@ namespace FishbowlConnect.MySQL
                         invQtyWithAllTrackings.Add(new InvQtyWithAllTracking
                         {
                             PartNumber = (string)reader["PartNumber"],
+                            PartDescription = (string)reader["description"],
                             Qty = reader["qty"] == DBNull.Value ? 0 : (decimal)reader["qty"],
                             QtyCommitted = reader["qtyCommitted"] == DBNull.Value ? 0 : (decimal)reader["qtyCommitted"],
                             TagID = reader["tagid"] == DBNull.Value ? 0 : (int)(Int64)reader["tagid"],
@@ -1353,6 +1355,7 @@ namespace FishbowlConnect.MySQL
             var grouped = invQtyWithAllTrackings.GroupBy(i => new
             {
                 i.PartNumber,
+                i.PartDescription,
                 i.TrackingEncoding,
                 i.LocationId,
                 i.LocationName,
@@ -1363,6 +1366,7 @@ namespace FishbowlConnect.MySQL
             })
             .Select(grp => new InvQtyGroupedByUniqueTagInfoWithTracking(
                 grp.Key.PartNumber
+                , grp.Key.PartDescription
                 , grp.GroupBy(g => new { g.TagID, g.Qty } )
                                     .Sum(tagGrp => tagGrp.Key.Qty)
                 , grp.GroupBy(g => new { g.TagID, g.QtyCommitted })

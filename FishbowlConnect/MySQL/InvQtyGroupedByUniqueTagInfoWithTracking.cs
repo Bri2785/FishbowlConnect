@@ -14,9 +14,26 @@ namespace FishbowlConnect.MySQL
     /// </summary>
     public class InvQtyGroupedByUniqueTagInfoWithTracking : NotifyOnChange
     {
-        public InvQtyGroupedByUniqueTagInfoWithTracking(string partNumber, decimal qty, decimal qtyCommitted, string trackingEncoding, int locationId, string locationName, bool locationPickable, string locationGroupName, int upcCaseQty, string defaultLocationName, List<SimpleTag> simpleTags, List<TrackingSimple> simpleTracking)
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="partNumber"></param>
+        /// <param name="partDescription"></param>
+        /// <param name="qty"></param>
+        /// <param name="qtyCommitted"></param>
+        /// <param name="trackingEncoding"></param>
+        /// <param name="locationId"></param>
+        /// <param name="locationName"></param>
+        /// <param name="locationPickable"></param>
+        /// <param name="locationGroupName"></param>
+        /// <param name="upcCaseQty"></param>
+        /// <param name="defaultLocationName"></param>
+        /// <param name="simpleTags"></param>
+        /// <param name="simpleTracking"></param>
+        public InvQtyGroupedByUniqueTagInfoWithTracking(string partNumber, string partDescription, decimal qty, decimal qtyCommitted, string trackingEncoding, int locationId, string locationName, bool locationPickable, string locationGroupName, int upcCaseQty, string defaultLocationName, List<SimpleTag> simpleTags, List<TrackingSimple> simpleTracking)
         {
             PartNumber = partNumber;
+            PartDescription = partDescription;
             Qty = qty;
             QtyCommitted = qtyCommitted;
             //TagID = tagID;
@@ -34,6 +51,17 @@ namespace FishbowlConnect.MySQL
 
         private string partNumber;
         public string PartNumber
+        {
+            get { return partNumber; }
+            set
+            {
+                partNumber = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string partDescription;
+        public string PartDescription
         {
             get { return partNumber; }
             set
