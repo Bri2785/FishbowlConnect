@@ -219,7 +219,14 @@ namespace FishbowlConnect.MySQL
 
         public bool HasTracking
         {
-            get { return SimpleTracking?.Count > 0; }
+            get
+            {
+                if (SimpleTracking != null)
+                {
+                    return SimpleTracking.Where(t => t.TrackingInfo != null).ToList().Count > 0;
+                }
+                return false;
+            }
             
         }
 

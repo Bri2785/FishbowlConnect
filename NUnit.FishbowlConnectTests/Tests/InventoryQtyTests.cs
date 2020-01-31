@@ -24,29 +24,31 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string BadDatabaseName = "fndfnd";
 
 
-        //const string GoodServerAddress = "192.168.150.2";
-        //const string GoodUserName = "admin";
-        //const string GoodPassword = "does1tall";
-        //const string DatabaseAddress = "192.168.150.2";
-        //const int DatabasePort = 3301;
-        //const string DatabaseName = "briteideasupdate";
-        //const string ValidPartNumberWithInventory = "ECL-SC";
-        //const string ValidPartNumberWithNoInventory = "LED-C70W2";
-        //const string ValidDefaultLocationGroup = "Main Warehouse";
-
-        const string ValidProductNumberWithInventory = "ML60BLcs6";
-
-        const string GoodServerAddress = "192.168.150.4";
+        const string GoodServerAddress = "192.168.150.2";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
         const string DatabaseAddress = "192.168.150.2";
-        const int DatabasePort = 2361;
-        const string DatabaseName = "gcs_copy_1_23_20";
-        const string ValidPartNumberWithInventory = "CSBL030";
-        const string ValidDefaultLocationGroup = "Main";
-        const string ValidPartNumberWithNoInventory = "";
-        const string ValidTrackingWithInventory = "$T$L18-19-8013";
-        const string ValidLocationWithInventory = "$L$WS5C";
+        const int DatabasePort = 3301;
+        const string DatabaseName = "briteideasupdate";
+        const string ValidPartNumberWithInventory = "ECL-SC";
+        const string ValidPartNumberWithNoInventory = "LED-C70W2";
+        const string ValidDefaultLocationGroup = "Main Warehouse";
+        const string ValidLocationWithInventory = "$L$J12A";
+        const string ValidTrackingWithInventory = "$T$0819";
+
+        const string ValidProductNumberWithInventory = "ML60BLcs6";
+
+        //const string GoodServerAddress = "192.168.150.4";
+        //const string GoodUserName = "admin";
+        //const string GoodPassword = "does1tall";
+        //const string DatabaseAddress = "192.168.150.2";
+        //const int DatabasePort = 2361;
+        //const string DatabaseName = "gcs_copy_1_23_20";
+        //const string ValidPartNumberWithInventory = "CSBL030";
+        //const string ValidDefaultLocationGroup = "Main";
+        //const string ValidPartNumberWithNoInventory = "";
+        //const string ValidTrackingWithInventory = "$T$L18-19-8013";
+        //const string ValidLocationWithInventory = "$L$WS5C";
 
 
         //all run against briteideasUpdate DB Date 3-5-19, C:\Program Files\Fishbowl\data\backups
@@ -191,7 +193,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 InvQtyGroupedByUniqueTagInfoWithTracking first = invQtyGroupedByTags.FirstOrDefault();
 
-                Assert.IsEmpty(first.SimpleTracking);
+                //Assert.IsEmpty(first.SimpleTracking);
 
                 Assert.IsNull(first.PrimaryTrackingValueAndName);
 
