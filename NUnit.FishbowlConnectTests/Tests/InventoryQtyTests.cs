@@ -135,7 +135,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtyGroupedByTags
                     = await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(locationName,
-                                                ValidDefaultLocationGroup, FishbowlConnect.Helpers.InventorySearchTermType.Product);
+                                                ValidDefaultLocationGroup, FishbowlConnect.Helpers.InventorySearchTermType.Part);
 
 
                 Assert.IsInstanceOf(typeof(List<InvQtyGroupedByUniqueTagInfoWithTracking>), invQtyGroupedByTags);

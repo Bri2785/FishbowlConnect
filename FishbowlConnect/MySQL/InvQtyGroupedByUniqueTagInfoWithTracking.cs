@@ -63,10 +63,10 @@ namespace FishbowlConnect.MySQL
         private string partDescription;
         public string PartDescription
         {
-            get { return partNumber; }
+            get { return partDescription; }
             set
             {
-                partNumber = value;
+                partDescription = value;
                 RaisePropertyChanged();
             }
         }
@@ -211,8 +211,19 @@ namespace FishbowlConnect.MySQL
             {
                 simpleTracking = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(HasTracking));
             }
         }
+
+        private bool hasTracking;
+
+        public bool HasTracking
+        {
+            get { return SimpleTracking?.Count > 0; }
+            
+        }
+
+
 
         public string PrimaryTrackingValueAndName
         {
