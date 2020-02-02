@@ -93,6 +93,7 @@ namespace FishbowlConnect.Json.APIObjects
         private string statusField;
         private Part partField;
         private decimal quantityField;
+
         private Tracking trackingField;
         private TagType destinationTagField;
         private Location1 locationField;
@@ -185,6 +186,10 @@ namespace FishbowlConnect.Json.APIObjects
         public string SlotNumber { get; set; }
 
         public string Note { get; set; }
+
+        public string AltNumber { get; set; }
+
+        public long SourceTagID { get; set; }
 
         //public string SourceTagID { get; set; }
 

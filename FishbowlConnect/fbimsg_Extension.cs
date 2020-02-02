@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using FishbowlConnect.Interfaces;
 using Newtonsoft.Json;
+using FishbowlConnect.Json.APIObjects;
 
 /// <remarks/>
 namespace FishbowlConnect
@@ -146,30 +147,6 @@ namespace FishbowlConnect
     //    }
 
     //}
-
-    public partial class Location1 : NotifyOnChange
-    {
-        [XmlIgnore]
-        public string FullLocation
-        {
-            get
-            {
-                return LocationGroupName + " - " + Name;
-            }
-        }
-
-        private bool _isSelected;
-        [XmlIgnore]
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set
-            {
-                _isSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-    }
 
 
 

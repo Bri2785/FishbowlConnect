@@ -77,4 +77,11 @@ namespace FishbowlConnect.Json.APIObjects
         [JsonConverter(typeof(ListOrSingleValueConverter<PartTracking>))]
         public List<PartTracking> PartTracking { get; set; }
     }
+
+    public partial class VendorPartNums : NotifyOnChange
+    {
+
+        [JsonConverter(typeof(ListOrSingleValueConverter<VendorPartNumber>))]
+        public List<VendorPartNumber> VendorPartNumber { get; set; }
+    }
 }

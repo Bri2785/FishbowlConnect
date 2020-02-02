@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FishbowlConnect.Json.APIObjects;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
