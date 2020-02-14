@@ -8,6 +8,6 @@ namespace FishbowlConnect.Json
     public class Module
     {
         [JsonProperty(PropertyName = "Module")]
-        public string[] ModuleList { get; set; }
+        public List<string> ModuleList { get; set; }
     }
 }
