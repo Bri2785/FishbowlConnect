@@ -827,7 +827,8 @@ namespace FishbowlConnect
             switch (loginMethod)
             {
                 case LoginMethod.Json:
-                    return await LoginJson();
+                    await LoginJson();
+                    return true;
                 case LoginMethod.Xml:
                     return await LoginXML();
 
@@ -911,7 +912,7 @@ namespace FishbowlConnect
         /// Login to Fishbowl and obtain a session key to make data requests. Set the username and password first
         /// </summary>
         /// <returns>Login Status Code</returns>
-        public async Task<bool> LoginJson()
+        public async Task<List<string>> LoginJson()
         {
 
             connectDoneAuto.WaitOne(); //wait for the connection or error out before logging in
@@ -954,6 +955,8 @@ namespace FishbowlConnect
 
                 Logger.Debug("Authenticated");
                 IsAuthenticated = true;
+                
+                return loginRs.ModuleAccess.ModuleList;
 
             }
             catch (Exception)
@@ -961,7 +964,7 @@ namespace FishbowlConnect
                 IsAuthenticated = false;
                 throw;
             }
-            return _isAuthenticated;
+            //return _isAuthenticated;
         }
 
         public async Task LogoutJson()
