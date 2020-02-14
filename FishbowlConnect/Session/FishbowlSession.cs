@@ -388,6 +388,7 @@ namespace FishbowlConnect
                                     LastResponseJson = serverResponse;
                                     FbiJson response = DeserializeFBServerResponseFromJsonString<FbiJson>(serverResponse);
                                     SessionKey = response.Ticket.Key;
+                                    UserId = response.Ticket.UserID;
                                     ResponseJson = response.FbiMsgsRs;
 
                                 }
@@ -397,7 +398,6 @@ namespace FishbowlConnect
                                     FbiXml response = DeserializeFromXMLString<FbiXml>(serverResponse);
 
                                     SessionKey = response.Ticket.Key; //update the key on the response. This is how we can use the loginRq and still get the key
-
                                     ResponseXML = (FbiMsgsRs)response.Item;
 
                                     //LastFbMsgRsStatusCode = _lastFbiMsgsRs.statusCode;
@@ -684,6 +684,10 @@ namespace FishbowlConnect
         /// </summary>
         public string SessionKey { get; private set; }
 
+        /// <summary>
+        /// the user Id logged in
+        /// </summary>
+        public int UserId { get; private set; }
 
         private bool _isConnected;
         /// <summary>

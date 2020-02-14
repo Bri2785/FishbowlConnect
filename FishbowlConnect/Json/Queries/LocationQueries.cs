@@ -1,4 +1,5 @@
-﻿using FishbowlConnect.Json.CsvClassMaps;
+﻿using FishbowlConnect.Helpers;
+using FishbowlConnect.Json.CsvClassMaps;
 using FishbowlConnect.Json.QueryClasses;
 using System;
 using System.Collections.Generic;
@@ -103,6 +104,52 @@ namespace FishbowlConnect
                             from locationgroup 
                             where locationgroup.`activeFlag` = 1
                             order by locationgroup.name";
+
+
+            return await ExecuteQueryAsync<LocationGroupSimpleObject, LocationGroupSimpleObjectClassMap>(query);
+        }
+
+        /// <summary>
+        /// Gets full list of ACTIVE location groups from Fishbowl, restricted to the user provided
+        /// </summary>
+        /// <returns>List of LocationGroupSimpleObject</returns>
+        /// <exception cref="KeyNotFoundException">Thrown when no location groups are found</exception>
+        public async Task<List<LocationGroupSimpleObject>> GetUserLocationGroupList(int userId)
+        {
+            string query = string.Format(@"SELECT locationgroup.`id` AS locationGroupId
+	                            , locationgroup.`name` AS LocationGroupName
+	                            , usertolg.`userId` AS userID
+	                            , usertolg.`defaultFlag` AS isDefault
+	                            , sysuser.`username`
+                            FROM locationgroup 
+                            JOIN usertolg ON locationgroup.`id` = usertolg.`locationGroupId`
+                            JOIN sysuser ON sysuser.`id` = usertolg.`userId`
+                            WHERE locationgroup.`activeFlag` = 1
+                            AND sysuser.id = {0}
+                            ORDER BY locationgroup.name", userId);
+
+
+            return await ExecuteQueryAsync<LocationGroupSimpleObject, LocationGroupSimpleObjectClassMap>(query);
+        }
+
+        /// <summary>
+        /// Gets full list of ACTIVE location groups from Fishbowl, restricted to the user provided
+        /// </summary>
+        /// <returns>List of LocationGroupSimpleObject</returns>
+        /// <exception cref="KeyNotFoundException">Thrown when no location groups are found</exception>
+        public async Task<List<LocationGroupSimpleObject>> GetUserLocationGroupList(string username)
+        {
+            string query = string.Format(@"SELECT locationgroup.`id` AS locationGroupId
+	                            , locationgroup.`name` AS LocationGroupName
+	                            , usertolg.`userId` AS userID
+	                            , usertolg.`defaultFlag` AS isDefault
+	                            , sysuser.`username`
+                            FROM locationgroup 
+                            JOIN usertolg ON locationgroup.`id` = usertolg.`locationGroupId`
+                            JOIN sysuser ON sysuser.`id` = usertolg.`userId`
+                            WHERE locationgroup.`activeFlag` = 1
+                            AND sysuser.username = '{0}'
+                            ORDER BY locationgroup.name", username.EscapeForMySQL()); //removes _
 
 
             return await ExecuteQueryAsync<LocationGroupSimpleObject, LocationGroupSimpleObjectClassMap>(query);

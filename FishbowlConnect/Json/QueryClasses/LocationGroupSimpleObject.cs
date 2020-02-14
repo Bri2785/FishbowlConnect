@@ -8,5 +8,9 @@ namespace FishbowlConnect.Json.QueryClasses
     {
         public int LocationGroupID { get; set; }
         public string LocationGroupName { get; set; }
+
+        public int UserId { get; set; }
+        public bool IsDefault { get; set; }
+        public string UserName { get; set; }
     }
 }

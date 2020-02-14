@@ -188,21 +188,7 @@ namespace NUnit.FishbowlConnectTests
 
 
         #endregion
-        [Test]
-        public async Task FBSessionGetLocationGroupListTest()
-        {
-            SessionConfig config = new SessionConfig("192.168.150.4", 28192, "bnordstrom", "does1tall");
 
-
-            using (FishbowlSession _session = new FishbowlSession(config))
-            {
-
-                var headerRow = await _session.GetLocationGroupList();
-
-                Assert.NotNull(headerRow);
-            }
-
-        }
 
 
         [Test]
@@ -1139,23 +1125,7 @@ namespace NUnit.FishbowlConnectTests
 
 
 
-        [TestCase("A1A", "Main Warehouse")]
-        public async Task GetLocationSimpleTest(string LocationName, string LocationGroupName)
-        {
-            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
-            LocationSimpleObject locationSimple;
 
-            using (FishbowlSession session = new FishbowlSession(config))
-            {
-
-                locationSimple = await session.GetLocationSimple(LocationGroupName,
-                    LocationName);
-
-                Assert.IsInstanceOf<LocationSimpleObject>(locationSimple);
-            }
-
-
-        }
 
         [Test]
         public async Task GetPickListTest()
