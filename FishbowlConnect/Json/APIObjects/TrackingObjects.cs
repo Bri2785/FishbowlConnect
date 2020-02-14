@@ -22,15 +22,17 @@ namespace FishbowlConnect.Json.APIObjects
         }
     }
 
-
+    
+    [JsonConverter(typeof(TrackingItemSerializeMySqlDateConverter))]
     public class TrackingItem : NotifyOnChange
     {
-        private string trackingValueField;
-
+       
         /// <remarks/>
         public PartTracking PartTracking { get; set; }
 
-        [JsonConverter(typeof(MySQLCompatibleDateFormat))]
+
+        private string trackingValueField;
+        //this is serialized by the type of the partTracking field
         public string TrackingValue
         {
             get
@@ -66,6 +68,26 @@ namespace FishbowlConnect.Json.APIObjects
             }
         
 
+    }
+
+    public partial class PartTracking
+    {
+
+        public string PartTrackingID { get; set; }
+
+        public string Name { get; set; }
+
+        public string Abbr { get; set; }
+
+         public string Description { get; set; }
+
+        public string SortOrder { get; set; }
+
+        public string TrackingTypeID { get; set; }
+
+        public string Active { get; set; }
+
+         public string Primary { get; set; }
     }
 
     public class TrackingSimple : NotifyOnChange, IPartTrackingFields

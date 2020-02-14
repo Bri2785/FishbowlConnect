@@ -17,13 +17,13 @@ namespace NUnit.FishbowlConnectTests.Tests
     [TestFixture]
     public class PickingTests
     {
-        const string GoodServerAddress = "192.168.150.4";
-        const string GoodUserName = "jon";
-        const string GoodPassword = "holl30";
+        const string GoodServerAddress = "192.168.125.26";
+        const string GoodUserName = "admin";
+        const string GoodPassword = "does1tall";
 
-        const string DatabaseAddress = "192.168.150.2";
-        const int DatabasePort = 2361;
-        const string DatabaseName = "gcs_copy_1_23_20";
+        const string DatabaseAddress = "192.168.125.26";
+        const int DatabasePort = 3305;
+        const string DatabaseName = "gcs_copy";
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
         //const string ValidPartNumberWithInventory = "CSBL030";
@@ -33,7 +33,7 @@ namespace NUnit.FishbowlConnectTests.Tests
         //const string ValidLocationWithInventory = "$L$WS5C";
 
 
-        const string ValidPickNumber = "T20-11";
+        const string ValidPickNumber = "S20-306";
 
         [TestCase(ValidPickNumber)]
         public async Task LoadPickByNumberReturnsPickObject(string PickNum)
@@ -72,7 +72,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 //pick item and save back
 
-                PickItem itemToPick = pick.PickItems.PickItem.Where(pi => pi.Part.Num == "CSGR022").FirstOrDefault();
+                PickItem itemToPick = pick.PickItems.PickItem.Where(pi => pi.Part.Num == "CSBR060").FirstOrDefault();
 
 
                 //invQty to pick from
@@ -91,7 +91,7 @@ namespace NUnit.FishbowlConnectTests.Tests
                 //select which one to use
                 InvQtyGroupedByUniqueTagInfoWithTracking selectedInvQty =
                             invQtyGrouped
-                                .Where(iq => iq.LocationName == "Stock" && iq.TrackingEncoding == "P+brsFekSv4jKkSQiO6Ebw==")
+                                .Where(iq => iq.LocationName == "SMT" && iq.TrackingEncoding == "WJpJOpM83Vsm1IV6wQExkg==")
                                 .FirstOrDefault();
 
                 //

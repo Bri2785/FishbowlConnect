@@ -339,20 +339,7 @@ namespace NUnit.FishbowlConnectTests
 
 
         }
-        [Test]
-        public async Task FBDBgetProductTest()
-        {
-            MySqlConfig config = new MySqlConfig("192.168.150.2", "3301", "gone", "fishing", "BRITEIDEASUPDATE");
 
-            using (var db = await FishbowlMySqlDB.CreateAsync(config))
-            {
-                ProductSimpleObject temp = await db.getProduct("LED-SBA24BL");
-                Assert.IsInstanceOf(typeof(ProductSimpleObject), temp);
-
-            }
-
-
-        }
 
         [Test]
         public async Task FBDBgetPartsTest()

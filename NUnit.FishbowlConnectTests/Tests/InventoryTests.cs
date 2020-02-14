@@ -15,15 +15,15 @@ namespace NUnit.FishbowlConnectTests.Tests
     [TestFixture]
     public class InventoryTests
     {
-        const string GoodServerAddress = "192.168.150.4";
+        const string GoodServerAddress = "192.168.125.26";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
 
-        const string DatabaseAddress = "192.168.150.2";
-        const int DatabasePort = 2361;
+        const string DatabaseAddress = "192.168.125.26";
+        const int DatabasePort = 3305;
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
-        const string DatabaseName = "BRITEIDEASUPDATE";
+        const string DatabaseName = "local_demo";
 
         const string ValidPartNumberWithInventory = "ECL-SC";
 
@@ -51,7 +51,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
-        [TestCase("TestProduct", "B1A")]
+        [TestCase("PB100", "Stock 100")]
         public async Task AddInventoryImportTest(string partNumber, string LocationName)
         {
             //TODO:convert to new InvQtyWithTracking Format
@@ -100,7 +100,7 @@ namespace NUnit.FishbowlConnectTests.Tests
                     }
                 }
 
-                await session.AddInventoryImportAsync(partNumber, 10, LocationName, "Farnam", "Test Import Add",
+                await session.AddInventoryImportAsync(partNumber, 10, LocationName, "SLC", "Test Import Add",
                          partNumAndTracks);
 
                 List<InvQty> invQtiesAfterImport = await session.GetPartInventory(partNumber);

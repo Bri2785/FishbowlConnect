@@ -1,6 +1,7 @@
 ﻿using FishbowlConnect;
 using FishbowlConnect.Json.APIObjects;
 using FishbowlConnect.Json.QueryClasses;
+using FishbowlConnect.MySQL;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace NUnit.FishbowlConnectTests.Tests
     [TestFixture]
     public class ProductTests
     {
-        const string GoodServerAddress = "192.168.150.2";
+        const string GoodServerAddress = "192.168.125.26";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
         const string BadServerAddress = "127.5.4.3";
@@ -21,16 +22,15 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string NoUserName = null;
         const string NoPassword = null;
 
-        const string DatabaseAddress = "192.168.150.2";
-        const int DatabasePort = 3301;
+        const string DatabaseAddress = "192.168.125.26";
+        const int DatabasePort = 3305;
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
-        const string DatabaseName = "BRITEIDEASUPDATE";
+        const string DatabaseName = "local_demo";
         const string BadDatabaseName = "fndfnd";
 
-        const string ValidProductNumber = "3802299LG-RZ";
+        const string ValidProductNumber = "B201-cs2";
 
-        //all run against briteideasUpdate DB Date 3-5-19, C:\Program Files\Fishbowl\data\backups
 
         [TestCase(ValidProductNumber)]
         public async Task ProductRequestedByNumReturnsProductObject(string productNumber)
@@ -110,5 +110,20 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
+        [Test]
+        public async Task FBDBgetProductTest()
+        {
+            MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),
+                                                        DatabaseUser, DatabasePassword, DatabaseName);
+
+            using (var db = await FishbowlMySqlDB.CreateAsync(config))
+            {
+                ProductSimpleObject temp = await db.getProduct(ValidProductNumber);
+                Assert.IsInstanceOf(typeof(ProductSimpleObject), temp);
+
+            }
+
+
+        }
     }
 }
