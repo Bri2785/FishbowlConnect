@@ -11,7 +11,7 @@ namespace FishbowlConnect.Json.APIObjects
     {
 
         /// <remarks/>
-        public string UOMID { get; set; }
+        public int UOMID { get; set; }
 
         /// <remarks/>
         public string Name { get; set; }
@@ -20,10 +20,10 @@ namespace FishbowlConnect.Json.APIObjects
         public string Code { get; set; }
 
         /// <remarks/>
-        public string Integral { get; set; }
+        public bool Integral { get; set; }
 
         /// <remarks/>
-        public string Active { get; set; }
+        public bool Active { get; set; }
 
         /// <remarks/>
         public string Type { get; set; }
@@ -43,21 +43,21 @@ namespace FishbowlConnect.Json.APIObjects
     {
 
         /// <remarks/>
-        public string MainUOMID { get; set; }
+        public int MainUOMID { get; set; }
 
         /// <remarks/>
-        public string ToUOMID { get; set; }
+        public int ToUOMID { get; set; }
 
         /// <remarks/>
         public string ToUOMCode { get; set; }
 
         /// <remarks/>
-        public string ConversionMultiply { get; set; }
+        public decimal ConversionMultiply { get; set; }
 
         /// <remarks/>
-        public string ConversionFactor { get; set; }
+        public decimal ConversionFactor { get; set; }
 
         /// <remarks/>
-        public string ToUOMIsIntegral { get; set; }
+        public bool ToUOMIsIntegral { get; set; }
     }
 }

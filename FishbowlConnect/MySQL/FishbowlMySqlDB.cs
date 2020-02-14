@@ -1818,8 +1818,12 @@ namespace FishbowlConnect.MySQL
 
             ProductSimpleObject ProductSimpleObject = null;// = new ProductSimpleObject();
 
-            string query = String.Format(@"SELECT product.id, product.num, product.description, product.`upc`, product.price
+            string query = string.Format(@"SELECT product.id, product.num
+                                            , product.description, product.`upc`, product.price
+                                            , product.`uomId`
+                                            , part.num AS PartNum
                                 FROM product
+                                LEFT JOIN part ON product.`partId` = part.id
                                 WHERE Upper(product.num) LIKE '{0}' OR Upper(product.`upc`) LIKE '{0}'", productNumOrUPC.ToUpper());
 
             int rowCount= 0;
@@ -1837,8 +1841,9 @@ namespace FishbowlConnect.MySQL
                             Description = (string)reader["description"],
                             UPC = (string)reader["upc"],
                             Price = (decimal)reader["price"],
-                            Id = (int)reader["id"]
-                            
+                            Id = (int)reader["id"],
+                            UomId = (int)reader["uomId"],
+                            PartNum = (string)reader["PartNum"]
                         };
                     }
                 }

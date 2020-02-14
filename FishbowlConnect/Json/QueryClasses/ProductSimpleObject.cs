@@ -81,7 +81,33 @@ namespace FishbowlConnect.Json.QueryClasses
             }
         }
 
+        private int uomId;
+        public int UomId
+        {
+            get
+            {
+                return uomId;
+            }
+            set
+            {
+                uomId = value;
+                RaisePropertyChanged();
+            }
+        }
 
+        private string partNum;
+        public string PartNum
+        {
+            get
+            {
+                return partNum;
+            }
+            set
+            {
+                partNum = value;
+                RaisePropertyChanged();
+            }
+        }
 
     }
 }
