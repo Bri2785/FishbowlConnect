@@ -59,6 +59,30 @@ namespace FishbowlConnect
             return await ExecuteQueryAsync<LocationSimpleObject, LocationSimpleObjectClassMap>(query);
         }
 
+        ///// <summary>
+        ///// Returns a list of Active SimpleLocation Object from the locationgroup name provided.
+        ///// </summary>
+        ///// <param name="LocationGroupName"></param>
+        ///// <returns>List of Location Simple Object restricted to a users Location groups</returns>
+        ///// <exception cref="KeyNotFoundException">Throws KeyNotFound when no records returned</exception>
+        //public async Task<List<LocationSimpleObject>> GetUserLocationSimpleList(string LocationGroupName)
+        //{
+        //    string query = String.Format(@"Select location.`id` as locationId, 
+        //                            location.`name` as locationName, 
+        //                            locationgroup.`name` as LGName, 
+        //                            locationgroup.`id` as locationGroupId,
+        //                            tag.`num` AS LocationTagNum
+        //                    FROM location
+        //                    JOIN locationgroup ON location.`locationGroupId` = locationgroup.`id`
+        //                    JOIN tag ON tag.`locationId` = location.id AND tag.`typeId` = 10
+        //                    where location.`activeFlag` = 1
+        //                    and locationgroup.`name` = '{0}'
+        //                    order by location.name", LocationGroupName);
+
+
+        //    return await ExecuteQueryAsync<LocationSimpleObject, LocationSimpleObjectClassMap>(query);
+        //}
+
         /// <summary>
         /// Gets a single location simple object from the provided location group and location name
         /// </summary>

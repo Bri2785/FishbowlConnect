@@ -91,6 +91,23 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
+        [TestCase("Main Warehouse")]
+        public async Task GetLocationSimpleListTest(string LocationGroupName)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+            List<LocationSimpleObject> locationSimple;
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                locationSimple = await session.GetLocationSimpleList(LocationGroupName);
+
+                Assert.IsInstanceOf<List<LocationSimpleObject>>(locationSimple);
+            }
+
+
+        }
+
 
     }
 }
