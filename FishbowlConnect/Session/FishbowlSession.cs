@@ -365,7 +365,7 @@ namespace FishbowlConnect
                         //we need to check for both XML and Json now
                         if (content.Contains("</FbiXml>") || (IsJson = IsValidJson(content)))
                         {
-                            //Logger.Debug("Full message received");
+                            Logger.Trace("Full message received");
                             // All the data has been read from the   
                             // client. 
                             serverResponse = state.sb.ToString();

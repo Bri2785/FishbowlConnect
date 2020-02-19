@@ -44,24 +44,36 @@ namespace FishbowlConnect.Json.Converters
             {
                 if (prop.CanRead)
                 {
-                    object propVal = prop.GetValue(value, null);
-                    if (propVal != null)
+                    if (!prop.CustomAttributes.Where(attribute => attribute.AttributeType == typeof(JsonIgnoreAttribute)).Any())
                     {
-                        switch (trackingType)
+                        object propVal = prop.GetValue(value, null);
+                        if (propVal != null)
                         {
-                            case "20":
-                            case "30":
-                                DateTime trackingDate;
-                                if (DateTime.TryParse(propVal.ToString(), out trackingDate))
+                            if (prop.Name == "TrackingValue")
+                            {
+                                //check and write the tracking values section
+                                switch (trackingType)
                                 {
-                                    string mySQLDateString = trackingDate.ToString(DefaultDateTimeFormat);
-                                    jo.Add(prop.Name, JToken.FromObject(mySQLDateString, serializer));
-                                }
-                                break;
+                                    case "20":
+                                    case "30":
+                                        DateTime trackingDate;
+                                        if (DateTime.TryParse(propVal.ToString(), out trackingDate))
+                                        {
+                                            string mySQLDateString = trackingDate.ToString(DefaultDateTimeFormat);
+                                            jo.Add(prop.Name, JToken.FromObject(mySQLDateString, serializer));
+                                        }
+                                        break;
 
-                            default:
+                                    default:
+                                        jo.Add(prop.Name, JToken.FromObject(propVal, serializer));
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                //write the PartTracking section
                                 jo.Add(prop.Name, JToken.FromObject(propVal, serializer));
-                                break;
+                            }
                         }
                     }
                 }

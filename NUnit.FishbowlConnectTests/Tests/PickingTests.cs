@@ -27,13 +27,13 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
         //const string ValidPartNumberWithInventory = "CSBL030";
-        const string ValidDefaultLocationGroup = "SLC";
+        const string ValidDefaultLocationGroup = "LA";
         //const string ValidPartNumberWithNoInventory = "";
         //const string ValidTrackingWithInventory = "$T$L18-19-8013";
         //const string ValidLocationWithInventory = "$L$WS5C";
 
 
-        const string ValidPickNumber = "S20-306";
+        const string ValidPickNumber = "S20-307";
 
         [TestCase(ValidPickNumber)]
         public async Task LoadPickByNumberReturnsPickObject(string PickNum)
@@ -55,9 +55,11 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
-        [TestCase(ValidPickNumber)]
-        public async Task LoadPickAndPickItemHandlesCorrectly(string PickNum)
+        [TestCase(ValidPickNumber, "SMRT102", "SMT", "1Pubxj6wlO6fTVhPkIHM0A==")]
+        [TestCase("S10082", "B200", "Stock 100", "930")]
+        public async Task LoadPickAndPickItemHandlesCorrectly(string PickNum, string partNumToPick, string locationToPickFrom, string lotNumber = null, string trackingEncoding = null)
         {
+            
 
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
 
@@ -72,7 +74,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 //pick item and save back
 
-                PickItem itemToPick = pick.PickItems.PickItem.Where(pi => pi.Part.Num == "CSBR060").FirstOrDefault();
+                PickItem itemToPick = pick.PickItems.PickItem.Where(pi => pi.Part.Num == partNumToPick).FirstOrDefault();
 
 
                 //invQty to pick from
@@ -89,10 +91,23 @@ namespace NUnit.FishbowlConnectTests.Tests
                 }
 
                 //select which one to use
-                InvQtyGroupedByUniqueTagInfoWithTracking selectedInvQty =
+                InvQtyGroupedByUniqueTagInfoWithTracking selectedInvQty = null;
+                if (!string.IsNullOrEmpty(lotNumber))
+                {
+                    selectedInvQty =
                             invQtyGrouped
-                                .Where(iq => iq.LocationName == "SMT" && iq.TrackingEncoding == "WJpJOpM83Vsm1IV6wQExkg==")
+                                .Where(iq => iq.LocationName == locationToPickFrom && 
+                                    iq.SimpleTracking.Any(st => st.TrackingInfo == lotNumber))
                                 .FirstOrDefault();
+                }
+                else
+                {
+                    selectedInvQty =
+                            invQtyGrouped
+                                .Where(iq => iq.LocationName == locationToPickFrom && iq.TrackingEncoding == trackingEncoding)
+                                .FirstOrDefault();
+                }
+                
 
                 //
                 //.Where(iq => iq.LocationName == "M1" && iq.TrackingEncoding == "32/wVwpZJxIup2uaQHhHQw==")
