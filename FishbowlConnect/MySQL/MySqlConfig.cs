@@ -11,19 +11,21 @@ namespace FishbowlConnect.MySQL
         public string MySqlUser { get; set; }
         public string MySqlPassword { get; set; }
         public string MySqlDatabase { get; set; }
+        public string SSlMode { get; set; }
 
         public MySqlConfig()
         {
 
         }
 
-        public MySqlConfig(string host, string port, string user, string password, string database)
+        public MySqlConfig(string host, string port, string user, string password, string database, string sslMode = "None")
         {
-            this.MySqlServerHost = host;
-            this.MySqlPort = port;
-            this.MySqlUser = user;
-            this.MySqlPassword = password;
-            this.MySqlDatabase = database;
+            MySqlServerHost = host;
+            MySqlPort = port;
+            MySqlUser = user;
+            MySqlPassword = password;
+            MySqlDatabase = database;
+            SSlMode = sslMode;
         }
 
         public override string ToString()
@@ -32,7 +34,8 @@ namespace FishbowlConnect.MySQL
                                 ";PORT=" + MySqlPort +
                                 ";DATABASE=" + MySqlDatabase +
                                 ";UID=" + MySqlUser +
-                                ";PASSWORD=" + MySqlPassword;
+                                ";PASSWORD=" + MySqlPassword +
+                                ";SslMode=" + SSlMode;
         }
     }
 }

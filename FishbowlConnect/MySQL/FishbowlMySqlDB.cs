@@ -47,7 +47,8 @@ namespace FishbowlConnect.MySQL
                                 ";PORT=" + Config.MySqlPort +
                                 ";DATABASE=" + Config.MySqlDatabase +
                                 ";UID=" + Config.MySqlUser +
-                                ";PASSWORD=" + Config.MySqlPassword);
+                                ";PASSWORD=" + Config.MySqlPassword +
+                                ";SslMode=Required");
 
             await Connection.OpenAsync();
             return this;
@@ -85,7 +86,8 @@ namespace FishbowlConnect.MySQL
                     ";PORT=" + Config.MySqlPort +
                     ";DATABASE=" + Config.MySqlDatabase +
                     ";UID=" + Config.MySqlUser +
-                    ";PASSWORD=" + Config.MySqlPassword);
+                    ";PASSWORD=" + Config.MySqlPassword +
+                    ";SslMode=" + Config.SSlMode);
             }
             else
             {
