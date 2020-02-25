@@ -77,6 +77,23 @@ namespace FishbowlConnect
         }
 
         /// <summary>
+        /// Filters the report list to just the reports the user supplied has access to
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<Report>> GetReportsUserHasAccessTo(int userId)
+        {
+            string query = string.Format(@"Select distinct report.id, report.name
+                                from report
+                                join useraccess on Concat('Report-',report.id) = useraccess.`moduleName`
+                                join usergroup on usergroup.`id` = useraccess.`groupId`
+                                join usergrouprel on usergroup.`id` = usergrouprel.`groupId`
+                                where usergrouprel.`userId` = {0}", userId);
+
+            return await ExecuteQueryAsync<Report, ReportClassMap>(query);
+        }
+
+        /// <summary>
         /// Get the report Id from the name provided. Must be an exact match
         /// </summary>
         /// <param name="reportName"></param>
