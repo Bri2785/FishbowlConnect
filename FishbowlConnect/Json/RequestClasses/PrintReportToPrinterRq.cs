@@ -10,8 +10,8 @@ namespace FishbowlConnect.Json
     public class PrintReportToPrinterRq
     {
         public int NumberOfCopies { get; set; }
-        public string PrinterName { get; set; }
-        public string ReportName { get; set; }
+        public int PrinterId { get; set; }
+        public int ReportId { get; set; }
         public ParameterList ParameterList { get; set; }
     }
 
