@@ -29,8 +29,6 @@ namespace NUnit.FishbowlConnectTests.Tests
         {
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword, 20000);
 
-
-
             using (FishbowlSession session = new FishbowlSession(config))
             {
                 int reportId = await session.GetReportIdFromName(ReportName);
@@ -52,8 +50,32 @@ namespace NUnit.FishbowlConnectTests.Tests
             }
         }
 
+        public async Task<int> PrintReportToPrinter(int reportId, int PrinterId, int NumberOfCopies, List<ReportParam> ReportParams = null)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword, 20000);
 
-        [TestCase("New Receipt 3in", "CutePDF Writer", 2)]
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+                List<Printer> printers = await session.GetServerPrinterList();
+                if (printers == null || printers.Count == 0)
+                {
+                    throw new FishbowlException("Printers not found");
+                }
+
+                int? printerId = printers.Where(p => p.Id == PrinterId).FirstOrDefault()?.Id;
+
+                if (!printerId.HasValue)
+                {
+                    throw new FishbowlException(string.Format("Printer {0} not found", PrinterId));
+                }
+
+                return await session.PrintReportToPrinter(reportId, printerId.Value, ReportParams, NumberOfCopies);
+
+            }
+        }
+
+
+        [TestCase("New Receipt 3in", "CutePDF Writer", 1)]
         public async Task PrintStandardReportToPrinterTest(string ReportName, string PrinterName, int NumberOfCopies)
         {
             List<ReportParam> reportParams = new List<ReportParam>();
@@ -76,7 +98,35 @@ namespace NUnit.FishbowlConnectTests.Tests
         //tests
         //Print report where id doesnt exist throws correct error response
         //Print to printer where id is invalid throws correct response
+        [TestCase(999)]
+        public async Task PrintToInvalidPrinterIDThrowsCorrectError(int invalidId)
+        {
+            try
+            {
+                int jobId = await PrintReportToPrinter(3, invalidId, 1);
+            }
+            catch (FishbowlException e)
+            {
+                Assert.IsInstanceOf(typeof(FishbowlException), e);
+                Assert.That(e.Message.Contains("Printer " + invalidId + " not found"));
+            }
+        }
 
+        [TestCase(9999)]
+        public async Task RequestInvalidReportIdThrowsCorrectError(int reportId)
+        {
+            try
+            {
+                int jobId = await PrintReportToPrinter(reportId, 69309791, 1);
+            }
+            catch (FishbowlException e)
+            {
+                Assert.IsInstanceOf(typeof(FishbowlException), e);
+                Assert.That(e.Message.Contains("Report id " + reportId + " not found"));
+            }
+
+            
+        }
           
 
 

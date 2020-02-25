@@ -515,7 +515,7 @@ namespace FishbowlConnect
         /// <param name="Qty"></param>
         /// <param name="EndLocationWithLG"></param>
         /// <param name="Note"></param>
-        /// <param name="trackingFieldsAndValues">List of simple tracking fields and values/param>
+        /// <param name="trackingFieldsAndValues">List of simple tracking fields and values</param>
         /// <returns></returns>
         public async Task MoveInventoryImportAsync(string PartNumber, string BeginLocationWithLG, int Qty, string EndLocationWithLG,
                 string Note, List<TrackingSimple> trackingFieldsAndValues)
