@@ -292,4 +292,10 @@ namespace FishbowlConnect.Json.APIObjects
         public int status { get; set; }
 
     }
+
+    public class VoidPickResponse
+    {
+        public Pick VoidedPick { get; set; }
+        public string UnVoidableItems { get; set; }
+    }
 }

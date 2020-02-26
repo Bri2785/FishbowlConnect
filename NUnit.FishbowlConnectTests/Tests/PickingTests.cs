@@ -17,7 +17,7 @@ namespace NUnit.FishbowlConnectTests.Tests
     [TestFixture]
     public class PickingTests
     {
-        const string GoodServerAddress = "192.168.125.26";
+        const string GoodServerAddress = "192.168.150.4";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
 
@@ -388,6 +388,25 @@ namespace NUnit.FishbowlConnectTests.Tests
                 pick.Should().BeEquivalentTo(newPick);
 
 
+
+            }
+
+        }
+
+        [TestCase(62759)]
+        public async Task VoidPickReturnsVoidedPick(int pickId)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            config.RequestTimeout = 30000;
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+                VoidPickResponse voidResponse = await session.VoidPick(pickId);
+                Assert.NotNull(voidResponse);
+                Assert.NotNull(voidResponse.VoidedPick);
+                Assert.That(voidResponse.VoidedPick.StatusID == "10");
+                //TODO: add unvoidable check test for different pick
 
             }
 

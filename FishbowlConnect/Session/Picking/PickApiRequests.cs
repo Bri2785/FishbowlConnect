@@ -1,5 +1,6 @@
 ﻿using FishbowlConnect.Exceptions;
 using FishbowlConnect.Json.APIObjects;
+using FishbowlConnect.Json.RequestClasses;
 using FishbowlConnect.Json.Requests;
 using System;
 using System.Collections.Generic;
@@ -52,5 +53,25 @@ namespace FishbowlConnect
 
         }
 
+
+        /// <summary>
+        /// Void a pick by id
+        /// </summary>
+        /// <param name="pickId"></param>
+        /// <returns>Voided Pick</returns>
+        public async Task<VoidPickResponse> VoidPick(int pickId)
+        {
+            if (pickId <= 0)
+            {
+                throw new ArgumentException(string.Format("Pick id {0} is invalid", pickId));
+            }
+            VoidPickRq voidPickRq = new VoidPickRq();
+            voidPickRq.PickId = pickId;
+
+            VoidPickRs voidPickRs = await IssueJsonRequestAsync<VoidPickRs>(voidPickRq);
+
+            return new VoidPickResponse { VoidedPick = voidPickRs.Pick, UnVoidableItems = voidPickRs.UnvoidableItems };
+
+        }
     }
 }
