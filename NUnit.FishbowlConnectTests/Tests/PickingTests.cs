@@ -411,6 +411,25 @@ namespace NUnit.FishbowlConnectTests.Tests
             }
 
         }
+        [TestCase(62758)]
+        public async Task VoidPickReturnsUnvoidableMessage(int pickId)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            config.RequestTimeout = 30000;
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+                VoidPickResponse voidResponse = await session.VoidPick(pickId);
+                Assert.NotNull(voidResponse);
+                Assert.NotNull(voidResponse.VoidedPick);
+                Assert.That(voidResponse.VoidedPick.StatusID == "10");
+                Assert.That(!string.IsNullOrEmpty(voidResponse.UnVoidableItems));
+                Debug.WriteLine(voidResponse.UnVoidableItems);
+
+            }
+
+        }
 
     }
 }
