@@ -785,7 +785,7 @@ namespace NUnit.FishbowlConnectTests
             BillingAddress.Attn = "Beer, Holly";
             BillingAddress.Street = "1605 Hunt Dr";
             BillingAddress.City = "Normal";
-            BillingAddress.Default = "true";
+            BillingAddress.Default = true;
             BillingAddress.Residential = "false";
             BillingAddress.Type = AddressType.Main;
             BillingAddress.Zip = "61716";
@@ -845,7 +845,7 @@ namespace NUnit.FishbowlConnectTests
             ShippingAddress.Attn = "Beer, Holly";
             ShippingAddress.Street = "1605 Hunt Dr";
             ShippingAddress.City = "Normal";
-            ShippingAddress.Default = "true";
+            ShippingAddress.Default = true;
             ShippingAddress.Residential = "false";
             ShippingAddress.Type = AddressType.Ship;
             ShippingAddress.Zip = "61716";

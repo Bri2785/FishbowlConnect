@@ -13,17 +13,23 @@ namespace FishbowlConnect.Json.APIObjects
     {
         public string ID { get; set; }
         public string OrderNumber { get; set; }
+        public string ShipmentNumber { get; set; }
         public string OrderType { get; set; }
         public string CreatedDate { get; set; }
         public string DateLastModified { get; set; }
+
         public string Carrier { get; set; }
+        public string CarrierService { get; set; }
+        public string CarrierServiceID { get; set; }
         public string Status { get; set; }
         public string FOB { get; set; }
         public string Note { get; set; }
-        public string CartonCount { get; set; }
+        public int CartonCount { get; set; }
+        public bool ServiceItems { get; set; }
         public string Contact { get; set; }
 
-        public Address Address { get; set; }
+
+        public ShipmentAddress Address { get; set; }
 
         private Cartons cartons;
 
@@ -37,6 +43,10 @@ namespace FishbowlConnect.Json.APIObjects
             }
         }
 
+        public CustomFields CustomFields { get; set; }
+
+
+        [JsonIgnore]
         public FullyObservableCollection<ShippingItem> ItemsFlattened => 
             new FullyObservableCollection<ShippingItem>( Cartons?.Carton?
                                                         .Where(c=>c.ShippingItems != null)
@@ -58,8 +68,16 @@ namespace FishbowlConnect.Json.APIObjects
         public string CartonNum { get; set; }
         public string TrackingNum { get; set; }
         public string FreightWeight { get; set; }
+        public string FreightWeightUOM { get; set; }
         public string FreightAmount { get; set; }
+        public decimal Width { get; set; }
+        public decimal Height { get; set; }
+        public decimal Length { get; set; }
+        public decimal DeclaredValue { get; set; }
 
+
+        //Fb needs this even if the carton is empty
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public ShippingItems ShippingItems
         {
             get
@@ -91,7 +109,10 @@ namespace FishbowlConnect.Json.APIObjects
         public string Cost { get; set; }
         public string SKU { get; set; }
         public string UPC { get; set; }
-        public string OrderItemID { get; set; }
+        //public string OrderItemID { get; set; }
+        public int SoItemId { get; set; }
+        public int PoItemId { get; set; }
+        public int XoItemId { get; set; }
         public string OrderLineItem { get; set; }
         public string CartonName { get; set; }
         public string CartonID { get; set; }

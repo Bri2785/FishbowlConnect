@@ -35,5 +35,30 @@ namespace NUnit.FishbowlConnectTests.Tests
             }
 
         }
+
+        [TestCase(ValidShipNumber)]
+        public async Task LoadAndPackShipmentIsSuccess(string shipNum)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                Shipping shipment = await session.getShipment(shipNum);
+
+                
+                Assert.NotNull(shipment);
+                shipment.Status = "20"; //packed
+
+                await session.SaveShipment(shipment);
+
+                Shipping packedShipment = await session.getShipment(shipNum);
+                Assert.That(packedShipment.Status == "20");
+            }
+
+        }
+
+
     }
 }
