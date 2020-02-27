@@ -262,7 +262,7 @@ namespace NUnit.FishbowlConnectTests.Tests
                 PickItem ItemRemaining = null;
                 decimal PickItemRequestedQty = itemToPick.Quantity;
 
-
+                //pick.StatusID = "30"; //all committed
 
                 foreach (PickItem item in pick.PickItems.PickItem)
                 {
@@ -276,7 +276,7 @@ namespace NUnit.FishbowlConnectTests.Tests
                             item.Status = "30";
                             item.Location = fullTagForTrackingInfo.Location;
                             item.Tracking = fullTagForTrackingInfo.Tracking;
-
+                            item.Tag = fullTagForTrackingInfo; //required for committing
 
                             //item.qty is unchanged, full amount
                             selectedInvQty.Qty = selectedInvQty.Qty - item.Quantity;
