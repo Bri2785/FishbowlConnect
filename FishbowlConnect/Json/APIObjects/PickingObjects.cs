@@ -12,7 +12,7 @@ namespace FishbowlConnect.Json.APIObjects
     {
         private PickItems pickItemsField;
 
-        public string PickID { get; set; }
+        public int PickID { get; set; }
         public string Number { get; set; }
         public string Type { get; set; }
         public string TypeID { get; set; }
@@ -297,5 +297,11 @@ namespace FishbowlConnect.Json.APIObjects
     {
         public Pick VoidedPick { get; set; }
         public string UnVoidableItems { get; set; }
+    }
+
+    public class ItemList
+    {
+        [JsonConverter(typeof(ListOrSingleValueConverter<PickItem>))]
+        public List<PickItem> PickItem { get; set; }
     }
 }

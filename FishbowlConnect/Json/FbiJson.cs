@@ -59,6 +59,7 @@ namespace FishbowlConnect.Json
         public GetServerPrinterListRs GetServerPrinterListRs { set { Rs = value; } }
         public SetSystemPropertyRs SetSystemPropertyRs { set { Rs = value; } }
         public VoidPickRs VoidPickRs { set { Rs = value; } }
+        public VoidPickItemsRs VoidPickItemsRs { set { Rs = value; } }
         public string StatusCode { get; set; }
         public string StatusMessage { get; set; }
     }

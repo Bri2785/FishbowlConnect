@@ -21,19 +21,19 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
 
-        const string DatabaseAddress = "192.168.125.26";
-        const int DatabasePort = 3305;
-        const string DatabaseName = "local_demo";
+        const string DatabaseAddress = "192.168.150.2";
+        const int DatabasePort = 2361;
+        const string DatabaseName = "briteideasupdate";
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
         //const string ValidPartNumberWithInventory = "CSBL030";
-        const string ValidDefaultLocationGroup = "LA";
+        const string ValidDefaultLocationGroup = "Main Warehouse";
         //const string ValidPartNumberWithNoInventory = "";
         //const string ValidTrackingWithInventory = "$T$L18-19-8013";
         //const string ValidLocationWithInventory = "$L$WS5C";
 
 
-        const string ValidPickNumber = "S20-307";
+        const string ValidPickNumber = "S71219";
 
         [TestCase(ValidPickNumber)]
         public async Task LoadPickByNumberReturnsPickObject(string PickNum)
@@ -199,6 +199,154 @@ namespace NUnit.FishbowlConnectTests.Tests
             }
 
         }
+
+
+        [TestCase("S71243", "03403", "F41B")]
+        public async Task LoadPickAndPickItemWithCommitOnlyHandlesCorrectly(string PickNum, string partNumToPick, string locationToPickFrom, string lotNumber = null, string trackingEncoding = null)
+        {
+
+
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                Pick pick = await session.GetPick(PickNum);
+
+                Assert.NotNull(pick);
+                Assert.True(pick.PickItems.PickItem.Count >= 1);
+
+                //pick item and save back
+
+                PickItem itemToPick = pick.PickItems.PickItem.Where(pi => pi.Part.Num == partNumToPick).FirstOrDefault();
+
+
+                //invQty to pick from
+                List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtyGrouped = null; //list of inventory tags to choose from
+
+                MySqlConfig dbConfig = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),
+                                                                DatabaseUser, DatabasePassword, DatabaseName);
+
+                using (FishbowlMySqlDB db = await FishbowlMySqlDB.CreateAsync(dbConfig))
+                {
+                    invQtyGrouped =
+                        await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(itemToPick.Part.Num,
+                        ValidDefaultLocationGroup, InventorySearchTermType.Part);
+                }
+
+                //select which one to use
+                InvQtyGroupedByUniqueTagInfoWithTracking selectedInvQty = null;
+                if (!string.IsNullOrEmpty(lotNumber))
+                {
+                    selectedInvQty =
+                            invQtyGrouped
+                                .Where(iq => iq.LocationName == locationToPickFrom &&
+                                    iq.SimpleTracking.Any(st => st.TrackingInfo == lotNumber))
+                                .FirstOrDefault();
+                }
+                else
+                {
+                    selectedInvQty =
+                            invQtyGrouped
+                                .Where(iq => iq.LocationName == locationToPickFrom && iq.TrackingEncoding == (trackingEncoding ?? ""))
+                                .FirstOrDefault();
+                }
+
+
+                //
+                //.Where(iq => iq.LocationName == "M1" && iq.TrackingEncoding == "32/wVwpZJxIup2uaQHhHQw==")
+
+                Tag fullTagForTrackingInfo = await session.GetTagObjectAsync(selectedInvQty.SimpleTags[0].TagId.ToString());
+
+                PickItem ItemRemaining = null;
+                decimal PickItemRequestedQty = itemToPick.Quantity;
+
+
+
+                foreach (PickItem item in pick.PickItems.PickItem)
+                {
+                    Debug.WriteLine(item.Quantity);
+                    if (item.Status != "40" && item.Status != "30") //add committed ignore
+                    {
+
+                        if (PickItemRequestedQty >= item.Quantity) //selecting all in available in this invQty line
+                        {
+                            //we have enough
+                            item.Status = "30";
+                            item.Location = fullTagForTrackingInfo.Location;
+                            item.Tracking = fullTagForTrackingInfo.Tracking;
+
+
+                            //item.qty is unchanged, full amount
+                            selectedInvQty.Qty = selectedInvQty.Qty - item.Quantity;
+                            PickItemRequestedQty = PickItemRequestedQty - item.Quantity;
+                            //QtyNeededInPartUom = QtyNeededInPartUom - item.Quantity;
+
+                        }
+                        else
+                        {
+                            if (PickItemRequestedQty > 0) //only run if there's more to be set from this requestedQty
+                            {
+
+                                //we have no items left to hold the remainder, so split again
+                                ItemRemaining = MyExtensions.DeepCopyXML(item);
+                                ItemRemaining.Status = "10";
+                                ItemRemaining.Quantity = item.Quantity - PickItemRequestedQty; //in part UOM
+
+                                ItemRemaining.PickItemID = "-1";
+
+
+                                //first item
+                                item.Status = "30";
+                                item.Quantity = PickItemRequestedQty;
+
+
+                                //item.Tag = fullTagForTrackingInfo;
+                                item.Location = fullTagForTrackingInfo.Location;
+                                item.Tracking = fullTagForTrackingInfo.Tracking;
+
+                                //item.SourceTagID = long.Parse(fullTagForTrackingInfo.TagID);
+
+
+                                selectedInvQty.Qty = selectedInvQty.Qty - PickItemRequestedQty;// itemQtyInProductUom;
+
+                                PickItemRequestedQty = decimal.Zero; //filled this amount
+
+                                //QtyNeededInPartUom = QtyNeededInPartUom - item.Quantity;
+                            }
+
+                        }
+
+
+                    }
+                }
+
+                if (ItemRemaining != null)
+                {
+                    pick.PickItems.PickItem.Add(ItemRemaining);
+                }
+
+
+
+
+
+
+                await session.SavePick(pick);
+
+                Pick newPick = await session.GetPick(PickNum);
+
+
+
+                Assert.NotNull(newPick);
+                Assert.True(pick.PickItems.PickItem.Count == newPick.PickItems.PickItem.Count);
+
+
+
+            }
+
+        }
+
 
 
         [TestCase("S10017")]
@@ -431,5 +579,61 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
+        [TestCase(ValidPickNumber)]
+        public async Task VoidPickItemReturnsReloadedPickWithVoidedItem(string pickNum)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            config.RequestTimeout = 30000;
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+                Pick pick = await session.GetPick(pickNum);
+
+                List<PickItem> itemsToVoid = new List<PickItem>();
+                PickItem itemToVoid = pick.PickItems.PickItem.FirstOrDefault(i => i.PickItemID == "171074");
+                itemsToVoid.Add(itemToVoid);
+
+
+
+                VoidPickResponse voidResponse = await session.VoidPickItems(pick, itemsToVoid);
+                Assert.NotNull(voidResponse);
+                Assert.NotNull(voidResponse.VoidedPick);
+                Assert.That(voidResponse.VoidedPick.PickItems.PickItem
+                                .FirstOrDefault(i => i.PickItemID == itemToVoid.PickItemID)?.Status == "10"); 
+                Assert.That(string.IsNullOrEmpty(voidResponse.UnVoidableItems));
+         
+            }
+
+        }
+
+        [TestCase(ValidPickNumber)]
+        public async Task VoidPickItemReturnsUnvoidableMessage(string pickNum)
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            config.RequestTimeout = 30000;
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+                Pick pick = await session.GetPick(pickNum);
+
+                List<PickItem> itemsToVoid = new List<PickItem>();
+                PickItem itemToVoid = pick.PickItems.PickItem.FirstOrDefault(i => i.Status == "40");
+                itemsToVoid.Add(itemToVoid);
+
+
+
+                VoidPickResponse voidResponse = await session.VoidPickItems(pick, itemsToVoid);
+                Assert.NotNull(voidResponse);
+                Assert.NotNull(voidResponse.VoidedPick);
+                Assert.That(voidResponse.VoidedPick.PickItems.PickItem
+                                .FirstOrDefault(i=>i.PickItemID == itemToVoid.PickItemID)?.Status == "40"); //not voided since shipped
+                Assert.That(!string.IsNullOrEmpty(voidResponse.UnVoidableItems));
+                Debug.WriteLine(voidResponse.UnVoidableItems);
+
+            }
+
+        }
     }
 }

@@ -73,5 +73,35 @@ namespace FishbowlConnect
             return new VoidPickResponse { VoidedPick = voidPickRs.Pick, UnVoidableItems = voidPickRs.UnvoidableItems };
 
         }
+
+        public async Task<VoidPickResponse> VoidPickItems(Pick pick, List<PickItem> pickItemsToVoid)
+        {
+            if (pick == null)
+            {
+                throw new ArgumentNullException("Pick is required");
+            }
+            if (pick.PickID <= 0)
+            {
+                throw new ArgumentNullException("Pick must have been saved to be voided");
+            }
+            if (pickItemsToVoid == null)
+            {
+                throw new ArgumentNullException("You must provide items to void");
+            }
+            if (pickItemsToVoid.Count == 0)
+            {
+                throw new ArgumentNullException("You must provide items to void");
+            }
+
+            VoidPickItemsRq pickItemsRq = new VoidPickItemsRq();
+            pickItemsRq.Pick = pick;
+            pickItemsRq.ItemList = new ItemList() { PickItem =  pickItemsToVoid  };
+
+            VoidPickItemsRs voidItemsRs = await IssueJsonRequestAsync<VoidPickItemsRs>(pickItemsRq);
+
+            return new VoidPickResponse() { VoidedPick = voidItemsRs.Pick, UnVoidableItems = voidItemsRs.UnvoidableItems };
+
+
+        }
     }
 }
