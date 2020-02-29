@@ -36,53 +36,59 @@ namespace FishbowlConnect.Json.Converters
             //should be an object, but then it will have to be parsed everywhere else
 
             TrackingItem trackingItem = value as TrackingItem;
-            string trackingType = trackingItem.PartTracking.TrackingTypeID;
-
             JObject jo = new JObject();
-            Type type = value.GetType();
-            foreach (PropertyInfo prop in type.GetProperties())
-            {
-                if (prop.CanRead)
-                {
-                    if (!prop.CustomAttributes.Where(attribute => attribute.AttributeType == typeof(JsonIgnoreAttribute)).Any())
-                    {
-                        object propVal = prop.GetValue(value, null);
-                        if (propVal != null)
-                        {
-                            if (prop.Name == "TrackingValue")
-                            {
-                                //check and write the tracking values section
-                                switch (trackingType)
-                                {
-                                    case "20":
-                                    case "30":
-                                        DateTime trackingDate;
-                                        if (DateTime.TryParse(propVal.ToString(), out trackingDate))
-                                        {
-                                            string mySQLDateString = trackingDate.ToString(DefaultDateTimeFormat);
-                                            jo.Add(prop.Name, JToken.FromObject(mySQLDateString, serializer));
-                                        }
-                                        break;
 
-                                    default:
-                                        jo.Add(prop.Name, JToken.FromObject(propVal, serializer));
-                                        break;
-                                }
-                            }
-                            else
+            if (trackingItem.PartTracking != null) //some items dont have tracking
+            {
+                string trackingType = trackingItem.PartTracking.TrackingTypeID;
+                Type type = value.GetType();
+                foreach (PropertyInfo prop in type.GetProperties())
+                {
+                    if (prop.CanRead)
+                    {
+                        if (!prop.CustomAttributes.Where(attribute => attribute.AttributeType == typeof(JsonIgnoreAttribute)).Any())
+                        {
+                            object propVal = prop.GetValue(value, null);
+                            if (propVal != null)
                             {
-                                //write the PartTracking section
-                                jo.Add(prop.Name, JToken.FromObject(propVal, serializer));
+                                if (prop.Name == "TrackingValue")
+                                {
+                                    //check and write the tracking values section
+                                    switch (trackingType)
+                                    {
+                                        case "20":
+                                        case "30":
+                                            DateTime trackingDate;
+                                            if (DateTime.TryParse(propVal.ToString(), out trackingDate))
+                                            {
+                                                string mySQLDateString = trackingDate.ToString(DefaultDateTimeFormat);
+                                                jo.Add(prop.Name, JToken.FromObject(mySQLDateString, serializer));
+                                            }
+                                            break;
+
+                                        default:
+                                            jo.Add(prop.Name, JToken.FromObject(propVal, serializer));
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    //write the PartTracking section
+                                    jo.Add(prop.Name, JToken.FromObject(propVal, serializer));
+                                }
                             }
                         }
                     }
                 }
+                //Debug.WriteLine(jo.Property("TrackingValue")?.Value);
+                jo.WriteTo(writer);
+
             }
-            //Debug.WriteLine(jo.Property("TrackingValue")?.Value);
-            jo.WriteTo(writer);
-
-
-
+            else
+            {
+                JToken t = JToken.FromObject(value,serializer);
+                t.WriteTo(writer);
+            }
         }
     }
 }

@@ -4872,67 +4872,6 @@ namespace FishbowlConnect
         }
     }
 
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-    public partial class SerialNum
-    {
-
-        private string serialIDField;
-
-        private string numberField;
-
-        private string committedField;
-
-        public SerialNum()
-        {
-            this.committedField = "false";
-        }
-
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType = "integer")]
-        public string SerialID
-        {
-            get
-            {
-                return this.serialIDField;
-            }
-            set
-            {
-                this.serialIDField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string Number
-        {
-            get
-            {
-                return this.numberField;
-            }
-            set
-            {
-                this.numberField = value;
-            }
-        }
-
-        /// <remarks/>
-        public string Committed
-        {
-            get
-            {
-                return this.committedField;
-            }
-            set
-            {
-                this.committedField = value;
-            }
-        }
-    }
 
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]

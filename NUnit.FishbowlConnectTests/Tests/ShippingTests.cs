@@ -12,11 +12,11 @@ namespace NUnit.FishbowlConnectTests.Tests
     public class ShippingTests
     {
 
-        const string GoodServerAddress = "192.168.150.4";
+        const string GoodServerAddress = "192.168.125.26";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
 
-        const string ValidShipNumber = "S71224";
+        const string ValidShipNumber = "S10014";
 
         [TestCase(ValidShipNumber)]
         public async Task LoadShipmentDetailsAndGetFlattenedListOFItems(string shipNum)
@@ -36,7 +36,9 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
-        [TestCase(ValidShipNumber)]
+        [TestCase("S10014")]
+        [TestCase("S10017")]
+        [TestCase("S10083")]
         public async Task LoadAndPackShipmentIsSuccess(string shipNum)
         {
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);

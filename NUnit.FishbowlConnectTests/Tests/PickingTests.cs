@@ -33,7 +33,7 @@ namespace NUnit.FishbowlConnectTests.Tests
         //const string ValidLocationWithInventory = "$L$WS5C";
 
 
-        const string ValidPickNumber = "S20-307";
+        const string ValidPickNumber = "S10083";
 
         [TestCase(ValidPickNumber)]
         public async Task LoadPickByNumberReturnsPickObject(string PickNum)

@@ -122,8 +122,21 @@ namespace FishbowlConnect.Json.APIObjects
         public string DisplayWeight { get; set; }
         public DisplayWeightUOM DisplayWeightUOM { get; set; }
 
-        [JsonConverter(typeof(ListOrSingleValueConverter<TrackingItem>))]
-        public List<TrackingItem> Tracking { get; set; }
+        private Tracking tracking;
+
+        public Tracking Tracking
+        {
+            get { return tracking; }
+            set
+            {
+                tracking = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        //[JsonConverter(typeof(ListOrSingleValueConverter<TrackingItem>))]
+        //public List<TrackingItem> Tracking { get; 
+        //    set; }
     }
 
     public partial class ShipmentImage : NotifyOnChange

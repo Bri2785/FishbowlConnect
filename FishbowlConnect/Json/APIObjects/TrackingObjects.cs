@@ -46,10 +46,26 @@ namespace FishbowlConnect.Json.APIObjects
             }
         }
 
-        [JsonIgnore]
-            public string TrackingSummary
+        private SerialBoxList serialBoxList;
+
+        public SerialBoxList SerialBoxList
+        {
+            get { return serialBoxList; }
+            set
             {
-                get
+                serialBoxList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        [JsonIgnore]
+        public string TrackingSummary
+        {
+            get
+            {
+                if (PartTracking != null)
                 {
                     if (PartTracking.TrackingTypeID == "20" || PartTracking.TrackingTypeID == "30")
                     {
@@ -64,8 +80,10 @@ namespace FishbowlConnect.Json.APIObjects
 
 
                 }
+                return null;
 
             }
+        }
         
 
     }
@@ -88,6 +106,36 @@ namespace FishbowlConnect.Json.APIObjects
         public string Active { get; set; }
 
          public string Primary { get; set; }
+    }
+
+    public class SerialBoxList
+    {
+        [JsonConverter(typeof(ListOrSingleValueConverter<SerialBox>))]
+        public List<SerialBox> SerialBox { get; set; }
+    }
+
+    public class SerialBox
+    {
+        
+        public SerialNumList SerialNumList { get; set; }
+
+    }
+
+    public class SerialNumList
+    {
+        [JsonConverter(typeof(ListOrSingleValueConverter<SerialNum>))]
+        public List<SerialNum> SerialNum { get; set; }
+    }
+
+    public partial class SerialNum
+    {
+
+        public int SerialID { get; set; }
+        public int SerialNumID { get; set; }
+
+        public string Number { get; set; }
+
+        public PartTracking PartTracking { get; set; }
     }
 
     public class TrackingSimple : NotifyOnChange, IPartTrackingFields
