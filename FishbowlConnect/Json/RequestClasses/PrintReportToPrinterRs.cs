@@ -8,5 +8,6 @@ namespace FishbowlConnect.Json
     {
         public string StatusCode { get; set; }
         public string StatusMessage { get; set; }
+        public int JobId { get; set; }
     }
 }

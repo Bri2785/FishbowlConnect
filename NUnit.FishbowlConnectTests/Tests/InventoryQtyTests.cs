@@ -24,13 +24,13 @@ namespace NUnit.FishbowlConnectTests.Tests
         const string BadDatabaseName = "fndfnd";
 
 
-        const string GoodServerAddress = "192.168.150.2";
+        const string GoodServerAddress = "192.168.150.9";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
-        const string DatabaseAddress = "192.168.150.2";
+        const string DatabaseAddress = "192.168.150.9";
         const int DatabasePort = 3301;
         const string DatabaseName = "briteideasupdate";
-        const string ValidPartNumberWithInventory = "ECL-SC";
+        const string ValidPartNumberWithInventory = "SFL44WW";
         const string ValidPartNumberWithNoInventory = "LED-C70W2";
         const string ValidDefaultLocationGroup = "Main Warehouse";
         const string ValidLocationWithInventory = "$L$J12A";
@@ -58,7 +58,7 @@ namespace NUnit.FishbowlConnectTests.Tests
         public async Task InvQtyGroupedWithTrackingShouldReturnNestedLists(string partNumber)
         {
             MySqlConfig config = new MySqlConfig(DatabaseAddress, DatabasePort.ToString(),
-                DatabaseUser, DatabasePassword, DatabaseName);
+                DatabaseUser, DatabasePassword, DatabaseName, "Required");
 
             using (var db = await FishbowlMySqlDB.CreateAsync(config))
             {

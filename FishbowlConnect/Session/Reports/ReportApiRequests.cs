@@ -1,5 +1,7 @@
-﻿using FishbowlConnect.Json;
+﻿using FishbowlConnect.Exceptions;
+using FishbowlConnect.Json;
 using FishbowlConnect.Json.APIObjects;
+using FishbowlConnect.Json.CsvClassMaps;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,29 +14,29 @@ namespace FishbowlConnect
         /// <summary>
         /// Prints any sepcified Fishbowl report to the specified printer. The printer must be found on the fishbowl server machine
         /// </summary>
-        /// <param name="ReportName">Name of the Fishbowl report</param>
-        /// <param name="PrinterName">Name of the printer to print to</param>
+        /// <param name="ReportId">Id of the Fishbowl report</param>
+        /// <param name="PrinterId">Id of the printNode printer to print to</param>
 
-        /// <param name="ParameterList">List of parameters and values. Names must match the actula parameter name in iReport, not the displayed name in fishbowl</param>
+        /// <param name="ParameterList">List of parameters and values. Names must match the actual parameter name in iReport, not the displayed name in fishbowl</param>
         /// <param name="NumOfCopies">Number of copies to print</param>
         /// <returns></returns>
-        public async Task PrintReportToPrinter(string ReportName, string PrinterName,  List<ReportParam> ParameterList, int NumOfCopies = 1)
+        public async Task<int> PrintReportToPrinter(int ReportId, int PrinterId,  List<ReportParam> ParameterList, int NumOfCopies = 1)
         {
-            if (string.IsNullOrEmpty(ReportName))
+            if (ReportId <= 0)
             {
-                throw new ArgumentException("Report name cannot be missing");
+                throw new ArgumentException("Report Id is invalid");
             }
 
-            if (string.IsNullOrEmpty(PrinterName))
+            if (PrinterId <= 0)
             {
-                throw new ArgumentException("Printer Name cannot be missing");
+                throw new ArgumentException("Printer Id is Invalid");
             }
 
             PrintReportToPrinterRq reportToPrinterRq = new PrintReportToPrinterRq();
 
-            reportToPrinterRq.PrinterName = PrinterName;
+            reportToPrinterRq.PrinterId = PrinterId;
             reportToPrinterRq.NumberOfCopies = NumOfCopies;
-            reportToPrinterRq.ReportName = ReportName;
+            reportToPrinterRq.ReportId = ReportId;
 
             if (ParameterList != null && ParameterList?.Count > 0)
             {
@@ -44,20 +46,71 @@ namespace FishbowlConnect
 
             PrintReportToPrinterRs reportToPrinterRs = await this.IssueJsonRequestAsync<PrintReportToPrinterRs>(reportToPrinterRq);
 
-
+            return reportToPrinterRs.JobId;
         }
 
         /// <summary>
         /// Returns a list pf installed printer names from the Fishbowl server to be used in report printing
         /// </summary>
         /// <returns>List of string of printer names</returns>
-        public async Task<List<string>> GetServerPrinterList()
+        public async Task<List<Printer>> GetServerPrinterList()
         {
             GetServerPrinterListRq printerListRq = new GetServerPrinterListRq();
 
             GetServerPrinterListRs printerListRs = await IssueJsonRequestAsync<GetServerPrinterListRs>(printerListRq);
 
             return printerListRs.Printers.Printer;
+        }
+
+        /// <summary>
+        /// Returns list of active reports
+        /// </summary>
+        /// <returns>List of Report Objects</returns>
+        public async Task<List<Report>> GetReports()
+        {
+            string query = @"Select id as ReportId, name as ReportName
+                                            From report
+                                            where report.activeFlag = 1";
+
+
+            return await ExecuteQueryAsync<Report, ReportClassMap>(query);
+        }
+
+        /// <summary>
+        /// Filters the report list to just the reports the user supplied has access to
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<Report>> GetReportsUserHasAccessTo(int userId)
+        {
+            string query = string.Format(@"Select distinct report.id, report.name
+                                from report
+                                join useraccess on Concat('Report-',report.id) = useraccess.`moduleName`
+                                join usergroup on usergroup.`id` = useraccess.`groupId`
+                                join usergrouprel on usergroup.`id` = usergrouprel.`groupId`
+                                where usergrouprel.`userId` = {0}", userId);
+
+            return await ExecuteQueryAsync<Report, ReportClassMap>(query);
+        }
+
+        /// <summary>
+        /// Get the report Id from the name provided. Must be an exact match
+        /// </summary>
+        /// <param name="reportName"></param>
+        /// <returns></returns>
+        public async Task<int> GetReportIdFromName(string reportName)
+        {
+            string query = string.Format(@"Select id as ReportId
+                                            From report
+                                            where report.name = '{0}'",reportName);
+
+
+            string reportID = await ExecuteQueryAsync(query);
+            if (string.IsNullOrEmpty(reportID))
+            {
+                throw new FishbowlException(string.Format("Report {0} not found", reportName));
+            }
+            return int.Parse(reportID);
         }
     }
 }
