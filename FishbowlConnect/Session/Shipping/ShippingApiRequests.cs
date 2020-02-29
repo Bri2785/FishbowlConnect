@@ -64,6 +64,34 @@ namespace FishbowlConnect
         }
 
         /// <summary>
+        /// Packs a shipment (changes status only)
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        public async Task PackShipment(Shipping shipment)
+        {
+            shipment.Status = "20";
+            await SaveShipment(shipment);
+
+
+        }
+
+        /// <summary>
+        /// Packs a shipment (changes status only)
+        /// </summary>
+        /// <param name="shipNum"></param>
+        /// <returns></returns>
+        public async Task PackShipment(string shipNum)
+        {
+            Shipping shipment = await getShipment(shipNum);
+            
+            shipment.Status = "20";
+            await SaveShipment(shipment);
+
+
+        }
+
+        /// <summary>
         /// Ships an order in FB. Uploads the provided image as a signature if added. Auto fulfills any service items also
         /// </summary>
         /// <param name="ShipNum">"Shipment number, must include the prefix"</param>
