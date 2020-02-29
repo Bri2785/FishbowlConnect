@@ -10,6 +10,8 @@ namespace FishbowlConnect.Json.APIObjects
     {
         public int ReportId { get; set; }
         public string ReportName { get; set; }
+
+        public string ReportDescription { get; set; }
     }
 
 

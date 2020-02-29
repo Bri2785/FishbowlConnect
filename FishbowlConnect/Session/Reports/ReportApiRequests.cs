@@ -68,7 +68,7 @@ namespace FishbowlConnect
         /// <returns>List of Report Objects</returns>
         public async Task<List<Report>> GetReports()
         {
-            string query = @"Select id as ReportId, name as ReportName
+            string query = @"Select id as ReportId, name as ReportName, report.`description`
                                             From report
                                             where report.activeFlag = 1";
 
@@ -83,12 +83,30 @@ namespace FishbowlConnect
         /// <returns></returns>
         public async Task<List<Report>> GetReportsUserHasAccessTo(int userId)
         {
-            string query = string.Format(@"Select distinct report.id, report.name
+            string query = string.Format(@"Select distinct report.id, report.name, report.`description`
                                 from report
                                 join useraccess on Concat('Report-',report.id) = useraccess.`moduleName`
                                 join usergroup on usergroup.`id` = useraccess.`groupId`
                                 join usergrouprel on usergroup.`id` = usergrouprel.`groupId`
                                 where usergrouprel.`userId` = {0}", userId);
+
+            return await ExecuteQueryAsync<Report, ReportClassMap>(query);
+        }
+
+        /// <summary>
+        /// Filters the report list to just the reports the user supplied has access to
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<List<Report>> GetReportsUserHasAccessTo(string username)
+        {
+            string query = string.Format(@"Select distinct report.id, report.name, report.`description`
+                                from report
+                                join useraccess on Concat('Report-',report.id) = useraccess.`moduleName`
+                                join usergroup on usergroup.`id` = useraccess.`groupId`
+                                join usergrouprel on usergroup.`id` = usergrouprel.`groupId`
+                                JOIN sysuser ON sysuser.`id` = usergrouprel.`userId`
+                                WHERE sysuser.`userName` = '{0}'", username);
 
             return await ExecuteQueryAsync<Report, ReportClassMap>(query);
         }

@@ -14,15 +14,15 @@ namespace NUnit.FishbowlConnectTests.Tests
     [TestFixture]
     public class ReportTests
     {
-        const string GoodServerAddress = "192.168.150.4";
+        const string GoodServerAddress = "192.168.125.26";
         const string GoodUserName = "admin";
         const string GoodPassword = "does1tall";
 
-        const string DatabaseAddress = "192.168.150.2";
-        const int DatabasePort = 2361;
+        const string DatabaseAddress = "192.168.125.26";
+        const int DatabasePort = 3305;
         const string DatabaseUser = "gone";
         const string DatabasePassword = "fishing";
-        const string DatabaseName = "BRITEIDEASUPDATE";
+        const string DatabaseName = "local_demo";
 
 
         public async Task<int> PrintReportToPrinter(string ReportName, string PrinterName, int NumberOfCopies, List<ReportParam> ReportParams = null)
@@ -127,9 +127,43 @@ namespace NUnit.FishbowlConnectTests.Tests
 
             
         }
-          
 
 
+        [Test]
+        public async Task GetListOfServerReports()
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword, 20000);
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                List<Report> reports = await session.GetReports();
+
+                Assert.NotNull(reports);
+                Assert.That(reports.Count > 0);
+                Assert.That(reports[0].ReportId > 0);
+                Assert.That(!string.IsNullOrEmpty(reports[0].ReportName));
+                Assert.That(!string.IsNullOrEmpty(reports[0].ReportDescription));
+
+            }
+        }
+        [Test]
+        public async Task GetListOfServerReportsRestrictedToUser()
+        {
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword, 20000);
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                List<Report> reports = await session.GetReportsUserHasAccessTo("admin");
+
+                Assert.NotNull(reports);
+                Assert.That(reports.Count > 0);
+                Assert.That(reports[0].ReportId > 0);
+                Assert.That(!string.IsNullOrEmpty(reports[0].ReportName));
+                Assert.That(!string.IsNullOrEmpty(reports[0].ReportDescription));
+            }
+        }
 
 
         [Test]
