@@ -88,7 +88,8 @@ namespace FishbowlConnect
                                 join useraccess on Concat('Report-',report.id) = useraccess.`moduleName`
                                 join usergroup on usergroup.`id` = useraccess.`groupId`
                                 join usergrouprel on usergroup.`id` = usergrouprel.`groupId`
-                                where usergrouprel.`userId` = {0}", userId);
+                                where usergrouprel.`userId` = {0}
+                                order by report.name", userId);
 
             return await ExecuteQueryAsync<Report, ReportClassMap>(query);
         }
@@ -106,7 +107,8 @@ namespace FishbowlConnect
                                 join usergroup on usergroup.`id` = useraccess.`groupId`
                                 join usergrouprel on usergroup.`id` = usergrouprel.`groupId`
                                 JOIN sysuser ON sysuser.`id` = usergrouprel.`userId`
-                                WHERE sysuser.`userName` = '{0}'", username);
+                                WHERE sysuser.`userName` = '{0}'
+                                order by report.name", username);
 
             return await ExecuteQueryAsync<Report, ReportClassMap>(query);
         }
