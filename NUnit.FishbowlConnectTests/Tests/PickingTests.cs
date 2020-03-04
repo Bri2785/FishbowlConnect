@@ -147,7 +147,7 @@ namespace NUnit.FishbowlConnectTests.Tests
                                 ItemRemaining.Status = "10";
                                 ItemRemaining.Quantity = item.Quantity - PickItemRequestedQty; //in part UOM
 
-                                ItemRemaining.PickItemID = "-1";
+                                ItemRemaining.PickItemID = -1;
 
 
                                 //first item
@@ -294,7 +294,7 @@ namespace NUnit.FishbowlConnectTests.Tests
                                 ItemRemaining.Status = "10";
                                 ItemRemaining.Quantity = item.Quantity - SpecifiedQtyInProductUom; //in part UOM
 
-                                ItemRemaining.PickItemID = "-1";
+                                ItemRemaining.PickItemID = -1;
 
 
                                 //first item
@@ -389,6 +389,103 @@ namespace NUnit.FishbowlConnectTests.Tests
 
 
 
+            }
+
+        }
+
+        
+        
+        [TestCase("S10085")]
+        public async Task LoadPickByNumberResetItemsHandlesCorrectly(string PickNum)
+        {
+
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            config.RequestTimeout = 30000;
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                Pick pick = await session.GetPick(PickNum);
+
+                Assert.NotNull(pick);
+
+                List<PickItem> SelectedPickItems =  MyExtensions.DeepCopyXML(pick.PickItems.PickItem.ToList());
+
+                var grouped = SelectedPickItems.OrderByDescending(pi=> pi.PickItemID)
+                                        .GroupBy(pi => pi, new PickItemComparerWithoutTrackingFactor())
+                                        ;
+
+
+                Assert.That(grouped.Count() == 3); //line item 1, line item 2, and the short qty
+
+                foreach (var group in grouped)
+                {
+                    Assert.That(group.Key.PickItemID > 0);
+                }
+
+                
+                //await session.SavePick(pick);
+
+                //Pick newPick = await session.GetPick(PickNum);
+
+                //pick.Should().BeEquivalentTo(newPick);
+
+
+
+            }
+
+        }
+
+        [TestCase("S10084")]
+        public async Task LoadPickByNumberResetItemsWithTrackingHandlesCorrectly(string PickNum)
+        {
+
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            config.RequestTimeout = 30000;
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+
+                Pick pick = await session.GetPick(PickNum);
+
+                Assert.NotNull(pick);
+
+                List<PickItem> SelectedPickItems = MyExtensions.DeepCopyXML(pick.PickItems.PickItem.ToList());
+
+                var grouped = SelectedPickItems.OrderByDescending(pi => pi.PickItemID)
+                                        .GroupBy(pi => pi, new PickItemComparerIncludingTracking())
+                                        ;
+
+
+                Assert.That(grouped.Count() == 2); //(line item 1 and line item 2), and then line item 3
+                Dictionary<PickItem, decimal> dictQty = new Dictionary<PickItem, decimal>();
+
+                foreach (var group in grouped)
+                {
+                    Assert.That(group.Key.PickItemID > 0);
+                    
+                    decimal totalGroupQty = 0M;
+                    foreach (var item in group)
+                    {
+                        totalGroupQty += item.Quantity;
+                    }
+
+                    dictQty.Add(group.Key, totalGroupQty);
+                    group.Key.Quantity = group.Sum(pig => pig.Quantity);
+                }
+
+                ///The linq query is re-executed everytime. the key is still part of the list since we used the full item and it still
+                ///holds a reference. So when we sum the items in the list after we summed the total list, the sums compound 
+                ///and wont equal in the Assert. It still works, since we are only interested in the first grouping and we can use that for our 
+                ///printint, etc
+
+                Assert.That(grouped.Select(g => g.Key).ToList().Count == 2);
+                foreach (var key in grouped.Select(g => g.Key).ToList())
+                {
+                    Assert.That(dictQty.GetValueOrDefault(key) == key.Quantity);
+                }
             }
 
         }

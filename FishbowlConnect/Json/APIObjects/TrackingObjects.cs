@@ -1,9 +1,11 @@
-﻿using FishbowlConnect.Interfaces;
+﻿using FishbowlConnect.Helpers;
+using FishbowlConnect.Interfaces;
 using FishbowlConnect.Json.Converters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 
 namespace FishbowlConnect.Json.APIObjects
@@ -20,10 +22,74 @@ namespace FishbowlConnect.Json.APIObjects
         {
             get { return TrackingItem?[0].TrackingSummary; }
         }
+
+        /// <summary>
+        /// This can be set using the getEncoding method if needed
+        /// </summary>
+        [JsonIgnore]
+        public string TrackingEncoding { get; set; }
+        public string getEncoding()
+        {
+
+            string trackingString = TrackingToStringForEncoding();
+            if (string.IsNullOrEmpty(trackingString))
+            {
+                return string.Empty;
+            }
+            try
+            {
+                //base64 convert then md5 hash
+                byte[] trackingBytes = Encoding.UTF8.GetBytes(trackingString);
+                string base64 = Convert.ToBase64String(trackingBytes);
+                return base64.CreateMD5();
+            }
+            catch (Exception e)
+            {
+                return string.Empty;
+            }
+        }
+
+        private string TrackingToStringForEncoding()
+        {
+            if (TrackingItem != null && TrackingItem.Count > 0)
+            {
+
+                List<TrackingItem> filteredAndSortedTracking = TrackingItem.Where(t => t.PartTracking.PartTrackingID != "30").ToList();
+                    
+                filteredAndSortedTracking.Sort(new Comparison<TrackingItem>((x, y) => x.PartTracking.PartTrackingID.CompareTo(y.PartTracking.PartTrackingID)));
+
+                if (filteredAndSortedTracking.Count == 0)
+                {
+                    return string.Empty;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                foreach (var item in filteredAndSortedTracking)
+                {
+                    if (sb.Length > 0)
+                    {
+                        sb.Append(" ");
+                    }
+                    sb.Append(item.TrackingSummary);
+                }
+
+                return sb.ToString();
+
+            }
+            return string.Empty;
+        }
+
+
     }
 
-    
-    [JsonConverter(typeof(TrackingItemSerializeMySqlDateConverter))]
+
+
+
+
+
+
+
+        [JsonConverter(typeof(TrackingItemSerializeMySqlDateConverter))]
     public class TrackingItem : NotifyOnChange
     {
        
@@ -57,8 +123,6 @@ namespace FishbowlConnect.Json.APIObjects
                 RaisePropertyChanged();
             }
         }
-
-
 
         [JsonIgnore]
         public string TrackingSummary

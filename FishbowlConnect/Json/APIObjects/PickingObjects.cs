@@ -89,7 +89,7 @@ namespace FishbowlConnect.Json.APIObjects
     [Serializable()]
     public class PickItem : NotifyOnChange
     {
-        public string PickItemID { get; set; }
+        public int PickItemID { get; set; }
         private string statusField;
         private Part partField;
         private decimal quantityField;
@@ -175,13 +175,13 @@ namespace FishbowlConnect.Json.APIObjects
 
         public string OrderID { get; set; }
 
-        public string SoItemId { get; set; }
+        public int SoItemId { get; set; }
 
-        public string PoItemId { get; set; }
+        public int PoItemId { get; set; }
 
-        public string XoItemId { get; set; }
+        public int XoItemId { get; set; }
 
-        public string WoItemId { get; set; }
+        public int WoItemId { get; set; }
 
         public string SlotNumber { get; set; }
 
@@ -223,6 +223,143 @@ namespace FishbowlConnect.Json.APIObjects
         }
     }
 
+    public class PickItemComparerWithoutTrackingFactor : IEqualityComparer<PickItem>
+    {
+        public bool Equals(PickItem x, PickItem y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                return false;
+
+            return
+                x.Part?.PartID == y.Part?.PartID &&
+                x.SoItemId == y.SoItemId &&
+                x.PoItemId == y.PoItemId &&
+                x.XoItemId == y.XoItemId &&
+                x.WoItemId == y.WoItemId &&
+                x.Status.Equals(y.Status);
+        }
+
+        public int GetHashCode(PickItem obj)
+        {
+            //null check then creates hash from partnumber, tracking encoding, tag id
+
+            if (ReferenceEquals(obj, null)) return 0;
+            int hashSimplePartID = obj.Part.PartID == 0 ? 0 : obj.Part.PartID.GetHashCode();
+            int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
+            return hashSimplePartID ^ obj.SoItemId.GetHashCode() ^
+                obj.PoItemId.GetHashCode() ^
+                obj.XoItemId.GetHashCode() ^
+                obj.WoItemId.GetHashCode() ^ 
+                hashStatus;
+        }
+    }
+
+    /// <summary>
+    /// Used when Fishbwowl splits items but the user want to pick all of them together. 
+    /// You can use this to recombine the items for distinct tracking and part combo. 
+    /// Main example: Used for printing after pick
+    /// </summary>
+    public class PickItemComparerIncludingTracking : IEqualityComparer<PickItem>
+    {
+        public bool Equals(PickItem x, PickItem y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                return false;
+
+            
+
+            return
+                x.Part?.PartID == y.Part?.PartID &&
+                x.SoItemId == y.SoItemId &&
+                x.PoItemId == y.PoItemId &&
+                x.XoItemId == y.XoItemId &&
+                x.WoItemId == y.WoItemId &&
+                x.Status.Equals(y.Status) &&
+                x.Tracking?.getEncoding() == y.Tracking?.getEncoding();
+        }
+
+        public int GetHashCode(PickItem obj)
+        {
+            //only load the trackingEncoding when comparing
+            int hashTracking = 0;
+            if (obj.Tracking != null)
+            {
+                obj.Tracking.TrackingEncoding = obj.Tracking?.getEncoding();
+                hashTracking = obj.Tracking.TrackingEncoding == null ? 0 : obj.Tracking.TrackingEncoding.GetHashCode();
+            }
+
+            //null check then creates hash from partnumber, tracking encoding, tag id
+
+            if (ReferenceEquals(obj, null)) return 0;
+            int hashSimplePartID = obj.Part.PartID == 0 ? 0 : obj.Part.PartID.GetHashCode();
+            int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
+            
+            return hashSimplePartID ^ obj.SoItemId.GetHashCode() ^
+                obj.PoItemId.GetHashCode() ^
+                obj.XoItemId.GetHashCode() ^
+                obj.WoItemId.GetHashCode() ^
+                hashStatus ^ 
+                hashTracking;
+        }
+    }
+
+    /// <summary>
+    /// Used when Fishbwowl splits items but the user want to pick all of them together. 
+    /// You can use this to recombine the items to prevent extra unnecessary pick items
+    /// Main example: User manually splits a pick item and ends up picking from same location and tracking anyways.
+    /// </summary>
+    public class PickItemComparerIncludingTrackingAndLocation : IEqualityComparer<PickItem>
+    {
+        public bool Equals(PickItem x, PickItem y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+
+            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+                return false;
+
+
+
+            return
+                x.Part?.PartID == y.Part?.PartID &&
+                x.SoItemId == y.SoItemId &&
+                x.PoItemId == y.PoItemId &&
+                x.XoItemId == y.XoItemId &&
+                x.WoItemId == y.WoItemId &&
+                x.Status.Equals(y.Status) &&
+                x.Tracking?.getEncoding() == y.Tracking?.getEncoding() &&
+                x.ItemStartedLocation == y.ItemStartedLocation;
+
+        }
+
+        public int GetHashCode(PickItem obj)
+        {
+            //only load the trackingEncoding when comparing
+            int hashTracking = 0;
+            if (obj.Tracking != null)
+            {
+                obj.Tracking.TrackingEncoding = obj.Tracking?.getEncoding();
+                hashTracking = obj.Tracking.TrackingEncoding == null ? 0 : obj.Tracking.TrackingEncoding.GetHashCode();
+            }
+
+            //null check then creates hash from partnumber, tracking encoding, tag id
+
+            if (ReferenceEquals(obj, null)) return 0;
+            int hashSimplePartID = obj.Part.PartID == 0 ? 0 : obj.Part.PartID.GetHashCode();
+            int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
+            int hashLocation = obj.ItemStartedLocation == null ? 0 : obj.ItemStartedLocation.GetHashCode();
+
+            return hashSimplePartID ^ obj.SoItemId.GetHashCode() ^
+                obj.PoItemId.GetHashCode() ^
+                obj.XoItemId.GetHashCode() ^
+                obj.WoItemId.GetHashCode() ^
+                hashStatus ^ hashLocation ^
+                hashTracking;
+        }
+    }
     public partial class PickItems: NotifyOnChange
     {
         private FullyObservableCollection<PickItem> pickItems;

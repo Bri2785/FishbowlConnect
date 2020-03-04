@@ -19,7 +19,7 @@ namespace FishbowlConnect.Json.APIObjects
             this.TrackingFlag = "false";
         }
 
-        public string PartID { get; set; }
+        public int PartID { get; set; }
 
         public string PartClassID { get; set; }
 

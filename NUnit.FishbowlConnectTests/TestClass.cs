@@ -1217,12 +1217,12 @@ namespace NUnit.FishbowlConnectTests
 
 
                 PickItem pickItem1 = MyExtensions.DeepCopyXML(workingOnItem);
-                pickItem1.PickItemID = "-1";
+                pickItem1.PickItemID = -1;
 
                 //pickItem1.PropertyChanged += PickItem1_PropertyChanged;
 
                 PickItem pickItem2 = MyExtensions.DeepCopyXML(workingOnItem);
-                pickItem2.PickItemID = "-1";
+                pickItem2.PickItemID = -1;
 
 
                 pickItem1.Location = tag1.Location;
