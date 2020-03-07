@@ -223,38 +223,38 @@ namespace FishbowlConnect.Json.APIObjects
         }
     }
 
-    public class PickItemComparerWithoutTrackingFactor : IEqualityComparer<PickItem>
-    {
-        public bool Equals(PickItem x, PickItem y)
-        {
-            if (ReferenceEquals(x, y)) return true;
+    //public class PickItemComparerWithoutTrackingFactor : IEqualityComparer<PickItem>
+    //{
+    //    public bool Equals(PickItem x, PickItem y)
+    //    {
+    //        if (ReferenceEquals(x, y)) return true;
 
-            if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
-                return false;
+    //        if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
+    //            return false;
 
-            return
-                x.Part?.PartID == y.Part?.PartID &&
-                x.SoItemId == y.SoItemId &&
-                x.PoItemId == y.PoItemId &&
-                x.XoItemId == y.XoItemId &&
-                x.WoItemId == y.WoItemId &&
-                x.Status.Equals(y.Status);
-        }
+    //        return
+    //            x.Part?.PartID == y.Part?.PartID &&
+    //            x.SoItemId == y.SoItemId &&
+    //            x.PoItemId == y.PoItemId &&
+    //            x.XoItemId == y.XoItemId &&
+    //            x.WoItemId == y.WoItemId &&
+    //            x.Status.Equals(y.Status);
+    //    }
 
-        public int GetHashCode(PickItem obj)
-        {
-            //null check then creates hash from partnumber, tracking encoding, tag id
+    //    public int GetHashCode(PickItem obj)
+    //    {
+    //        //null check then creates hash from partnumber, tracking encoding, tag id
 
-            if (ReferenceEquals(obj, null)) return 0;
-            int hashSimplePartID = obj.Part.PartID == 0 ? 0 : obj.Part.PartID.GetHashCode();
-            int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
-            return hashSimplePartID ^ obj.SoItemId.GetHashCode() ^
-                obj.PoItemId.GetHashCode() ^
-                obj.XoItemId.GetHashCode() ^
-                obj.WoItemId.GetHashCode() ^ 
-                hashStatus;
-        }
-    }
+    //        if (ReferenceEquals(obj, null)) return 0;
+    //        int hashSimplePartID = obj.Part.PartID == 0 ? 0 : obj.Part.PartID.GetHashCode();
+    //        int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
+    //        return hashSimplePartID ^ obj.SoItemId.GetHashCode() ^
+    //            obj.PoItemId.GetHashCode() ^
+    //            obj.XoItemId.GetHashCode() ^
+    //            obj.WoItemId.GetHashCode() ^ 
+    //            hashStatus;
+    //    }
+    //}
 
     /// <summary>
     /// Used when Fishbwowl splits items but the user want to pick all of them together. 
@@ -288,8 +288,8 @@ namespace FishbowlConnect.Json.APIObjects
             int hashTracking = 0;
             if (obj.Tracking != null)
             {
-                obj.Tracking.TrackingEncoding = obj.Tracking?.getEncoding();
-                hashTracking = obj.Tracking.TrackingEncoding == null ? 0 : obj.Tracking.TrackingEncoding.GetHashCode();
+                //obj.Tracking.TrackingEncoding = obj.Tracking?.getEncoding();
+                hashTracking = obj.Tracking?.getEncoding() == null ? 0 : obj.Tracking.getEncoding().GetHashCode();
             }
 
             //null check then creates hash from partnumber, tracking encoding, tag id
@@ -341,8 +341,8 @@ namespace FishbowlConnect.Json.APIObjects
             int hashTracking = 0;
             if (obj.Tracking != null)
             {
-                obj.Tracking.TrackingEncoding = obj.Tracking?.getEncoding();
-                hashTracking = obj.Tracking.TrackingEncoding == null ? 0 : obj.Tracking.TrackingEncoding.GetHashCode();
+                //obj.Tracking.TrackingEncoding = obj.Tracking?.getEncoding();
+                hashTracking = obj.Tracking.getEncoding() == null ? 0 : obj.Tracking.getEncoding().GetHashCode();
             }
 
             //null check then creates hash from partnumber, tracking encoding, tag id

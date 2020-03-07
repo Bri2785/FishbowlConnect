@@ -40,7 +40,7 @@ namespace FishbowlConnect.Json.Converters
 
             if (trackingItem.PartTracking != null) //some items dont have tracking
             {
-                string trackingType = trackingItem.PartTracking.TrackingTypeID;
+                int trackingType = trackingItem.PartTracking.TrackingTypeID;
                 Type type = value.GetType();
                 foreach (PropertyInfo prop in type.GetProperties())
                 {
@@ -56,8 +56,8 @@ namespace FishbowlConnect.Json.Converters
                                     //check and write the tracking values section
                                     switch (trackingType)
                                     {
-                                        case "20":
-                                        case "30":
+                                        case 20:
+                                        case 30:
                                             DateTime trackingDate;
                                             if (DateTime.TryParse(propVal.ToString(), out trackingDate))
                                             {

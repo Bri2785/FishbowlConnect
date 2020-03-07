@@ -26,12 +26,13 @@ namespace FishbowlConnect.Json.APIObjects
         /// <summary>
         /// This can be set using the getEncoding method if needed
         /// </summary>
-        [JsonIgnore]
-        public string TrackingEncoding { get; set; }
+        //[JsonIgnore]
+        //public string TrackingEncoding { get; set; }
         public string getEncoding()
         {
 
             string trackingString = TrackingToStringForEncoding();
+            
             if (string.IsNullOrEmpty(trackingString))
             {
                 return string.Empty;
@@ -39,9 +40,10 @@ namespace FishbowlConnect.Json.APIObjects
             try
             {
                 //base64 convert then md5 hash
-                byte[] trackingBytes = Encoding.UTF8.GetBytes(trackingString);
-                string base64 = Convert.ToBase64String(trackingBytes);
-                return base64.CreateMD5();
+                byte[] encryptedTracking = trackingString.CreateMD5();
+                //byte[] trackingBytes = Encoding.UTF8.GetBytes(encryptedTracking);
+                return  Convert.ToBase64String(encryptedTracking);
+                //return base64.CreateMD5();
             }
             catch (Exception e)
             {
@@ -68,9 +70,9 @@ namespace FishbowlConnect.Json.APIObjects
                 {
                     if (sb.Length > 0)
                     {
-                        sb.Append(" ");
+                        sb.Append("  "); //double space to match Fishbowl
                     }
-                    sb.Append(item.TrackingSummary);
+                    sb.Append(item.ToString());
                 }
 
                 return sb.ToString();
@@ -131,7 +133,7 @@ namespace FishbowlConnect.Json.APIObjects
             {
                 if (PartTracking != null)
                 {
-                    if (PartTracking.TrackingTypeID == "20" || PartTracking.TrackingTypeID == "30")
+                    if (PartTracking.TrackingTypeID == 20 || PartTracking.TrackingTypeID == 30)
                     {
                         if (!string.IsNullOrEmpty(TrackingValue))
                         {
@@ -148,7 +150,104 @@ namespace FishbowlConnect.Json.APIObjects
 
             }
         }
-        
+
+        public override string ToString()
+        {
+            StringBuilder str = new StringBuilder();
+            switch (this.PartTracking.TrackingTypeID)
+            {
+
+                case 20:
+                case 30:
+                    {
+                        
+                        str.Append(this.PartTracking.Abbr).Append(": ")
+                            .Append(DateTime.Parse(TrackingValue).ToString("MMM d, yyyy")); //found from debug IntelliJ
+                        break;
+                    }
+                case 40:
+                    {
+                        if (this.SerialBoxList?.SerialBox?.Count == 0)
+                        {
+                            return str.ToString();
+                        }
+                        //if (showSerialHeader) //true for our implementation
+                        //{
+                            foreach (SerialNum serialNum in this.SerialBoxList.SerialBox[0].SerialNumList.SerialNum)
+                            {
+                                str.Append(serialNum.PartTracking.Abbr).Append(", ");
+                            }
+                            str.Replace(",", ":", str.Length-1, 1); //replace tailing comma with colon
+                        //}
+                        foreach (SerialBox serialBox in this.SerialBoxList.SerialBox)
+                        {
+                            //if (uncommittedOnly && serialBox.isCommitted()) //uncommitted is always false in our implementation
+                            //{
+                            //    continue;
+                            //}
+                            foreach (SerialNum serialNum2 in serialBox.SerialNumList.SerialNum)
+                            {
+                                //if (maxLength > 0 && str.length() > maxLength) //maxlength is always 0 in our implementation
+                                //{
+                                //    str.Append("...");
+                                //    return str.toString();
+                                //}
+                                str.Append(serialNum2.Number).Append(", ");
+                            }
+                            str.Replace(",", ";", str.Length - 1, 1);
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        str.Append(PartTracking.Abbr).Append(": ").Append(getTrackingString());
+                        break;
+                    }
+            }
+            return str.ToString();
+        }
+
+        public string getTrackingString()
+        {
+            if (PartTracking == null)
+            {
+                return string.Empty;
+            }
+            switch (PartTracking.TrackingTypeID)
+            {
+
+                case 20:
+                case 30:
+                    {
+                        if (TrackingValue != null) {
+                            return DateTime.Parse(TrackingValue).ToString("yyyy-MM-dd'T'HH:mm:ss");
+                        }
+                        return string.Empty;
+                    }
+                case 50:
+                    {
+                        if (TrackingValue == null)
+                        {
+                            return string.Empty;
+                        }
+                        decimal money = decimal.Parse(TrackingValue.Replace("$","")); //FB stores the dollar sign so remove first
+                        money = Math.Round(money, 5, MidpointRounding.AwayFromZero);
+                        return money.ToString("C");
+                    }
+                case 40:
+                    {
+                        return string.Empty;
+                    }
+                default:
+                    {
+                        if (TrackingValue == null)
+                        {
+                            return string.Empty;
+                        }
+                        return TrackingValue.ToString();
+                    }
+            }
+        }
 
     }
 
@@ -165,7 +264,7 @@ namespace FishbowlConnect.Json.APIObjects
 
         public string SortOrder { get; set; }
 
-        public string TrackingTypeID { get; set; }
+        public int TrackingTypeID { get; set; }
 
         public string Active { get; set; }
 

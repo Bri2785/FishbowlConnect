@@ -17,7 +17,7 @@ namespace FishbowlConnect.Helpers
                 PartTracking = new PartTracking
                 {
                     Name = partNumAndTracks.TrackingLabel,
-                    TrackingTypeID = partNumAndTracks.TrackingTypeID.ToString(),
+                    TrackingTypeID = partNumAndTracks.TrackingTypeID,
                     PartTrackingID = partNumAndTracks.TrackingID.ToString(),
                     Abbr = partNumAndTracks.TrackingAbbr, 
                     Primary = partNumAndTracks.TrackingPrimaryFlag.ToString()
