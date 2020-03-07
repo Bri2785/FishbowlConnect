@@ -30,7 +30,7 @@ namespace FishbowlConnect.Json.APIObjects
 
         public PickOrders PickOrders { get; set; }
 
-        
+
         public PickItems PickItems
         {
             get
@@ -97,7 +97,7 @@ namespace FishbowlConnect.Json.APIObjects
         private Tracking trackingField;
         private TagType destinationTagField;
         private Location1 locationField;
-        
+
         public string Status
         {
             get
@@ -270,7 +270,7 @@ namespace FishbowlConnect.Json.APIObjects
             if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
                 return false;
 
-            
+
 
             return
                 x.Part?.PartID == y.Part?.PartID &&
@@ -297,12 +297,12 @@ namespace FishbowlConnect.Json.APIObjects
             if (ReferenceEquals(obj, null)) return 0;
             int hashSimplePartID = obj.Part.PartID == 0 ? 0 : obj.Part.PartID.GetHashCode();
             int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
-            
+
             return hashSimplePartID ^ obj.SoItemId.GetHashCode() ^
                 obj.PoItemId.GetHashCode() ^
                 obj.XoItemId.GetHashCode() ^
                 obj.WoItemId.GetHashCode() ^
-                hashStatus ^ 
+                hashStatus ^
                 hashTracking;
         }
     }
@@ -360,18 +360,20 @@ namespace FishbowlConnect.Json.APIObjects
             int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
             int hashLocation = obj.Location == null ? 0 : obj.Location.FullLocation.GetHashCode();
 
-            return hashSimplePartID ^ 
+            return hashSimplePartID ^
                 obj.SoItemId.GetHashCode() ^
                 obj.PoItemId.GetHashCode() ^
                 obj.XoItemId.GetHashCode() ^
                 obj.WoItemId.GetHashCode() ^
-                hashStatus ^ 
+                hashStatus ^
                 obj.Quantity.GetHashCode() ^
                 hashLocation ^
                 hashTracking;
         }
     }
-    public partial class PickItems: NotifyOnChange
+
+
+    public partial class PickItems : NotifyOnChange
     {
         private FullyObservableCollection<PickItem> pickItems;
 
@@ -421,7 +423,7 @@ namespace FishbowlConnect.Json.APIObjects
         public string Carrier { get; set; }
     }
 
-    
+
 
     public class PickItemLocations
     {
@@ -451,5 +453,34 @@ namespace FishbowlConnect.Json.APIObjects
     {
         [JsonConverter(typeof(ListOrSingleValueConverter<PickItem>))]
         public List<PickItem> PickItem { get; set; }
+    }
+
+    /// <summary>
+    /// Helper methods to be used with Pick objects
+    /// </summary>
+    public static class PickHelpers{
+        public static bool PickItemMatches(PickItem beforeSave, PickItem afterSave)
+        {
+            bool locationMatches = false;
+            if (beforeSave.Location != null && afterSave.Location != null)
+            {
+                locationMatches = beforeSave.Location.FullLocation.Equals(afterSave.Location.FullLocation);
+            }
+            else
+            {
+                locationMatches = true; //both null
+            }
+            bool matches =
+            beforeSave.Part?.PartID == afterSave.Part?.PartID &&
+                beforeSave.SoItemId == afterSave.SoItemId &&
+                beforeSave.PoItemId == afterSave.PoItemId &&
+                beforeSave.XoItemId == afterSave.XoItemId &&
+                beforeSave.WoItemId == afterSave.WoItemId &&
+                beforeSave.Status.Equals(afterSave.Status) &&
+                beforeSave.Quantity.Equals(afterSave.Quantity) &&
+                locationMatches &&
+                beforeSave.Tracking?.getEncoding() == afterSave.Tracking?.getEncoding();
+            return matches;
+        }
     }
 }

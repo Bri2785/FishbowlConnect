@@ -939,29 +939,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
-        private bool PickItemMatches(PickItem beforeSave, PickItem afterSave)
-        {
-            bool locationMatches = false;
-            if (beforeSave.Location != null && afterSave.Location != null)
-            {
-                locationMatches = beforeSave.Location.FullLocation.Equals(afterSave.Location.FullLocation);
-            }
-            else
-            {
-                locationMatches = true; //both null
-            }
-            bool matches =
-            beforeSave.Part?.PartID == afterSave.Part?.PartID &&
-                beforeSave.SoItemId == afterSave.SoItemId &&
-                beforeSave.PoItemId == afterSave.PoItemId &&
-                beforeSave.XoItemId == afterSave.XoItemId &&
-                beforeSave.WoItemId == afterSave.WoItemId &&
-                beforeSave.Status.Equals(afterSave.Status) &&
-                beforeSave.Quantity.Equals(afterSave.Quantity) &&
-                locationMatches  &&
-                beforeSave.Tracking?.getEncoding() == afterSave.Tracking?.getEncoding();
-            return matches;
-        }
+        
 
         [TestCase(25)]
         public async Task VoidPickReturnsUnvoidableMessage(int pickId)
