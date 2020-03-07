@@ -321,17 +321,26 @@ namespace FishbowlConnect.Json.APIObjects
             if (ReferenceEquals(x, null) || ReferenceEquals(y, null))
                 return false;
 
-
-
-            return
-                x.Part?.PartID == y.Part?.PartID &&
+            bool locationMatches = false;
+            if (x.Location != null && y.Location != null)
+            {
+                locationMatches = x.Location.FullLocation.Equals(y.Location.FullLocation);
+            }
+            else
+            {
+                locationMatches = true; //both null
+            }
+            bool equals =
+            x.Part?.PartID == y.Part?.PartID &&
                 x.SoItemId == y.SoItemId &&
                 x.PoItemId == y.PoItemId &&
                 x.XoItemId == y.XoItemId &&
                 x.WoItemId == y.WoItemId &&
                 x.Status.Equals(y.Status) &&
-                x.Tracking?.getEncoding() == y.Tracking?.getEncoding() &&
-                x.ItemStartedLocation == y.ItemStartedLocation;
+                x.Quantity.Equals(y.Quantity) &&
+                locationMatches &&
+                x.Tracking?.getEncoding() == y.Tracking?.getEncoding();
+            return equals;
 
         }
 
@@ -341,22 +350,24 @@ namespace FishbowlConnect.Json.APIObjects
             int hashTracking = 0;
             if (obj.Tracking != null)
             {
-                //obj.Tracking.TrackingEncoding = obj.Tracking?.getEncoding();
                 hashTracking = obj.Tracking.getEncoding() == null ? 0 : obj.Tracking.getEncoding().GetHashCode();
             }
 
-            //null check then creates hash from partnumber, tracking encoding, tag id
+            //null check then creates hash 
 
             if (ReferenceEquals(obj, null)) return 0;
             int hashSimplePartID = obj.Part.PartID == 0 ? 0 : obj.Part.PartID.GetHashCode();
             int hashStatus = obj.Status == null ? 0 : obj.Status.GetHashCode();
-            int hashLocation = obj.ItemStartedLocation == null ? 0 : obj.ItemStartedLocation.GetHashCode();
+            int hashLocation = obj.Location == null ? 0 : obj.Location.FullLocation.GetHashCode();
 
-            return hashSimplePartID ^ obj.SoItemId.GetHashCode() ^
+            return hashSimplePartID ^ 
+                obj.SoItemId.GetHashCode() ^
                 obj.PoItemId.GetHashCode() ^
                 obj.XoItemId.GetHashCode() ^
                 obj.WoItemId.GetHashCode() ^
-                hashStatus ^ hashLocation ^
+                hashStatus ^ 
+                obj.Quantity.GetHashCode() ^
+                hashLocation ^
                 hashTracking;
         }
     }
