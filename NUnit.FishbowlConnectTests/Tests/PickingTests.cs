@@ -826,10 +826,10 @@ namespace NUnit.FishbowlConnectTests.Tests
                     foreach (var item in SelectedPickItems)
                     {
                         //find single line in returned pick
-                        var matchcount = pick.PickItems.PickItem.Where(p => PickItemMatches(item, p) == true).Count();
+                        var matchcount = pick.PickItems.PickItem.Where(p => PickHelpers.PickItemMatches(item, p) == true).Count();
                         Assert.That(matchcount == 1);
 
-                        var matchItem = pick.PickItems.PickItem.FirstOrDefault(p => PickItemMatches(item, p) == true);
+                        var matchItem = pick.PickItems.PickItem.FirstOrDefault(p => PickHelpers.PickItemMatches(item, p) == true);
                         Assert.That(matchItem != null); //finds the first one. This will not error if there are more than one match
                                                         //Case where user selects 2 partial picks with the same everything.
                     }
@@ -922,9 +922,9 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 Assert.That(pick.PickItems.PickItem.FirstOrDefault().Tag.Tracking.getEncoding() == preSaveItem.Tracking.getEncoding());
 
-                Assert.That(PickItemMatches(preSaveItem, pick.PickItems.PickItem.FirstOrDefault()));
+                Assert.That(PickHelpers.PickItemMatches(preSaveItem, pick.PickItems.PickItem.FirstOrDefault()));
 
-                Assert.That(pick.PickItems.PickItem.Where(p => PickItemMatches(item, p)).Count() == 1);
+                Assert.That(pick.PickItems.PickItem.Where(p => PickHelpers.PickItemMatches(item, p)).Count() == 1);
 
 
 

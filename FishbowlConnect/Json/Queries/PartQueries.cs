@@ -28,9 +28,9 @@ namespace FishbowlConnect
         /// Returns a List of PartNumAndTracks objects that hold the part number and all of the currently used tracking fields
         /// Used in cases where the tag number is not known (adding inventory)
         /// </summary>
-        /// <param name="searchTerm">Can be product number or UPC code</param>
+        /// <param name="partNumber">Can be part number or UPC code</param>
         /// <returns></returns>
-        public async Task<List<PartNumAndTracks>> GetPartNumberAndTrackingFields(string searchTerm)
+        public async Task<List<PartNumAndTracks>> GetPartNumberAndTrackingFields(string partNumber)
         {
             string query = string.Format(@"SELECT part.num as PartNumber
 	                            , parttracking.id as TrackingID
@@ -40,14 +40,13 @@ namespace FishbowlConnect
 	                            , parttracking.`typeId` as TrackingTypeID
 	                            , parttotracking.`primaryFlag` as TrackingPrimaryFlag
 
-                            FROM product
-                            JOIN part ON product.`partId` = part.id
+                            FROM part 
 
                             LEFT JOIN parttotracking ON (parttotracking.`partId` = part.id)
                             LEFT JOIN parttracking ON parttotracking.`partTrackingId` = parttracking.`id`
 
-                            WHERE (UPPER(product.`num`) LIKE '{0}' OR product.`upc` LIKE '{0}' )
-                            Order BY parttracking.sortorder", searchTerm.ToUpper());
+                            WHERE (UPPER(part.`num`) LIKE '{0}' OR part.`upc` LIKE '{0}' )
+                            Order BY parttracking.sortorder", partNumber.ToUpper());
 
             return await ExecuteQueryAsync<PartNumAndTracks, PartNumAndTracksClassMap>(query);
         }

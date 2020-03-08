@@ -51,75 +51,74 @@ namespace NUnit.FishbowlConnectTests.Tests
 
         }
 
-        [TestCase("PB100", "Stock 100")]
+        [TestCase("InventoryToAddDecimal", "Stock 100")]
         public async Task AddInventoryImportTest(string partNumber, string LocationName)
         {
-            //TODO:convert to new InvQtyWithTracking Format
-            //SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
-
 
             using (FishbowlSession session = new FishbowlSession(config))
             {
-                List<InvQty> invQties = await session.GetPartInventory(partNumber);
-
-                //get the total qty in our location
-                int locationInventory = (int)invQties
-                    .Where(l => l.Location.Name == LocationName)
-                    .Sum(m => decimal.Parse(m.QtyAvailable));
-
-
-                //add our inventory
-                List<PartNumAndTracks> partNumAndTracks = await session.GetPartNumberAndTrackingFields(partNumber);
-                foreach (var item in partNumAndTracks)
+                using (FishbowlMySqlDB db = await FishbowlMySqlDB.CreateAsync(new MySqlConfig(
+                    DatabaseAddress, DatabasePort.ToString(), DatabaseUser, DatabasePassword,
+                    DatabaseName)))
                 {
-                    switch (item.TrackingTypeID)
+                    //List<InvQtyGroupedByUniqueTagInfoWithTracking> invQties = 
+                    //    await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(partNumber,"", FishbowlConnect.Helpers.InventorySearchTermType.Part);
+
+                    //add our inventory
+                    List<PartNumAndTracks> partNumAndTracks = await session.GetPartNumberAndTrackingFields(partNumber);
+                    foreach (var item in partNumAndTracks)
                     {
-                        case 10:
-                        case 40:
-                            item.TrackingInfo = "Test text field";
-                            break;
-                        case 20:
-                        case 30:
-                            item.TrackingInfo = "1/1/2018"; //regular MySQL Date format doesnt work here
-                            break;
-                        case 50:
-                        case 60:
-                            item.TrackingInfo = "2";
-                            break;
-                        case 70:
-                            item.TrackingInfo = "2";
-                            break;
-                        case 80:
-                            item.TrackingInfo = "true";
-                            break;
-                        default:
-                            item.TrackingInfo = "";
-                            break;
+                        switch (item.TrackingTypeID)
+                        {
+                            case 10:
+                            case 40:
+                                item.TrackingInfo = "9112";
+                                break;
+                            case 20:
+                            case 30:
+                                item.TrackingInfo = "1/1/2018"; //regular MySQL Date format doesnt work here
+                                break;
+                            case 50:
+                            case 60:
+                                item.TrackingInfo = "2";
+                                break;
+                            case 70:
+                                item.TrackingInfo = "2";
+                                break;
+                            case 80:
+                                item.TrackingInfo = "true";
+                                break;
+                            default:
+                                item.TrackingInfo = "";
+                                break;
 
+                        }
                     }
+
+                    await session.AddInventoryImportAsync(partNumber, 10.55m, LocationName, "LA", "Test Import Add",
+                             partNumAndTracks);
+
+                    List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtiesAfterImport = 
+                        await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(partNumber, "", FishbowlConnect.Helpers.InventorySearchTermType.Part);
+
+                    InvQtyGroupedByUniqueTagInfoWithTracking invQty = invQtiesAfterImport
+                        .First(iv => iv.PartNumber == partNumber && iv.LocationName == LocationName);
+
+                    Assert.IsTrue(invQty.Qty == 10.55m);
+
+
+                    //revert
+                    await session.CycleInventoryImportAsync(partNumber, "LA-" + LocationName, 0m, "revert add", null, invQty.SimpleTracking);
                 }
-
-                await session.AddInventoryImportAsync(partNumber, 10, LocationName, "SLC", "Test Import Add",
-                         partNumAndTracks);
-
-                List<InvQty> invQtiesAfterImport = await session.GetPartInventory(partNumber);
-
-                //get the total qty in our location
-                int locationNewInventory = (int)invQtiesAfterImport
-                    .Where(l => l.Location.Name == LocationName)
-                    .Sum(m => decimal.Parse(m.QtyAvailable));
-
-                Assert.IsTrue(locationNewInventory == locationInventory + 10);
-
-
             }
 
 
 
         }
 
-        [TestCase(ValidPartNumberWithInventory)]
+        [TestCase("InventoryToCycle")]
+        [TestCase("InventoryToCycleDecimal")]
         public async Task CycleInventoryImportTest(string partNumber)
         {
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
@@ -131,19 +130,26 @@ namespace NUnit.FishbowlConnectTests.Tests
                     DatabaseAddress, DatabasePort.ToString(), DatabaseUser, DatabasePassword,
                     DatabaseName)))
                 {
-                    InvQtyWithAllTracking invQty = (await db.GetPartTagAndAllTrackingWithDefaultLocation(
-                        partNumber, "Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Part)).First(m => m.Qty > 1);
+                    InvQtyGroupedByUniqueTagInfoWithTracking invQty = (await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(
+                        partNumber, "", FishbowlConnect.Helpers.InventorySearchTermType.Part)).First(m => (m.Qty - m.QtyCommitted) > 1);
                     if (invQty != null)
                     {
+                        decimal qtyToCycleTo = Math.Round((invQty.Qty - invQty.QtyCommitted) / 2, 2, MidpointRounding.AwayFromZero);
 
+                        await session.CycleInventoryImportAsync(invQty.PartNumber, invQty.LocationFullName, qtyToCycleTo,
+                            "Test Cycle Count", null, invQty.SimpleTracking); 
 
-                        await session.CycleInventoryImportAsync(invQty.PartNumber, invQty.LocationFullName, (int)invQty.Qty - 1,
-                            "Test Cycle Count", null, null); //TODO: add tracking values
+                        InvQtyGroupedByUniqueTagInfoWithTracking newInvQty = (await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(
+                        partNumber, "", FishbowlConnect.Helpers.InventorySearchTermType.Part))
+                                .Find(m => m.LocationFullName == invQty.LocationFullName
+                                    && m.TrackingEncoding == invQty.TrackingEncoding);
 
-                        InvQtyWithAllTracking newInvQty = (await db.GetPartTagAndAllTrackingWithDefaultLocation(
-                        partNumber, "Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Part)).Find(m => m.TagID == invQty.TagID);
+                        Assert.IsTrue(newInvQty.Qty == qtyToCycleTo);
 
-                        Assert.IsTrue(newInvQty.Qty == invQty.Qty - 1);
+                        //revert
+                        await session.CycleInventoryImportAsync(invQty.PartNumber, invQty.LocationFullName, invQty.Qty,
+                            "Test Cycle Count Revert", null, invQty.SimpleTracking);
+
                     }
                     else
                     {
@@ -154,64 +160,69 @@ namespace NUnit.FishbowlConnectTests.Tests
             }
         }
 
-        [TestCase("ECL-SC")]
+        [TestCase("InventoryToMove")]
         public async Task MoveInventoryImportTest(string partNumber)
         {
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
 
-            //for (int i = 0; i < 20; i++)
-            //{
-
             using (FishbowlSession session = new FishbowlSession(config))
             {
-                List<InvQtyWithAllTracking> invQtyWithTrackings = null;
+                List<InvQtyGroupedByUniqueTagInfoWithTracking> invQtyWithTrackings = null;
 
                 using (FishbowlMySqlDB db = await FishbowlMySqlDB.CreateAsync(new MySqlConfig(DatabaseAddress,
                     DatabasePort.ToString(), DatabaseUser, DatabasePassword, DatabaseName)))
                 {
-                    invQtyWithTrackings = await db.GetPartTagAndAllTrackingWithDefaultLocation(partNumber,"Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Part);
+                    invQtyWithTrackings = await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(partNumber, "", FishbowlConnect.Helpers.InventorySearchTermType.Part);
 
                     if (!(invQtyWithTrackings.Count > 0))
                     {
                         Assert.Fail("Part number has no inventory");
                     }
 
-                    InvQtyWithAllTracking invQty = invQtyWithTrackings[0];
+                    InvQtyGroupedByUniqueTagInfoWithTracking invQty = invQtyWithTrackings[0];
                     string fromLocation = invQty.LocationFullName;
 
                     //to location can be any location (just not the from location), getting first of the list for the default LG
-                    LocationSimpleObject toLocationObject = (await session.GetLocationSimpleList(4))
+                    LocationSimpleObject toLocationObject = (await session.GetLocationSimpleList("TX"))
                                                                 .First(m => m.LocationFullName != fromLocation);
                     string toLocation = toLocationObject.LocationFullName;
 
-                    int moveQty = (int)invQty.Qty; //move the full qty
+                    decimal moveQty = invQty.Qty; //move the full qty
 
-                    int ToLocationExistingQty = 0;
+                    decimal ToLocationExistingQty = 0m;
                     try
                     {
-                        var toLocationOption = (await db.GetPartTagAndTracking("$L$" + toLocationObject.LocationName))
+                        var toLocationOption = (await db.GetPartTagAndAllTrackingWithDefaultLocation("$L$" + toLocationObject.LocationName,
+                            "TX", FishbowlConnect.Helpers.InventorySearchTermType.Part))
                        .Find(m => m.PartNumber == partNumber);
                         if (toLocationOption != null)
                         {
-                            ToLocationExistingQty = (int)toLocationOption.Qty;
+                            ToLocationExistingQty = toLocationOption.Qty;
                         }
                     }
                     catch (KeyNotFoundException)
                     {
                         //no qty found
-                        ToLocationExistingQty = 0;
+                        ToLocationExistingQty = 0m;
                     }
 
 
                     await session.MoveInventoryImportAsync(partNumber, fromLocation, moveQty,
-                        toLocation, "Test Move", null);  //TODO: add tracking values
+                        toLocation, "Test Move", invQty.SimpleTracking);  
 
                     //now check the to location qty
 
-                    int newqty = (int)(await db.GetPartTagAndAllTrackingWithDefaultLocation(partNumber, "Main Warehouse", FishbowlConnect.Helpers.InventorySearchTermType.Part))
+                    decimal newqty = (await db.GetPartInvGroupedWithAllTrackingWithDefaultLocation(partNumber, "", FishbowlConnect.Helpers.InventorySearchTermType.Part))
                         .Find(m => m.LocationFullName == toLocationObject.LocationFullName).Qty;
 
                     Assert.IsTrue(newqty == (moveQty + ToLocationExistingQty));
+
+                    //move back
+
+                    await session.MoveInventoryImportAsync(partNumber, toLocation, moveQty,
+                        fromLocation, "Test Move Back", invQty.SimpleTracking);
+
+
                 }
 
             }

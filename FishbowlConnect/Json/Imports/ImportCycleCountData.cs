@@ -9,7 +9,7 @@ namespace FishbowlConnect.Json.Imports
         public string PartNumber { get; set; }
         public string PartDescription { get; set; }
         public string Location { get; set; }
-        public int Qty { get; set; }
+        public decimal Qty { get; set; }
         public string Date { get; set; }
         public string Note { get; set; }
         public string Customer { get; set; }

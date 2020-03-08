@@ -48,20 +48,20 @@ namespace FishbowlConnect
         /// <param name="Note">Any note to record with the transaction</param>
         /// <param name="partTrackingInfo">List of part tracking items</param>
         /// <returns>Void</returns>
-        public async Task AddInventoryImportAsync(string PartNumber, int Qty,
+        public async Task AddInventoryImportAsync(string PartNumber, decimal Qty,
             string LocationName, string LocationGroup, string Note = "", IEnumerable<IPartTrackingFields> partTrackingInfo = null)
         {
 
             //validate
-            if (String.IsNullOrEmpty(PartNumber))
+            if (string.IsNullOrEmpty(PartNumber))
             {
                 throw new ArgumentNullException("Part Number is required");
             }
-            if (String.IsNullOrEmpty(LocationName))
+            if (string.IsNullOrEmpty(LocationName))
             {
                 throw new ArgumentNullException("Location is required");
             }
-            if (String.IsNullOrEmpty(LocationGroup))
+            if (string.IsNullOrEmpty(LocationGroup))
             {
                 throw new ArgumentNullException("Location Group is required");
             }
@@ -517,19 +517,19 @@ namespace FishbowlConnect
         /// <param name="Note"></param>
         /// <param name="trackingFieldsAndValues">List of simple tracking fields and values</param>
         /// <returns></returns>
-        public async Task MoveInventoryImportAsync(string PartNumber, string BeginLocationWithLG, int Qty, string EndLocationWithLG,
+        public async Task MoveInventoryImportAsync(string PartNumber, string BeginLocationWithLG, decimal Qty, string EndLocationWithLG,
                 string Note, List<TrackingSimple> trackingFieldsAndValues)
         {
             //validate
-            if (String.IsNullOrEmpty(PartNumber))
+            if (string.IsNullOrEmpty(PartNumber))
             {
                 throw new ArgumentNullException("Part Number is required");
             }
-            if (String.IsNullOrEmpty(BeginLocationWithLG))
+            if (string.IsNullOrEmpty(BeginLocationWithLG))
             {
                 throw new ArgumentNullException("Beginning Location is required");
             }
-            if (String.IsNullOrEmpty(EndLocationWithLG))
+            if (string.IsNullOrEmpty(EndLocationWithLG))
             {
                 throw new ArgumentNullException("End Location is required");
             }
@@ -687,7 +687,7 @@ namespace FishbowlConnect
         /// <param name="Customer">Optional. Pass in null if not needed</param>
         /// <param name="trackingFieldsAndValues">List of part tracking fields and their values</param>
         /// <returns></returns>
-        public async Task CycleInventoryImportAsync(string PartNumber, string Location, int NewQty,
+        public async Task CycleInventoryImportAsync(string PartNumber, string Location, decimal NewQty,
             string Note, string Customer, List<TrackingSimple> trackingFieldsAndValues)
         {
             if (string.IsNullOrEmpty(PartNumber))
