@@ -12,7 +12,7 @@ namespace FishbowlConnect
 
         public async Task<string> GetPartLastCost(string partNumber)
         {
-            string query = String.Format(@"SELECT LastDate.unitcost, part.id
+            string query = string.Format(@"SELECT LastDate.unitcost, part.id
                                 FROM part
                                 JOIN (SELECT costlayer.`orgTotalCost`/costlayer.`orgQty` AS unitcost, costlayer.partid, costlayer.`dateCreated` AS LastIn
                                 FROM costlayer 

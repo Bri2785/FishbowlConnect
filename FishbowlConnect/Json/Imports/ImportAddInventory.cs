@@ -11,7 +11,7 @@ namespace FishbowlConnect.Json.Imports
         public string Location { get; set; }
         public decimal Qty { get; set; }
         public string UOM { get; set; }
-        public string Cost { get; set; }
+        public decimal Cost { get; set; }
         public string Date { get; set; }
         public string Note { get; set; }
 

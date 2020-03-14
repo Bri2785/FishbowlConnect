@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using FishbowlConnect.Exceptions;
+using FishbowlConnect.Helpers;
 using FishbowlConnect.Interfaces;
 using FishbowlConnect.Json;
 using FishbowlConnect.Json.APIObjects;
@@ -76,7 +77,7 @@ namespace FishbowlConnect
             //serialize to csv format
 
 
-            if (String.IsNullOrEmpty(header))
+            if (string.IsNullOrEmpty(header))
             {
                 throw new FishbowlException("Header row is not available");
             }
@@ -154,14 +155,13 @@ namespace FishbowlConnect
                 //importRows.Add(new Row { RowField = sb.ToString() });
                 //sb.Clear();
 
-                string cost = null;
+                decimal cost = decimal.Zero;
                 try
                 {
-                    cost = await GetPartLastCost(PartNumber);
+                    cost = decimal.Parse(await GetPartLastCost(PartNumber));
                 }
                 catch (Exception)
                 {
-                    cost = "0.00";
                 }
 
                 ImportAddInventory importAddInventory = new ImportAddInventory
@@ -169,7 +169,7 @@ namespace FishbowlConnect
                     PartNumber = PartNumber,
                     Qty = Qty,
                     Cost = cost,
-                    Date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
+                    Date = DateTime.Now.ToShortDateString(),
                     Location = LocationGroup + "-" + LocationName,
                     Note = Note
                 };
