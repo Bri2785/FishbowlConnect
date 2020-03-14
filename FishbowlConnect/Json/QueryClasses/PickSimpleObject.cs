@@ -9,9 +9,9 @@ namespace FishbowlConnect.Json.QueryClasses
     {
         string _dateScheduled;
 
-        public string PickID { get; set; }
+        public int PickID { get; set; }
         public string PickNumber { get; set; }
-        public string PickStatusID { get; set; }
+        public int PickStatusID { get; set; }
         public string DateScheduled
         {
             get
@@ -36,7 +36,7 @@ namespace FishbowlConnect.Json.QueryClasses
         {
             get
             {
-                if (PickStatusID == "40")
+                if (PickStatusID ==40)
                 {
                     return PickFulfillStatus.Fulfilled;
                 }
