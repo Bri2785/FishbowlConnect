@@ -60,6 +60,7 @@ namespace FishbowlConnect.Json
         public SetSystemPropertyRs SetSystemPropertyRs { set { Rs = value; } }
         public VoidPickRs VoidPickRs { set { Rs = value; } }
         public VoidPickItemsRs VoidPickItemsRs { set { Rs = value; } }
+        public SaveApiImageRs SaveApiImageRs { set { Rs = value; } }
         public string StatusCode { get; set; }
         public string StatusMessage { get; set; }
     }
