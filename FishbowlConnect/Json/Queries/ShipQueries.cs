@@ -89,25 +89,53 @@ namespace FishbowlConnect
         }
 
         /// <summary>
-        /// Returns list of shipment images from the database with the file path. Does not return base64 image
+        /// Returns list of base64 shipment images from the database
         /// Will throw error if table doesn't exist
         /// </summary>
         /// <param name="shipId">shipment id number</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<List<ShipmentImage>> GetShipmentImageList(int shipId, 
-            CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<List<FishbowlImage>> GetShipmentImageList(int shipId, string tableName,
+            CancellationToken cancellationToken = default)
         {
             string query = string.Format(@"select
                                   `id`,
-                                  `path`,
+                                  `imageFull`,
                                   `recordid`,
-                                    filenumber
+                                    tableName,
+                                    type
                                 from
-                                  `briteideasupdate`.`shipimages`
-                                where recordid = {0}", shipId);
+                                  `imageapi`
+                                where recordid = {0}
+                                AND tableName = '{1}'", shipId, tableName);
 
-            return await ExecuteQueryAsync<ShipmentImage, ShipmentImageClassMap>(query, cancellationToken);
+            return await ExecuteQueryAsync<FishbowlImage, ImageClassMap>(query, cancellationToken);
+        }
+
+        /// <summary>
+        /// Returns list of base64 shipment images from the database
+        /// Will throw error if table doesn't exist
+        /// </summary>
+        /// <param name="shipNum">Shipment Number</param>
+        /// <param name="tableName"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<List<FishbowlImage>> GetShipmentImageList(string shipNum, string tableName,
+            CancellationToken cancellationToken = default)
+        {
+            string query = string.Format(@"select
+                                  `id`,
+                                  `imageFull`,
+                                  `recordid`,
+                                    tableName,
+                                    type
+                                from
+                                  `reelimages`
+                                join ship on ship.id = reelimages.recordid
+                                where ship.num = '{0}'
+                                AND reelimages.tableName = '{1}'", shipNum, tableName);
+
+            return await ExecuteQueryAsync<FishbowlImage, ImageClassMap>(query, cancellationToken);
         }
 
 

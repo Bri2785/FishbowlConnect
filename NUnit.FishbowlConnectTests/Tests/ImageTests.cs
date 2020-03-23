@@ -1,4 +1,5 @@
 ﻿using FishbowlConnect;
+using FishbowlConnect.Exceptions;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -37,13 +38,39 @@ namespace NUnit.FishbowlConnectTests.Tests
                 await session.SaveApiImage(imageType, recordId, base64image);
 
                 string checkQuery = string.Format(@"Select imageFull
-                                        from image
+                                        from imageapi
                                         where recordid = {0}
                                         and tableName = '{1}'", recordId, imageType);
                 string savedImage = await session.ExecuteQueryAsync(checkQuery);
                 Assert.NotNull(savedImage);
             }
 
+
+        }
+
+        [Test]
+        public async Task DeleteApiImageWithIdIsSuccessful()
+        {
+            int id = 4 ;
+            SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
+
+            using (FishbowlSession session = new FishbowlSession(config))
+            {
+                await session.DeleteApiImage(id);
+
+                string checkQuery = string.Format(@"Select imageFull
+                                        from imageapi
+                                        where id = {0}", id);
+                try
+                {
+                    string savedImage = await session.ExecuteQueryAsync(checkQuery);
+                }
+                catch(Exception e)
+                {
+                    Assert.IsInstanceOf(typeof(KeyNotFoundException), e);
+                }
+                
+            }
 
         }
     }

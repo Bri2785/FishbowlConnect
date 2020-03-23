@@ -38,5 +38,18 @@ namespace FishbowlConnect
 
             await IssueJsonRequestAsync<SaveApiImageRs>(saveApiImageRq);
         }
+
+        /// <summary>
+        /// Deleted an Api Image from the database using the provided id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task DeleteApiImage(int id)
+        {
+            DeleteApiImageRq deleteApiImageRq = new DeleteApiImageRq();
+            deleteApiImageRq.ImageId = id;
+
+            await IssueJsonRequestAsync<DeleteApiImageRs>(deleteApiImageRq);
+        }
     }
 }

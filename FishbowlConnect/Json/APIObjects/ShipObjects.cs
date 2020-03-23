@@ -138,15 +138,7 @@ namespace FishbowlConnect.Json.APIObjects
         //public List<TrackingItem> Tracking { get; 
         //    set; }
     }
-
-    public partial class ShipmentImage : NotifyOnChange
-    {
-        public int Id { get; set; }
-        public string ImagePath { get; set; }
-        public int RecordId { get; set; }
-        public int FileNumber { get; set; }
-
-    }
+    
 
 
     public class ShipListFilters
