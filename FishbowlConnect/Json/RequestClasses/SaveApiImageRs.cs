@@ -8,5 +8,6 @@ namespace FishbowlConnect.Json.RequestClasses
     {
         public string StatusCode { get; set; }
         public string StatusMessage { get; set; }
+        public long ImageId { get; set; }
     }
 }

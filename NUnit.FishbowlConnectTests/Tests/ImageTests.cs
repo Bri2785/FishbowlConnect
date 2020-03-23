@@ -35,14 +35,17 @@ namespace NUnit.FishbowlConnectTests.Tests
                 string imageType = "apiShipment";
                 int recordId = 9;
 
-                await session.SaveApiImage(imageType, recordId, base64image);
+                long newId = await session.SaveApiImage(imageType, recordId, base64image);
 
-                string checkQuery = string.Format(@"Select imageFull
-                                        from imageapi
-                                        where recordid = {0}
-                                        and tableName = '{1}'", recordId, imageType);
-                string savedImage = await session.ExecuteQueryAsync(checkQuery);
-                Assert.NotNull(savedImage);
+                Assert.IsTrue(newId > 0L);
+
+                //string checkQuery = string.Format(@"Select imageFull
+                //                        from imageapi
+                //                        where recordid = {0}
+                //                        and tableName = '{1}'", recordId, imageType);
+                //string savedImage = await session.ExecuteQueryAsync(checkQuery);
+                //Assert.NotNull(savedImage);
+
             }
 
 

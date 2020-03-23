@@ -16,7 +16,7 @@ namespace FishbowlConnect
         /// <param name="recordId"></param>
         /// <param name="base64image"></param>
         /// <returns></returns>
-        public async Task SaveApiImage(string imageType, int recordId, string base64image)
+        public async Task<long> SaveApiImage(string imageType, int recordId, string base64image)
         {
             if (string.IsNullOrEmpty(imageType))
             {
@@ -36,7 +36,9 @@ namespace FishbowlConnect
             saveApiImageRq.Number = recordId;
             saveApiImageRq.Type = imageType;
 
-            await IssueJsonRequestAsync<SaveApiImageRs>(saveApiImageRq);
+            SaveApiImageRs apiImageRs = await IssueJsonRequestAsync<SaveApiImageRs>(saveApiImageRq);
+
+            return apiImageRs.ImageId;
         }
 
         /// <summary>
