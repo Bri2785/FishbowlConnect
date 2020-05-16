@@ -47,7 +47,7 @@ namespace FishbowlConnect
                                                 , toUomId);
 
 
-            return (await ExecuteQueryAsync<UOMConversion, UomConversionClassMap>(query)); //should only be 1. If none, error is thrown
+            return (await ExecuteQueryAsync<UOMConversion, UomConversionClassMap>(query));
         }
 
     }

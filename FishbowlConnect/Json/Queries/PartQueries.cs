@@ -68,5 +68,38 @@ namespace FishbowlConnect
             return (await ExecuteQueryAsync<PartSimpleObject, PartSimpleObjectClassMap>(query))[0];
         }
 
+
+        /// <summary>
+        /// Returns the list of default locations set for this part. It returns all LG's and null if the location has not been set for that LG
+        /// </summary>
+        /// <param name="partNum"></param>
+        /// <returns></returns>
+        public async Task<List<PartDefaultLocationObject>> GetPartDefaultLocations(string partNum)
+        {
+            string query = string.Format(@"SELECT partsAndLgs.LocationGroupId
+                                            , LocationGroupName
+                                            , partsAndLgs.PartId
+                                            , PartNum
+                                            , COALESCE(location.`id`,0) AS LocationId
+                                            , location.`name` AS LocationName
+
+                                            FROM 
+                                            (SELECT 
+                                              part.`id` AS PartId
+                                            , part.`num` AS PartNum
+                                            , locationgroup.`id` AS LocationGroupId
+                                            , locationgroup.`name` AS LocationGroupName
+                                            FROM part
+                                            CROSS JOIN locationgroup ) partsAndLgs
+
+                                            LEFT JOIN defaultlocation ON defaultlocation.`partId` = partsAndLgs.partid AND defaultlocation.`locationGroupId` = partsAndLgs.locationgroupid
+                                            LEFT JOIN location ON location.id = defaultlocation.`locationId`
+
+                                        WHERE partnum LIKE '{0}' 
+                                        ", partNum);
+
+            return await ExecuteQueryAsync<PartDefaultLocationObject, PartDefaultLocationClassMap>(query);
+        }
+
     }
 }

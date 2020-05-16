@@ -38,7 +38,7 @@ namespace NUnit.FishbowlConnectTests.Tests
             }
         }
 
-        [TestCase(24)]
+        [TestCase(9)]
         public async Task getUomConversions(int fromUomId)
         {
             SessionConfig config = new SessionConfig(GoodServerAddress, 28192, GoodUserName, GoodPassword);
@@ -51,7 +51,7 @@ namespace NUnit.FishbowlConnectTests.Tests
 
                 Assert.IsNotNull(uOMConversions);
 
-                Assert.True(uOMConversions.Count > 1);
+                Assert.True(uOMConversions.Count > 0);
             }
         }
     }
